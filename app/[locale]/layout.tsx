@@ -8,7 +8,7 @@ import { roboto } from "@/config/fonts";
 
 export const metadata = defaultMetadata;
 
-export default async function LandingLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {

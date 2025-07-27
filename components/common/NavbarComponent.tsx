@@ -15,65 +15,81 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/80 backdrop-blur-md border-b-0">
-      {/* Gradient line centered */}
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/80 backdrop-blur-md border-b-0 shadow-md">
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-300 h-[2px] bg-gradient-to-r from-black via-[var(--accent)] to-black" />
 
       <div className="mx-auto max-w-7xl px-6 sm:px-8 flex items-center justify-between h-16">
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-[var(--accent)]">
+        <Link
+          href="/"
+          className="text-xl font-bold text-[var(--accent)] flex items-center gap-2"
+        >
           BilloAI
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6 ml-8">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-[var(--foreground)]/90 hover:text-[var(--accent)] transition-colors font-medium"
+              className="relative text-[var(--foreground)]/90 font-medium before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[var(--accent)] before:transition-all before:duration-300 hover:before:w-full"
             >
               {link.label}
             </Link>
           ))}
           <Link
-            href="/app"
-            className="ml-4 rounded-lg bg-[var(--accent)] px-4 py-2 text-white hover:bg-[var(--accent-light)] transition font-semibold"
+            href="/login"
+            className="ml-4 rounded-lg bg-[var(--accent)] px-5 py-2.5 text-white hover:bg-[var(--accent-light)] transition font-semibold"
           >
             {t("cta")}
           </Link>
         </div>
 
-        {/* Mobile menu button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-[var(--foreground)] hover:text-[var(--accent)] transition-colors"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          className="md:hidden relative w-8 h-6 flex flex-col justify-between"
         >
-          ☰
+          <span
+            className={`block h-1 bg-[var(--foreground)] rounded transition-transform duration-300 ${
+              isOpen ? "rotate-45 translate-y-2" : ""
+            }`}
+          />
+          <span
+            className={`block h-1 bg-[var(--foreground)] rounded transition-opacity duration-300 ${
+              isOpen ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`block h-1 bg-[var(--foreground)] rounded transition-transform duration-300 ${
+              isOpen ? "-rotate-45 -translate-y-2" : ""
+            }`}
+          />
         </button>
       </div>
 
-      {/* Mobile dropdown */}
-      {isOpen && (
-        <div className="md:hidden flex flex-col items-center bg-[var(--background)] border-t border-gray-200 dark:border-gray-700 py-4 space-y-3">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="text-[var(--foreground)]/90 hover:text-[var(--accent)] transition-colors font-medium"
-            >
-              {link.label}
-            </Link>
-          ))}
+      <div
+        className={`md:hidden flex flex-col items-center bg-[var(--background)] border-t border-gray-200 dark:border-gray-700 py-4 space-y-3
+      transition-all duration-300 ease-in-out
+      ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}
+      >
+        {links.map((link) => (
           <Link
-            href="/app"
-            className="mt-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-white hover:bg-[var(--accent-light)] transition font-semibold"
+            key={link.href}
+            href={link.href}
+            onClick={() => setIsOpen(false)}
+            className="text-[var(--foreground)]/90 hover:text-[var(--accent)] transition-colors font-medium"
           >
-            {t("cta")}
+            {link.label}
           </Link>
-        </div>
-      )}
+        ))}
+        <Link
+          href="/login"
+          className="mt-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-white hover:bg-[var(--accent-light)] transition font-semibold"
+        >
+          {t("cta")}
+        </Link>
+      </div>
     </nav>
   );
 }
