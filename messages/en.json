@@ -1,6 +1,31 @@
 {
-    "LandingPage": {
-        "title": "Welcome to Billo AI",
-        "description": "This is a sample page"
+  "Navigation": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "cta": "Sign In"
+  },
+  "LandingPage": {
+    "HeroSection": {
+      "title": "Welcome to Billo AI",
+      "description": "Create professional invoices in seconds using AI. Generate, customize, and export invoices effortlessly with BilloAI.",
+      "primaryCta": "Get Started",
+      "secondaryCta": "Learn More"
+    },
+    "Features": {
+      "heading": "Why Choose BilloAI?",
+      "feature1": {
+        "title": "Lightning Fast",
+        "description": "Generate invoices in seconds using AI-powered templates."
+      },
+      "feature2": {
+        "title": "Customizable Layouts",
+        "description": "Easily customize PDF designs to match your branding."
+      },
+      "feature3": {
+        "title": "Automated Billing",
+        "description": "Save time with recurring invoices and smart reminders."
+      }
     }
+  }
 }

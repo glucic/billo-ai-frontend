@@ -1,6 +1,31 @@
 {
-    "LandingPage": {
-        "title": "Willkommen bei Billo AI",
-        "description": "Dies ist eine Beispielseite"
+  "Navigation": {
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "contact": "Kontakt",
+    "cta": "Anmelden"
+  },
+  "LandingPage": {
+    "HeroSection": {
+      "title": "Willkommen bei Billo AI",
+      "description": "Erstellen Sie professionelle Rechnungen in Sekundenschnelle mit KI. Generieren, anpassen und exportieren Sie Rechnungen mühelos mit BilloAI.",
+      "primaryCta": "Loslegen",
+      "secondaryCta": "Mehr erfahren"
+    },
+    "Features": {
+      "heading": "Warum BilloAI wählen?",
+      "feature1": {
+      "title": "Blitzschnell",
+      "description": "Erstellen Sie Rechnungen in Sekunden mit KI-gestützten Vorlagen."
+      },
+      "feature2": {
+      "title": "Anpassbare Layouts",
+      "description": "Passen Sie PDF-Designs einfach an Ihr Branding an."
+      },
+      "feature3": {
+      "title": "Automatisierte Abrechnung",
+      "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und intelligenten Erinnerungen."
+      }
     }
+  }
 }
