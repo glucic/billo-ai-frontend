@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# BilloAI
+
+**BilloAI** is an AI-powered invoice generation platform designed to help businesses create professional, customizable invoices quickly and effortlessly. With multi-language support, smart templates, and seamless PDF export, BilloAI simplifies your billing process.
+
+---
+
+## Features
+
+- **AI-Powered Invoicing**: Generate invoices instantly with AI-driven templates.
+- **Customizable Templates**: Tailor your invoice design to match your brand.
+- **Multi-Language Support**: Supports multiple locales with dynamic translations.
+- **Multi-Currency Billing**: Bill clients worldwide with automatic currency conversion.
+- **Automated Billing**: Recurring invoices and smart reminders to save time.
+- **Responsive UI**: Clean, modern, and mobile-friendly design.
+
+---
+
+## Tech Stack
+
+- **Framework**: Next.js 13 (App Router)
+- **Internationalization**: `next-intl`
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Fonts**: Google Fonts (Roboto)
+- **Language**: TypeScript / JavaScript
+- **Version Control**: Git
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (>=18.x)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/billoai.git
+cd billoai
+```
+
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables
+
+Create a `.env.local` file and add:
+
+```
+NEXT_PUBLIC_APP_URL=https://billoai.app
+```
+
+4. Run the development server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+/app
+  /[locale]           # Localized routes and layouts
+  /components         # React components (Navbar, Hero, Features, etc.)
+/i18n
+  /locales            # JSON translation files
+  routing.ts          # Locale routing config
+  request.ts          # i18n request config
+/public               # Static assets (images, icons)
+/styles               # Global styles and Tailwind config
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Localization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project uses [`next-intl`](https://next-intl-docs.vercel.app/) for handling localization. Translation files are stored as JSON in `/i18n/locales`.
 
-## Deploy on Vercel
+Supported locales:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- English (`en`)
+- German (`de`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to your branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
