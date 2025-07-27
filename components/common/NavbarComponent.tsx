@@ -36,12 +36,6 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/login"
-            className="ml-4 rounded-lg bg-[var(--accent)] px-5 py-2.5 text-white hover:bg-[var(--accent-light)] transition font-semibold"
-          >
-            {t("cta")}
-          </Link>
         </div>
 
         <button
@@ -83,12 +77,6 @@ export default function Navbar() {
             {link.label}
           </Link>
         ))}
-        <Link
-          href="/login"
-          className="mt-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-white hover:bg-[var(--accent-light)] transition font-semibold"
-        >
-          {t("cta")}
-        </Link>
       </div>
     </nav>
   );

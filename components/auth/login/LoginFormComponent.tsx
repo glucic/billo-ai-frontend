@@ -10,7 +10,10 @@ type LoginFormProps = {
   loading?: boolean;
 };
 
-export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
+export function LoginForm({
+  onSubmit,
+  loading = false,
+}: LoginFormProps) {
   const t = useTranslations("Auth.Login");
 
   const [username, setUsername] = useState("");

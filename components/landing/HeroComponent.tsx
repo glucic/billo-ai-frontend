@@ -2,8 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { Link } from "@/i18n/navigation";
 
-export function Hero() {
+export default function Hero() {
   const t = useTranslations("LandingPage.HeroSection");
 
   return (
@@ -39,12 +40,18 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="mt-8 flex flex-col gap-4 sm:flex-row"
       >
-        <button className="rounded-lg bg-[var(--accent)] px-6 py-3 text-white font-medium transition hover:bg-[var(--accent-light)]">
+        <Link
+          href="/dashboard"
+          className="rounded-lg bg-[var(--accent)] px-6 py-3 text-white font-medium transition hover:bg-[var(--accent-light)]"
+        >
           {t("primaryCta", { defaultMessage: "Get Started" })}
-        </button>
-        <button className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-[var(--foreground)] transition hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800">
+        </Link>
+        <Link
+          href="/learn-more"
+          className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-[var(--foreground)] transition hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+        >
           {t("secondaryCta", { defaultMessage: "Learn More" })}
-        </button>
+        </Link>
       </motion.div>
     </section>
   );

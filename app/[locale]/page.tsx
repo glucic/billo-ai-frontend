@@ -1,11 +1,14 @@
-import Navbar from "@/components/common/NavbarComponent";
-import Features from "@/components/landing/FeaturesComponent";
-import { Hero } from "@/components/landing/HeroComponent";
-import { useTranslations } from "next-intl";
+import { Navbar } from "@/components/common";
+import { Hero, Features } from "@/components/landing";
+import { Metadata } from "next";
+
+export const defaultMetadata: Metadata = {
+  title: "BilloAI – Login or Register",
+  description:
+    "Create professional invoices in seconds using AI. Generate, customize, and export invoices effortlessly with BilloAI.",
+};
 
 export default function LandingPage() {
-  const t = useTranslations("LandingPage");
-
   return (
     <main id="landing-page" className="min-h-screen">
       <Navbar />
