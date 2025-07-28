@@ -5,6 +5,7 @@ import { setRequestLocale } from 'next-intl/server'
 import '@/styles/globals.css'
 import { defaultMetadata } from '@/config/metadata'
 import { roboto } from '@/config/fonts'
+import { AuthProvider } from '@/context/AuthContext'
 
 export const metadata = defaultMetadata
 
@@ -28,7 +29,11 @@ export default async function LocaleLayout({
             className={`${roboto.variable} font-sans scroll-smooth`}
             suppressHydrationWarning>
             <body>
-                <NextIntlClientProvider>{children}</NextIntlClientProvider>
+                <AuthProvider>
+                    <NextIntlClientProvider locale={locale}>
+                        {children}
+                    </NextIntlClientProvider>
+                </AuthProvider>
             </body>
         </html>
     )

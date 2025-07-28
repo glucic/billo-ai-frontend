@@ -8,18 +8,20 @@ import React, { useState } from 'react'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
 import { IconBrandGoogle } from '@tabler/icons-react'
 import Link from 'next/link'
+import { login } from '@/hooks/auth'
 
 export default function LoginPage() {
     const router = useRouter()
     const t = useTranslations('Auth.Login')
     const [loading, setLoading] = useState(false)
 
-    const handleLogin = async (username: string, password: string) => {
+    const handleLogin = async (email: string, password: string) => {
         setLoading(true)
         try {
+            await login(email, password)
             router.push('/dashboard')
         } catch (error) {
-            alert('Login failed')
+            alert('Login failed. Please check your credentials and try again.')
         } finally {
             setLoading(false)
         }
@@ -44,6 +46,7 @@ export default function LoginPage() {
                     icon={<IconBrandGoogle className="h-5 w-5 text-red-500" />}
                     label={t('signInGoogle')}
                     onClick={() => alert('Google sign-in not implemented')}
+                    disabled={loading}
                 />
             </div>
 

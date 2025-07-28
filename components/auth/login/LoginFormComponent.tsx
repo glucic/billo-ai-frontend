@@ -6,22 +6,22 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
 type LoginFormProps = {
-    onSubmit: (username: string, password: string) => void | Promise<void>
+    onSubmit: (email: string, password: string) => void | Promise<void>
     loading?: boolean
 }
 
 export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
     const t = useTranslations('Auth.Login')
 
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!username.trim() || !password.trim()) {
+        if (!email.trim() || !password.trim()) {
             return
         }
-        onSubmit(username, password)
+        onSubmit(email, password)
     }
 
     return (
@@ -30,15 +30,15 @@ export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
             onSubmit={handleSubmit}
             noValidate>
             <InputField
-                id="username"
-                type="text"
-                label={t('username')}
-                placeholder={t('username')}
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                label={t('email')}
+                placeholder={t('email')}
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 required
-                autoComplete="username"
-                aria-label={t('username')}
+                autoComplete="email"
+                aria-label={t('email')}
                 disabled={loading}
             />
             <InputField

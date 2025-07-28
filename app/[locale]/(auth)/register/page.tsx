@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import { RegisterForm } from '@/components/auth/register/RegisterFormComponent'
 import { RegisterHeader } from '@/components/auth/register/RegisterHeaderComponent'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
+import { register } from '@/hooks/auth'
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -16,18 +17,17 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false)
 
     const handleRegister = async (formData: {
-        username: string
+        name: string
         email: string
         password: string
         confirmPassword: string
     }) => {
         setLoading(true)
         try {
-            // Add your registration logic here, e.g. API call
-
+            await register(formData.name, formData.email, formData.password)
             router.push('/dashboard')
         } catch (error) {
-            alert('Registration failed')
+            alert('Registration failed. Please try again.')
         } finally {
             setLoading(false)
         }
@@ -52,6 +52,7 @@ export default function RegisterPage() {
                     icon={<IconBrandGoogle className="h-5 w-5 text-red-500" />}
                     label={t('signUpGoogle')}
                     onClick={() => alert('Google sign-up not implemented')}
+                    disabled={loading}
                 />
             </div>
 

@@ -25,7 +25,7 @@ function InputField({ label, ...props }: InputFieldProps) {
 
 type RegisterFormProps = {
     onSubmit: (formData: {
-        username: string
+        name: string
         email: string
         password: string
         confirmPassword: string
@@ -36,14 +36,32 @@ type RegisterFormProps = {
 export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
     const t = useTranslations('Auth.Register')
 
-    const [username, setUsername] = useState('')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState<string | null>(null)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        onSubmit({ username, email, password, confirmPassword })
+        setError(null)
+
+        if (
+            !name.trim() ||
+            !email.trim() ||
+            !password.trim() ||
+            !confirmPassword.trim()
+        ) {
+            setError(t('allFieldsRequired'))
+            return
+        }
+
+        if (password !== confirmPassword) {
+            setError(t('passwordsDontMatch'))
+            return
+        }
+
+        onSubmit({ name, email, password, confirmPassword })
     }
 
     return (
@@ -56,8 +74,8 @@ export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
                 label={t('username')}
                 placeholder={t('username')}
                 aria-label={t('username')}
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                value={name}
+                onChange={e => setName(e.target.value)}
                 required
                 disabled={loading}
             />
@@ -91,6 +109,7 @@ export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
                 required
                 disabled={loading}
             />
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <button
                 type="submit"
                 disabled={loading}

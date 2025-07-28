@@ -32,7 +32,7 @@
         "Login": {
             "welcome": "Willkommen bei Billo",
             "subtitle": "Melden Sie sich an, um zu Ihrem Dashboard zu gelangen",
-            "username": "Benutzername",
+            "email": "E-Mail",
             "password": "Passwort",
             "loginButton": "Anmelden",
             "forgotPassword": "Passwort vergessen?",
@@ -56,7 +56,8 @@
             "signUpGoogle": "Mit Google anmelden",
             "signUpGithub": "Mit GitHub anmelden",
             "noAccount": "Haben Sie kein Konto?",
-            "signUp": "Registrieren"
+            "signUp": "Registrieren",
+            "loading": "Loading..."
         }
     }
 }
