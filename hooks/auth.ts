@@ -1,51 +1,180 @@
+import { useRouter, useParams } from 'next/navigation'
 import apiClient from '@/lib/apiClient'
+import React from 'react'
 
-export async function getCsrfCookie(): Promise<void> {
-    await apiClient.get('/sanctum/csrf-cookie')
+type Errors = Record<string, string[]>
+
+type AuthCallbacks = {
+    setErrors: (errors: Errors) => void
+    setStatus?: (status: string | null) => void
 }
 
-export async function login(email: string, password: string): Promise<any> {
-    await getCsrfCookie()
-    try {
-        return await apiClient.post('/login', { email, password })
-    } catch (error: any) {
-        if (error.response?.status === 422) {
-            return Promise.reject(error.response.data.errors)
+type RegisterProps = AuthCallbacks & {
+    name: string
+    email: string
+    password: string
+    password_confirmation: string
+}
+
+type LoginProps = AuthCallbacks & {
+    email: string
+    password: string
+}
+
+type ForgotPasswordProps = AuthCallbacks & {
+    email: string
+}
+
+type ResetPasswordProps = AuthCallbacks & {
+    password: string
+    password_confirmation: string
+    token?: string
+}
+
+type ResendEmailVerificationProps = {
+    setStatus: (status: string | null) => void
+}
+
+import { useAuthContext } from '@/context/AuthProvider'
+
+export const useAuth = ({
+    middleware,
+    redirectIfAuthenticated,
+}: {
+    middleware?: 'guest' | 'auth'
+    redirectIfAuthenticated?: string
+} = {}) => {
+    const router = useRouter()
+    const params = useParams()
+
+    const { user, loading, mutateUser } = useAuthContext()
+
+    const csrf = () => apiClient.get('/sanctum/csrf-cookie')
+
+    const register = async ({ setErrors, ...props }: RegisterProps) => {
+        await csrf()
+        setErrors({})
+        try {
+            await apiClient.post('/register', props)
+            await mutateUser()
+        } catch (error: any) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
+            } else {
+                throw error
+            }
         }
-        return Promise.reject({
-            general: [error.response?.data.message || 'Something went wrong'],
-        })
-    }
-}
-
-export async function register(
-    name: string,
-    email: string,
-    password: string,
-    password_confirmation: string,
-): Promise<any> {
-    if (password !== password_confirmation) {
-        throw new Error("Passwords don't match!")
     }
 
-    await getCsrfCookie()
-    try {
-        return await apiClient.post('/register', {
-            name,
-            email,
-            password,
-            password_confirmation,
-        })
-    } catch (error: any) {
-        throw error
+    const login = async ({
+        setErrors,
+        setStatus,
+        ...props
+    }: LoginProps & { setStatus?: (status: string | null) => void }) => {
+        await csrf()
+        setErrors({})
+        setStatus?.(null)
+        try {
+            await apiClient.post('/login', props)
+            await mutateUser()
+        } catch (error: any) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
+            } else {
+                throw error
+            }
+        }
     }
-}
 
-export async function logout(): Promise<any> {
-    await getCsrfCookie()
-    return apiClient.post('/logout')
-}
+    const forgotPassword = async ({
+        setErrors,
+        setStatus,
+        email,
+    }: ForgotPasswordProps) => {
+        await csrf()
+        setErrors({})
+        setStatus?.(null)
+        try {
+            const response = await apiClient.post('/forgot-password', { email })
+            setStatus?.(response.data.status)
+        } catch (error: any) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
+            } else {
+                throw error
+            }
+        }
+    }
 
-export async function fetchUser(): Promise<any> {
-    return apiClient.get('/api/user')
+    const resetPassword = async ({
+        setErrors,
+        setStatus,
+        ...props
+    }: ResetPasswordProps & AuthCallbacks) => {
+        await csrf()
+        setErrors({})
+        setStatus?.(null)
+        try {
+            const response = await apiClient.post('/reset-password', {
+                token: params.token,
+                ...props,
+            })
+            router.push('/login?reset=' + btoa(response.data.status))
+        } catch (error: any) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
+            } else {
+                throw error
+            }
+        }
+    }
+
+    const resendEmailVerification = async ({
+        setStatus,
+    }: ResendEmailVerificationProps) => {
+        const response = await apiClient.post(
+            '/email/verification-notification',
+        )
+        setStatus(response.data.status)
+    }
+
+    const logout = async () => {
+        try {
+            await apiClient.post('/logout')
+            await mutateUser(null, false)
+            router.push('/login')
+        } catch {
+            // optionally handle logout errors
+        }
+    }
+
+    // Handle redirects based on middleware and user state
+    React.useEffect(() => {
+        if (middleware === 'guest' && redirectIfAuthenticated && user) {
+            router.push(redirectIfAuthenticated)
+        }
+        if (middleware === 'auth' && user && !user.email_verified_at) {
+            //router.push('/verify-email')
+        }
+        if (
+            window.location.pathname === '/verify-email' &&
+            user?.email_verified_at
+        ) {
+            router.push(redirectIfAuthenticated ?? '/')
+        }
+        if (middleware === 'auth' && !user && !loading) {
+            logout()
+        }
+    }, [user, loading])
+
+    return {
+        user,
+        loading,
+        register,
+        login,
+        forgotPassword,
+        resetPassword,
+        resendEmailVerification,
+        logout,
+    }
 }

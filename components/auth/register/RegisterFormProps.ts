@@ -1,9 +1,16 @@
 type RegisterFormProps = {
-    onSubmit: (formData: {
+    onSubmit: (credentials: {
         name: string
         email: string
         password: string
-        confirmPassword: string
-    }) => void | Promise<void>
+        password_confirmation: string
+    }) => void
     loading?: boolean
+    errors?: {
+        name?: string[]
+        email?: string[]
+        password?: string[]
+        password_confirmation?: string[]
+        general?: string[]
+    }
 }

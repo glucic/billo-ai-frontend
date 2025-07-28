@@ -31,7 +31,7 @@
     "Auth": {
         "Login": {
             "welcome": "Willkommen bei Billo",
-            "subtitle": "Melden Sie sich an, um zu Ihrem Dashboard zu gelangen",
+            "subtitle": "Melden Sie sich an, um Ihr Dashboard zu öffnen",
             "email": "E-Mail",
             "password": "Passwort",
             "loginButton": "Anmelden",
@@ -39,8 +39,15 @@
             "or": "ODER",
             "signInGoogle": "Mit Google anmelden",
             "signInGithub": "Mit GitHub anmelden",
-            "noAccount": "Haben Sie kein Konto?",
-            "signUp": "Registrieren"
+            "noAccount": "Sie haben noch keinen Account?",
+            "signUp": "Registrieren",
+
+            "errors": {
+                "emailRequired": "E-Mail ist erforderlich.",
+                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                "passwordRequired": "Passwort ist erforderlich.",
+                "invalidCredentials": "Die angegebenen Anmeldedaten sind ungültig."
+            }
         },
         "Register": {
             "welcome": "Erstellen Sie ein Konto",
@@ -53,11 +60,21 @@
             "haveAccount": "Haben Sie bereits ein Konto?",
             "login": "Anmelden",
             "or": "ODER",
-            "signUpGoogle": "Mit Google anmelden",
-            "signUpGithub": "Mit GitHub anmelden",
-            "noAccount": "Haben Sie kein Konto?",
-            "signUp": "Registrieren",
-            "loading": "Loading..."
+            "signUpGoogle": "Mit Google registrieren",
+            "signUpGithub": "Mit GitHub registrieren",
+            "loading": "Lädt...",
+            "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
+            "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
+            "errors": {
+                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+                "nameRequired": "Benutzername ist erforderlich.",
+                "emailRequired": "E-Mail ist erforderlich.",
+                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                "passwordRequired": "Passwort ist erforderlich.",
+                "confirmPasswordRequired": "Bitte bestätigen Sie das Passwort.",
+                "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+                "passwordsDontMatch": "Die Passwörter stimmen nicht überein."
+            }
         }
     }
 }

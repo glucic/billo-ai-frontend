@@ -5,7 +5,7 @@ import { setRequestLocale } from 'next-intl/server'
 import '@/styles/globals.css'
 import { defaultMetadata } from '@/config/metadata'
 import { roboto } from '@/config/fonts'
-import { AuthProvider } from '@/context/AuthContext'
+import { AuthProvider } from '@/context/AuthProvider'
 
 export const metadata = defaultMetadata
 

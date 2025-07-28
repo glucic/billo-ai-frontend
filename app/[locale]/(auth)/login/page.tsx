@@ -1,14 +1,15 @@
 'use client'
 
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { useAuth } from '@/hooks/auth'
+
 import { LoginForm } from '@/components/auth/login/LoginFormComponent'
 import { LoginHeader } from '@/components/auth/login/LoginHeaderComponent'
-import React, { useState } from 'react'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
 import { IconBrandGoogle } from '@tabler/icons-react'
 import Link from 'next/link'
-import { login } from '@/hooks/auth'
 
 type Errors = {
     username?: string[]
@@ -19,28 +20,34 @@ type Errors = {
 export default function LoginPage() {
     const router = useRouter()
     const t = useTranslations('Auth.Login')
+    const { login, user } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: '/dashboard',
+    })
+
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState<Errors>({})
+    const [status, setStatus] = useState<string | null>(null)
 
     const handleLogin = async ({
-        username,
+        email,
         password,
     }: {
-        username: string
+        email: string
         password: string
     }) => {
         setLoading(true)
         setErrors({})
+        setStatus(null)
 
         try {
-            await login(username, password)
-            router.push('/dashboard')
-        } catch (error: any) {
-            if (error.username || error.password) {
-                setErrors(error)
-            } else {
-                setErrors({ general: [t('invalidCredentials')] })
-            }
+            await login({
+                email: email,
+                password,
+                setErrors,
+                setStatus,
+            })
+            setErrors({ general: [t('errors.invalidCredentials')] })
         } finally {
             setLoading(false)
         }
@@ -57,6 +64,8 @@ export default function LoginPage() {
                 loading={loading}
                 errors={errors}
             />
+
+            {status && <p className="text-green-600 mt-2">{status}</p>}
 
             <div className="flex items-center my-6 max-w-md w-full">
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />

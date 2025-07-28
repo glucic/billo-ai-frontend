@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { InputError } from '@/components/ui/InputError'
 
-const USERNAME_ID = 'email'
+const EMAIL_ID = 'email'
 const PASSWORD_ID = 'password'
 
 export function LoginForm({
@@ -21,16 +21,16 @@ export function LoginForm({
 }: LoginFormProps) {
     const t = useTranslations('Auth.Login')
 
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const isFormValid = username.trim() !== '' && password.trim() !== ''
+    const isFormValid = email.trim() !== '' && password.trim() !== ''
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (!isFormValid) return
 
-        onSubmit({ username, password })
+        onSubmit({ email, password })
     }
 
     return (
@@ -38,25 +38,26 @@ export function LoginForm({
             className="space-y-5 max-w-md w-full"
             onSubmit={handleSubmit}
             noValidate>
+            <InputError message={errors.general?.[0]} />
             <LabelInputContainer>
-                <Label htmlFor={USERNAME_ID}>{t('email')}</Label>
+                <Label htmlFor={EMAIL_ID}>{t('email')}</Label>
                 <InputField
-                    id={USERNAME_ID}
-                    type="text"
+                    id={EMAIL_ID}
+                    type="email"
                     placeholder={t('email')}
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                     required
                     autoComplete="email"
                     aria-label={t('email')}
                     aria-describedby={
-                        errors.username ? `${USERNAME_ID}-error` : undefined
+                        errors.email ? `${EMAIL_ID}-error` : undefined
                     }
                     disabled={loading}
                 />
                 <InputError
-                    message={errors.username?.[0]}
-                    id={`${USERNAME_ID}-error`}
+                    message={errors.email?.[0]}
+                    id={`${EMAIL_ID}-error`}
                 />
             </LabelInputContainer>
 
@@ -98,8 +99,6 @@ export function LoginForm({
                     {t('forgotPassword')}
                 </Link>
             </div>
-
-            <InputError message={errors.general?.[0]} />
         </form>
     )
 }

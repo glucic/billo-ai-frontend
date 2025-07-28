@@ -1,14 +1,9 @@
-type Errors = {
-    username?: string[]
-    password?: string[]
-    general?: string[]
-}
-
 type LoginFormProps = {
-    onSubmit: (credentials: {
-        username: string
-        password: string
-    }) => void | Promise<void>
+    onSubmit: (credentials: { email: string; password: string }) => void
     loading?: boolean
-    errors?: Errors
+    errors?: {
+        email?: string[]
+        password?: string[]
+        general?: string[]
+    }
 }

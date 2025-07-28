@@ -1,33 +1,61 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { IconBrandGoogle } from '@tabler/icons-react'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { IconBrandGoogle } from '@tabler/icons-react'
 
+import { useAuth } from '@/hooks/auth'
 import { RegisterForm } from '@/components/auth/register/RegisterFormComponent'
 import { RegisterHeader } from '@/components/auth/register/RegisterHeaderComponent'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
-import { register } from '@/hooks/auth'
+
+type Errors = {
+    name?: string[]
+    email?: string[]
+    password?: string[]
+    confirmPassword?: string[]
+    general?: string[]
+}
 
 export default function RegisterPage() {
     const router = useRouter()
     const t = useTranslations('Auth.Register')
-    const [loading, setLoading] = useState(false)
 
-    const handleRegister = async (formData: {
+    const { register: registerUser } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: '/dashboard',
+    })
+
+    const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState<Errors>({})
+    const [status, setStatus] = useState<string | null>(null)
+
+    const handleRegister = async ({
+        name,
+        email,
+        password,
+        password_confirmation,
+    }: {
         name: string
         email: string
         password: string
-        confirmPassword: string
+        password_confirmation: string
     }) => {
         setLoading(true)
+        setErrors({})
+        setStatus(null)
+
         try {
-            await register(formData.name, formData.email, formData.password, formData.confirmPassword)
-            router.push('/dashboard')
-        } catch (error) {
-            alert('Registration failed. Please try again.')
+            await registerUser({
+                name,
+                email,
+                password,
+                password_confirmation,
+                setErrors,
+                setStatus,
+            })
         } finally {
             setLoading(false)
         }
@@ -39,7 +67,13 @@ export default function RegisterPage() {
             className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4">
             <RegisterHeader />
 
-            <RegisterForm onSubmit={handleRegister} loading={loading} />
+            <RegisterForm
+                onSubmit={handleRegister}
+                loading={loading}
+                errors={errors}
+            />
+
+            {status && <p className="text-green-600 mt-2">{status}</p>}
 
             <div className="flex items-center my-6 max-w-md w-full">
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />

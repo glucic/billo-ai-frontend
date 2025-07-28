@@ -8,37 +8,47 @@ import {
     LabelInputContainer,
     StatefulButton,
 } from '@/components/ui'
+import { InputError } from '@/components/ui/InputError'
 
-export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
+const NAME_ID = 'name'
+const EMAIL_ID = 'email'
+const PASSWORD_ID = 'password'
+const PASSWORD_CONFIRMATION_ID = 'password_confirmation'
+
+export function RegisterForm({
+    onSubmit,
+    loading = false,
+    errors = {},
+}: RegisterFormProps) {
     const t = useTranslations('Auth.Register')
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState<string | null>(null)
+    const [password_confirmation, setConfirmPassword] = useState('')
+    const [clientError, setClientError] = useState<string | null>(null)
 
     const isFormValid =
         name.trim() !== '' &&
         email.trim() !== '' &&
         password.trim() !== '' &&
-        confirmPassword.trim() !== ''
+        password_confirmation.trim() !== ''
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        setError(null)
+        setClientError(null)
 
         if (!isFormValid) {
-            setError(t('allFieldsRequired'))
+            setClientError(t('allFieldsRequired'))
             return
         }
 
-        if (password !== confirmPassword) {
-            setError(t('passwordsDontMatch'))
+        if (password !== password_confirmation) {
+            setClientError(t('passwordsDontMatch'))
             return
         }
 
-        onSubmit({ name, email, password, confirmPassword })
+        onSubmit({ name, email, password, password_confirmation })
     }
 
     return (
@@ -46,82 +56,108 @@ export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
             className="space-y-5 max-w-md w-full"
             onSubmit={handleSubmit}
             noValidate>
+            <InputError
+                message={errors.general?.[0] || clientError || undefined}
+            />
+
+            {/* Name */}
             <LabelInputContainer>
-                <Label htmlFor="username">{t('username')}</Label>
+                <Label htmlFor={NAME_ID}>{t('username')}</Label>
                 <InputField
-                    id="username"
+                    id={NAME_ID}
                     type="text"
                     placeholder={t('username')}
-                    aria-label={t('username')}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     required
+                    aria-label={t('username')}
+                    aria-describedby={
+                        errors.name ? `${NAME_ID}-error` : undefined
+                    }
                     disabled={loading}
-                    aria-invalid={Boolean(error)}
                     autoFocus
+                />
+                <InputError
+                    message={errors.name?.[0]}
+                    id={`${NAME_ID}-error`}
                 />
             </LabelInputContainer>
 
+            {/* Email */}
             <LabelInputContainer>
-                <Label htmlFor="email">{t('email')}</Label>
+                <Label htmlFor={EMAIL_ID}>{t('email')}</Label>
                 <InputField
-                    id="email"
+                    id={EMAIL_ID}
                     type="email"
                     placeholder={t('email')}
-                    aria-label={t('email')}
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
+                    aria-label={t('email')}
+                    aria-describedby={
+                        errors.email ? `${EMAIL_ID}-error` : undefined
+                    }
                     disabled={loading}
-                    aria-invalid={Boolean(error)}
+                />
+                <InputError
+                    message={errors.email?.[0]}
+                    id={`${EMAIL_ID}-error`}
                 />
             </LabelInputContainer>
 
+            {/* Password */}
             <LabelInputContainer>
-                <Label htmlFor="password">{t('password')}</Label>
+                <Label htmlFor={PASSWORD_ID}>{t('password')}</Label>
                 <InputField
-                    id="password"
+                    id={PASSWORD_ID}
                     type="password"
                     placeholder={t('password')}
-                    aria-label={t('password')}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
+                    aria-label={t('password')}
+                    aria-describedby={
+                        errors.password ? `${PASSWORD_ID}-error` : undefined
+                    }
                     disabled={loading}
-                    aria-invalid={Boolean(error)}
+                />
+                <InputError
+                    message={errors.password?.[0]}
+                    id={`${PASSWORD_ID}-error`}
                 />
             </LabelInputContainer>
 
+            {/* Confirm Password */}
             <LabelInputContainer>
-                <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
+                <Label htmlFor={PASSWORD_CONFIRMATION_ID}>
+                    {t('confirmPassword')}
+                </Label>
                 <InputField
-                    id="confirmPassword"
+                    id={PASSWORD_CONFIRMATION_ID}
                     type="password"
                     placeholder={t('confirmPassword')}
-                    aria-label={t('confirmPassword')}
-                    value={confirmPassword}
+                    value={password_confirmation}
                     onChange={e => setConfirmPassword(e.target.value)}
                     required
+                    aria-label={t('confirmPassword')}
+                    aria-describedby={
+                        errors.password_confirmation
+                            ? `${PASSWORD_CONFIRMATION_ID}-error`
+                            : undefined
+                    }
                     disabled={loading}
-                    aria-invalid={Boolean(error)}
+                />
+                <InputError
+                    message={errors.password_confirmation?.[0]}
+                    id={`${PASSWORD_CONFIRMATION_ID}-error`}
                 />
             </LabelInputContainer>
-
-            {error && (
-                <p
-                    className="text-red-500 text-sm"
-                    role="alert"
-                    aria-live="assertive">
-                    {error}
-                </p>
-            )}
 
             <div className="flex justify-center">
                 <StatefulButton
                     className="min-w-[260px]"
                     type="submit"
-                    disabled={!isFormValid || loading}
-                >
+                    disabled={!isFormValid || loading}>
                     {t('registerButton')}
                 </StatefulButton>
             </div>

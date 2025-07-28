@@ -40,24 +40,41 @@
             "signInGoogle": "Sign in with Google",
             "signInGithub": "Sign in with GitHub",
             "noAccount": "Don't have an account?",
-            "signUp": "Sign up"
+            "signUp": "Sign up",
+
+            "errors": {
+                "emailRequired": "Email is required.",
+                "emailInvalid": "Please enter a valid email address.",
+                "passwordRequired": "Password is required.",
+                "invalidCredentials": "The provided credentials are incorrect."
+            }
         },
         "Register": {
             "welcome": "Create an account",
-            "subtitle": "Register to get started",
+            "subtitle": "Sign up to get started",
             "username": "Username",
             "email": "Email",
             "password": "Password",
-            "confirmPassword": "Confirm password",
+            "confirmPassword": "Confirm Password",
             "registerButton": "Register",
             "haveAccount": "Already have an account?",
             "login": "Login",
             "or": "OR",
             "signUpGoogle": "Sign up with Google",
             "signUpGithub": "Sign up with GitHub",
-            "noAccount": "Don't have an account?",
-            "signUp": "Sign up",
-            "loading": "Loading..."
+            "loading": "Loading...",
+            "allFieldsRequired": "Please fill out all fields.",
+            "passwordsDontMatch": "Passwords do not match.",
+            "errors": {
+                "general": "An error occurred. Please try again.",
+                "nameRequired": "Username is required.",
+                "emailRequired": "Email is required.",
+                "emailInvalid": "Please enter a valid email address.",
+                "passwordRequired": "Password is required.",
+                "confirmPasswordRequired": "Please confirm the password.",
+                "passwordTooShort": "Password must be at least 8 characters long.",
+                "passwordsDontMatch": "Passwords do not match."
+            }
         }
     }
 }
