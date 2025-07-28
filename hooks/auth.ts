@@ -17,15 +17,20 @@ export async function register(
     name: string,
     email: string,
     password: string,
-    confirmPassword: string,
+    password_confirmation: string,
 ): Promise<any> {
-    if (password !== confirmPassword) {
+    if (password !== password_confirmation) {
         throw new Error("Passwords don't match!")
     }
 
     await getCsrfCookie()
     try {
-        return await apiClient.post('/register', { name, email, password })
+        return await apiClient.post('/register', {
+            name,
+            email,
+            password,
+            password_confirmation,
+        })
     } catch (error: any) {
         throw error
     }
