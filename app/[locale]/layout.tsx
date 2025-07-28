@@ -1,36 +1,35 @@
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import { setRequestLocale } from "next-intl/server";
-import "@/styles/globals.css";
-import { defaultMetadata } from "@/config/metadata";
-import { roboto } from "@/config/fonts";
+import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { notFound } from 'next/navigation'
+import { routing } from '@/i18n/routing'
+import { setRequestLocale } from 'next-intl/server'
+import '@/styles/globals.css'
+import { defaultMetadata } from '@/config/metadata'
+import { roboto } from '@/config/fonts'
 
-export const metadata = defaultMetadata;
+export const metadata = defaultMetadata
 
 export default async function LocaleLayout({
-  children,
-  params,
+    children,
+    params,
 }: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+    children: React.ReactNode
+    params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+    const { locale } = await params
+    if (!hasLocale(routing.locales, locale)) {
+        notFound()
+    }
 
-  setRequestLocale(locale);
+    setRequestLocale(locale)
 
-  return (
-    <html
-      lang={locale}
-      className={`${roboto.variable} font-sans scroll-smooth`}
-      suppressHydrationWarning
-    >
-      <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html
+            lang={locale}
+            className={`${roboto.variable} font-sans scroll-smooth`}
+            suppressHydrationWarning>
+            <body>
+                <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            </body>
+        </html>
+    )
 }

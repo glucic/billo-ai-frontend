@@ -1,62 +1,62 @@
 {
-  "Navigation": {
-    "features": "Features",
-    "pricing": "Pricing",
-    "contact": "Contact",
-    "cta": "Sign In"
-  },
-  "LandingPage": {
-    "HeroSection": {
-      "title": "Welcome to Billo AI",
-      "description": "Create professional invoices in seconds using AI. Generate, customize, and export invoices effortlessly with BilloAI.",
-      "primaryCta": "Get Started",
-      "secondaryCta": "Learn More"
+    "Navigation": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "contact": "Contact",
+        "cta": "Sign In"
     },
-    "Features": {
-      "heading": "Why Choose BilloAI?",
-      "feature1": {
-        "title": "Lightning Fast",
-        "description": "Generate invoices in seconds using AI-powered templates."
-      },
-      "feature2": {
-        "title": "Customizable Layouts",
-        "description": "Easily customize PDF designs to match your branding."
-      },
-      "feature3": {
-        "title": "Automated Billing",
-        "description": "Save time with recurring invoices and smart reminders."
-      }
-    }
-  },
-  "Auth": {
-    "Login": {
-      "welcome": "Welcome to Billo",
-      "subtitle": "Sign in to continue to your dashboard",
-      "username": "Username",
-      "password": "Password",
-      "loginButton": "Login",
-      "forgotPassword": "Forgot password?",
-      "or": "OR",
-      "signInGoogle": "Sign in with Google",
-      "signInGithub": "Sign in with GitHub",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up"
+    "LandingPage": {
+        "HeroSection": {
+            "title": "Welcome to Billo AI",
+            "description": "Create professional invoices in seconds using AI. Generate, customize, and export invoices effortlessly with BilloAI.",
+            "primaryCta": "Get Started",
+            "secondaryCta": "Learn More"
+        },
+        "Features": {
+            "heading": "Why Choose BilloAI?",
+            "feature1": {
+                "title": "Lightning Fast",
+                "description": "Generate invoices in seconds using AI-powered templates."
+            },
+            "feature2": {
+                "title": "Customizable Layouts",
+                "description": "Easily customize PDF designs to match your branding."
+            },
+            "feature3": {
+                "title": "Automated Billing",
+                "description": "Save time with recurring invoices and smart reminders."
+            }
+        }
     },
-    "Register": {
-      "welcome": "Create an account",
-      "subtitle": "Register to get started",
-      "username": "Username",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm password",
-      "registerButton": "Register",
-      "haveAccount": "Already have an account?",
-      "login": "Login",
-      "or": "OR",
-      "signUpGoogle": "Sign up with Google",
-      "signUpGithub": "Sign up with GitHub",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up"
+    "Auth": {
+        "Login": {
+            "welcome": "Welcome to Billo",
+            "subtitle": "Sign in to continue to your dashboard",
+            "username": "Username",
+            "password": "Password",
+            "loginButton": "Login",
+            "forgotPassword": "Forgot password?",
+            "or": "OR",
+            "signInGoogle": "Sign in with Google",
+            "signInGithub": "Sign in with GitHub",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up"
+        },
+        "Register": {
+            "welcome": "Create an account",
+            "subtitle": "Register to get started",
+            "username": "Username",
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm password",
+            "registerButton": "Register",
+            "haveAccount": "Already have an account?",
+            "login": "Login",
+            "or": "OR",
+            "signUpGoogle": "Sign up with Google",
+            "signUpGithub": "Sign up with GitHub",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up"
+        }
     }
-  }
 }
