@@ -1,9 +1,19 @@
-type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+import React from 'react'
+
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     label?: string
     id: string
+    disabled?: boolean
+    className?: string
 }
 
-export function InputField({ label, id, ...props }: InputFieldProps) {
+export const InputField: React.FC<InputProps> = ({
+    label,
+    id,
+    disabled = false,
+    className = '',
+    ...props
+}) => {
     return (
         <div>
             {label && (
@@ -15,9 +25,12 @@ export function InputField({ label, id, ...props }: InputFieldProps) {
             )}
             <input
                 id={id}
+                disabled={disabled}
                 {...props}
-                className="w-full px-4 py-3 rounded border border-gray-300 bg-[var(--color-background)] text-[var(--color-foreground)] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition"
+                className={`${className} w-full px-4 py-3 rounded-md shadow-sm border border-gray-300 bg-[var(--color-background)] text-[var(--color-foreground)] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition`}
             />
         </div>
     )
 }
+
+export default InputField

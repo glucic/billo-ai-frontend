@@ -6,22 +6,33 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
 type LoginFormProps = {
-    onSubmit: (email: string, password: string) => void | Promise<void>
+    onSubmit: (credentials: {
+        username: string
+        password: string
+    }) => void | Promise<void>
     loading?: boolean
+    errors?: Partial<{
+        username: string[]
+        password: string[]
+        general: string[]
+    }>
 }
 
-export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
+export function LoginForm({
+    onSubmit,
+    loading = false,
+    errors = {},
+}: LoginFormProps) {
     const t = useTranslations('Auth.Login')
 
-    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!email.trim() || !password.trim()) {
-            return
-        }
-        onSubmit(email, password)
+        if (!username.trim() || !password.trim()) return
+
+        onSubmit({ username, password })
     }
 
     return (
@@ -29,18 +40,21 @@ export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
             className="space-y-5 max-w-md w-full"
             onSubmit={handleSubmit}
             noValidate>
+            {/* Email Field */}
             <InputField
                 id="email"
-                type="email"
+                type="text"
                 label={t('email')}
                 placeholder={t('email')}
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                value={username}
+                onChange={e => setUsername(e.target.value)}
                 required
                 autoComplete="email"
                 aria-label={t('email')}
                 disabled={loading}
             />
+
+            {/* Password Field */}
             <InputField
                 id="password"
                 type="password"
@@ -53,6 +67,8 @@ export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
                 aria-label={t('password')}
                 disabled={loading}
             />
+
+            {/* Submit Button */}
             <button
                 type="submit"
                 disabled={loading}
@@ -64,6 +80,7 @@ export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
                 {loading ? t('loading') : t('loginButton')}
             </button>
 
+            {/* Forgot Password */}
             <div className="text-right mt-1">
                 <Link
                     href="/forgot-password"
@@ -71,6 +88,11 @@ export function LoginForm({ onSubmit, loading = false }: LoginFormProps) {
                     {t('forgotPassword')}
                 </Link>
             </div>
+
+            {/* General Error */}
+            {errors.general && (
+                <p className="text-sm text-red-600 mt-2">{errors.general[0]}</p>
+            )}
         </form>
     )
 }

@@ -1,24 +1,41 @@
 import apiClient from '@/lib/apiClient'
 
-export async function getCsrfCookie() {
+export async function getCsrfCookie(): Promise<void> {
     await apiClient.get('/sanctum/csrf-cookie')
 }
 
-export async function login(email: string, password: string) {
+export async function login(email: string, password: string): Promise<any> {
     await getCsrfCookie()
-    return apiClient.post('/login', { email, password })
+    try {
+        return await apiClient.post('/login', { email, password })
+    } catch (error: any) {
+        throw error
+    }
 }
 
-export async function register(name: string, email: string, password: string) {
+export async function register(
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+): Promise<any> {
+    if (password !== confirmPassword) {
+        throw new Error("Passwords don't match!")
+    }
+
     await getCsrfCookie()
-    return apiClient.post('/register', { name, email, password })
+    try {
+        return await apiClient.post('/register', { name, email, password })
+    } catch (error: any) {
+        throw error
+    }
 }
 
-export async function logout() {
+export async function logout(): Promise<any> {
     await getCsrfCookie()
     return apiClient.post('/logout')
 }
 
-export async function fetchUser() {
+export async function fetchUser(): Promise<any> {
     return apiClient.get('/api/user')
 }
