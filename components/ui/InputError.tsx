@@ -1,10 +1,16 @@
-export function InputError({ messages }: { messages?: string[] }) {
-    if (!messages || messages.length === 0) return null
+import React from 'react'
+
+type InputErrorProps = {
+    message?: string
+    id?: string
+}
+
+export function InputError({ message, id }: InputErrorProps) {
+    if (!message) return null
+
     return (
-        <div className="mt-1 text-sm text-red-600">
-            {messages.map((msg, i) => (
-                <p key={i}>{msg}</p>
-            ))}
-        </div>
+        <p id={id} role="alert" className="text-sm text-red-600 mt-1">
+            {message}
+        </p>
     )
 }

@@ -37,7 +37,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Link
-                    href="/dashboard"
+                    href="/register"
                     className="rounded-lg bg-[var(--accent)] px-6 py-3 text-white font-medium transition hover:bg-[var(--accent-light)]">
                     {t('primaryCta', { defaultMessage: 'Get Started' })}
                 </Link>

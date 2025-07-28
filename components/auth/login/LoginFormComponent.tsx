@@ -1,22 +1,18 @@
 'use client'
 
 import React, { useState } from 'react'
-import { InputField } from '@/components/ui/InputField'
+import {
+    InputField,
+    Label,
+    LabelInputContainer,
+    StatefulButton,
+} from '@/components/ui'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { InputError } from '@/components/ui/InputError'
 
-type LoginFormProps = {
-    onSubmit: (credentials: {
-        username: string
-        password: string
-    }) => void | Promise<void>
-    loading?: boolean
-    errors?: Partial<{
-        username: string[]
-        password: string[]
-        general: string[]
-    }>
-}
+const USERNAME_ID = 'email'
+const PASSWORD_ID = 'password'
 
 export function LoginForm({
     onSubmit,
@@ -28,9 +24,11 @@ export function LoginForm({
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+    const isFormValid = username.trim() !== '' && password.trim() !== ''
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!username.trim() || !password.trim()) return
+        if (!isFormValid) return
 
         onSubmit({ username, password })
     }
@@ -40,47 +38,59 @@ export function LoginForm({
             className="space-y-5 max-w-md w-full"
             onSubmit={handleSubmit}
             noValidate>
-            {/* Email Field */}
-            <InputField
-                id="email"
-                type="text"
-                label={t('email')}
-                placeholder={t('email')}
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                required
-                autoComplete="email"
-                aria-label={t('email')}
-                disabled={loading}
-            />
+            <LabelInputContainer>
+                <Label htmlFor={USERNAME_ID}>{t('email')}</Label>
+                <InputField
+                    id={USERNAME_ID}
+                    type="text"
+                    placeholder={t('email')}
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    required
+                    autoComplete="email"
+                    aria-label={t('email')}
+                    aria-describedby={
+                        errors.username ? `${USERNAME_ID}-error` : undefined
+                    }
+                    disabled={loading}
+                />
+                <InputError
+                    message={errors.username?.[0]}
+                    id={`${USERNAME_ID}-error`}
+                />
+            </LabelInputContainer>
 
-            {/* Password Field */}
-            <InputField
-                id="password"
-                type="password"
-                label={t('password')}
-                placeholder={t('password')}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                aria-label={t('password')}
-                disabled={loading}
-            />
+            <LabelInputContainer>
+                <Label htmlFor={PASSWORD_ID}>{t('password')}</Label>
+                <InputField
+                    id={PASSWORD_ID}
+                    type="password"
+                    placeholder={t('password')}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    aria-label={t('password')}
+                    aria-describedby={
+                        errors.password ? `${PASSWORD_ID}-error` : undefined
+                    }
+                    disabled={loading}
+                />
+                <InputError
+                    message={errors.password?.[0]}
+                    id={`${PASSWORD_ID}-error`}
+                />
+            </LabelInputContainer>
 
-            {/* Submit Button */}
-            <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-3 rounded bg-[var(--color-accent)] text-white font-semibold transition ${
-                    loading
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-[var(--color-accent-light)]'
-                }`}>
-                {loading ? t('loading') : t('loginButton')}
-            </button>
+            <div className="flex justify-center">
+                <StatefulButton
+                    className="min-w-[260px]"
+                    type="submit"
+                    disabled={!isFormValid || loading}>
+                    {t('loginButton')}
+                </StatefulButton>
+            </div>
 
-            {/* Forgot Password */}
             <div className="text-right mt-1">
                 <Link
                     href="/forgot-password"
@@ -89,10 +99,7 @@ export function LoginForm({
                 </Link>
             </div>
 
-            {/* General Error */}
-            {errors.general && (
-                <p className="text-sm text-red-600 mt-2">{errors.general[0]}</p>
-            )}
+            <InputError message={errors.general?.[0]} />
         </form>
     )
 }

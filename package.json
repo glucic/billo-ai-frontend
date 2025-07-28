@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@radix-ui/react-label": "^2.1.7",
         "@radix-ui/react-slot": "^1.2.3",
         "@shadcn/ui": "^0.0.4",
         "@tabler/icons-react": "^3.34.1",
@@ -17,7 +18,7 @@
         "clsx": "^2.1.1",
         "cobe": "^0.6.4",
         "lucide-react": "^0.526.0",
-        "motion": "^12.23.9",
+        "motion": "^12.23.11",
         "next": "15.4.4",
         "next-intl": "^4.3.4",
         "react": "19.1.0",

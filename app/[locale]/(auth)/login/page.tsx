@@ -10,18 +10,37 @@ import { IconBrandGoogle } from '@tabler/icons-react'
 import Link from 'next/link'
 import { login } from '@/hooks/auth'
 
+type Errors = {
+    username?: string[]
+    password?: string[]
+    general?: string[]
+}
+
 export default function LoginPage() {
     const router = useRouter()
     const t = useTranslations('Auth.Login')
     const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState<Errors>({})
 
-    const handleLogin = async (email: string, password: string) => {
+    const handleLogin = async ({
+        username,
+        password,
+    }: {
+        username: string
+        password: string
+    }) => {
         setLoading(true)
+        setErrors({})
+
         try {
-            await login(email, password)
+            await login(username, password)
             router.push('/dashboard')
-        } catch (error) {
-            alert('Login failed. Please check your credentials and try again.')
+        } catch (error: any) {
+            if (error.username || error.password) {
+                setErrors(error)
+            } else {
+                setErrors({ general: [t('invalidCredentials')] })
+            }
         } finally {
             setLoading(false)
         }
@@ -33,7 +52,11 @@ export default function LoginPage() {
             className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4">
             <LoginHeader />
 
-            <LoginForm onSubmit={handleLogin} loading={loading} />
+            <LoginForm
+                onSubmit={handleLogin}
+                loading={loading}
+                errors={errors}
+            />
 
             <div className="flex items-center my-6 max-w-md w-full">
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />

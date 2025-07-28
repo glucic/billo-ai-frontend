@@ -9,7 +9,12 @@ export async function login(email: string, password: string): Promise<any> {
     try {
         return await apiClient.post('/login', { email, password })
     } catch (error: any) {
-        throw error
+        if (error.response?.status === 422) {
+            return Promise.reject(error.response.data.errors)
+        }
+        return Promise.reject({
+            general: [error.response?.data.message || 'Something went wrong'],
+        })
     }
 }
 

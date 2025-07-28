@@ -2,36 +2,12 @@
 
 import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
-
-type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
-    label?: string
-}
-
-function InputField({ label, ...props }: InputFieldProps) {
-    return (
-        <div>
-            {label && (
-                <label className="block text-sm font-medium mb-1 text-[var(--color-foreground)]">
-                    {label}
-                </label>
-            )}
-            <input
-                {...props}
-                className="w-full px-4 py-3 rounded border border-gray-300 bg-[var(--color-background)] text-[var(--color-foreground)] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition"
-            />
-        </div>
-    )
-}
-
-type RegisterFormProps = {
-    onSubmit: (formData: {
-        name: string
-        email: string
-        password: string
-        confirmPassword: string
-    }) => void | Promise<void>
-    loading?: boolean
-}
+import {
+    InputField,
+    Label,
+    LabelInputContainer,
+    StatefulButton,
+} from '@/components/ui'
 
 export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
     const t = useTranslations('Auth.Register')
@@ -42,16 +18,17 @@ export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
 
+    const isFormValid =
+        name.trim() !== '' &&
+        email.trim() !== '' &&
+        password.trim() !== '' &&
+        confirmPassword.trim() !== ''
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         setError(null)
 
-        if (
-            !name.trim() ||
-            !email.trim() ||
-            !password.trim() ||
-            !confirmPassword.trim()
-        ) {
+        if (!isFormValid) {
             setError(t('allFieldsRequired'))
             return
         }
@@ -69,57 +46,85 @@ export function RegisterForm({ onSubmit, loading = false }: RegisterFormProps) {
             className="space-y-5 max-w-md w-full"
             onSubmit={handleSubmit}
             noValidate>
-            <InputField
-                type="text"
-                label={t('username')}
-                placeholder={t('username')}
-                aria-label={t('username')}
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-                disabled={loading}
-            />
-            <InputField
-                type="email"
-                label={t('email')}
-                placeholder={t('email')}
-                aria-label={t('email')}
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                disabled={loading}
-            />
-            <InputField
-                type="password"
-                label={t('password')}
-                placeholder={t('password')}
-                aria-label={t('password')}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                disabled={loading}
-            />
-            <InputField
-                type="password"
-                label={t('confirmPassword')}
-                placeholder={t('confirmPassword')}
-                aria-label={t('confirmPassword')}
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                required
-                disabled={loading}
-            />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-3 rounded bg-[var(--color-accent)] text-white font-semibold transition ${
-                    loading
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-[var(--color-accent-light)]'
-                }`}>
-                {loading ? t('loading') : t('registerButton')}
-            </button>
+            <LabelInputContainer>
+                <Label htmlFor="username">{t('username')}</Label>
+                <InputField
+                    id="username"
+                    type="text"
+                    placeholder={t('username')}
+                    aria-label={t('username')}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                    disabled={loading}
+                    aria-invalid={Boolean(error)}
+                    autoFocus
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                <Label htmlFor="email">{t('email')}</Label>
+                <InputField
+                    id="email"
+                    type="email"
+                    placeholder={t('email')}
+                    aria-label={t('email')}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                    aria-invalid={Boolean(error)}
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                <Label htmlFor="password">{t('password')}</Label>
+                <InputField
+                    id="password"
+                    type="password"
+                    placeholder={t('password')}
+                    aria-label={t('password')}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    disabled={loading}
+                    aria-invalid={Boolean(error)}
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
+                <InputField
+                    id="confirmPassword"
+                    type="password"
+                    placeholder={t('confirmPassword')}
+                    aria-label={t('confirmPassword')}
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    required
+                    disabled={loading}
+                    aria-invalid={Boolean(error)}
+                />
+            </LabelInputContainer>
+
+            {error && (
+                <p
+                    className="text-red-500 text-sm"
+                    role="alert"
+                    aria-live="assertive">
+                    {error}
+                </p>
+            )}
+
+            <div className="flex justify-center">
+                <StatefulButton
+                    className="min-w-[260px]"
+                    type="submit"
+                    disabled={!isFormValid || loading}
+                >
+                    {t('registerButton')}
+                </StatefulButton>
+            </div>
         </form>
     )
 }
