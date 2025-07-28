@@ -1,9 +1,11 @@
-'use client'
-
 import React from 'react'
 
 interface DashboardLayoutProps {
     children: React.ReactNode
+}
+
+export const metadata = {
+    title: 'BilloAI - Dashboard',
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {

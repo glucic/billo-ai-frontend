@@ -60,7 +60,6 @@ export function RegisterForm({
                 message={errors.general?.[0] || clientError || undefined}
             />
 
-            {/* Name */}
             <LabelInputContainer>
                 <Label htmlFor={NAME_ID}>{t('username')}</Label>
                 <InputField
@@ -83,7 +82,6 @@ export function RegisterForm({
                 />
             </LabelInputContainer>
 
-            {/* Email */}
             <LabelInputContainer>
                 <Label htmlFor={EMAIL_ID}>{t('email')}</Label>
                 <InputField
@@ -105,7 +103,6 @@ export function RegisterForm({
                 />
             </LabelInputContainer>
 
-            {/* Password */}
             <LabelInputContainer>
                 <Label htmlFor={PASSWORD_ID}>{t('password')}</Label>
                 <InputField
@@ -127,7 +124,6 @@ export function RegisterForm({
                 />
             </LabelInputContainer>
 
-            {/* Confirm Password */}
             <LabelInputContainer>
                 <Label htmlFor={PASSWORD_CONFIRMATION_ID}>
                     {t('confirmPassword')}
