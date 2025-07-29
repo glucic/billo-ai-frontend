@@ -3,55 +3,62 @@
 import React from 'react'
 import { WizardStepTransition } from './WizardStepTransition'
 import { InputField, Label, LabelInputContainer } from '@/components/ui'
+import { useTranslations } from 'next-intl'
 
 export function StepCompanyDetails({
-    email,
-    phone,
+    company_email,
+    company_phone,
     workers,
     onChange,
-    step
+    step,
 }: {
-    email: string
-    phone: string
+    company_email: string
+    company_phone: string
     workers: number
     onChange: (field: string, value: string) => void
     step: number
 }) {
+    const t = useTranslations('Auth.GettingStarted.StepCompanyDetails')
+
     return (
         <WizardStepTransition step={step}>
             <h1 className="text-3xl font-bold text-center mb-6">
-                Company Details
+                {t('title')}
             </h1>
             <div className="space-y-4 w-80">
                 <LabelInputContainer>
-                    <Label htmlFor="email">Company Email</Label>
+                    <Label htmlFor="company_email">{t('emailLabel')}</Label>
                     <InputField
-                        id="email"
+                        id="company_email"
                         type="email"
-                        value={email}
-                        onChange={e => onChange('email', e.target.value)}
-                        placeholder="email@company.com"
+                        value={company_email}
+                        onChange={e =>
+                            onChange('company_email', e.target.value)
+                        }
+                        placeholder={t('emailPlaceholder')}
                     />
                 </LabelInputContainer>
 
                 <LabelInputContainer>
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="company_phone">{t('phoneLabel')}</Label>
                     <InputField
-                        id="phone"
-                        value={phone}
-                        onChange={e => onChange('phone', e.target.value)}
-                        placeholder="+123 456 789"
+                        id="company_phone"
+                        value={company_phone}
+                        onChange={e =>
+                            onChange('company_phone', e.target.value)
+                        }
+                        placeholder={t('phonePlaceholder')}
                     />
                 </LabelInputContainer>
 
                 <LabelInputContainer>
-                    <Label htmlFor="workers">Number of Workers</Label>
+                    <Label htmlFor="workers">{t('workersLabel')}</Label>
                     <InputField
                         id="workers"
                         type="number"
                         value={workers}
                         onChange={e => onChange('workers', e.target.value)}
-                        placeholder="50"
+                        placeholder={t('workersPlaceholder')}
                     />
                 </LabelInputContainer>
             </div>

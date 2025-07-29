@@ -13,21 +13,29 @@ import { StatefulButton } from '@/components/ui'
 export default function GettingStartedPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-
     const [step, setStep] = useState(0)
 
-    const [companyName, setCompanyName] = useState('')
-    const [companyAbout, setCompanyAbout] = useState('')
+    const [company_name, setCompanyName] = useState('')
+    const [company_description, setCompanyAbout] = useState('')
     const [details, setDetails] = useState({
-        email: '',
-        phone: '',
+        company_email: '',
+        company_phone: '',
         workers: 0,
     })
 
     const next = () => setStep(prev => prev + 1)
     const back = () => setStep(prev => prev - 1)
+
     const handleSubmit = async () => {
         setLoading(true)
+
+        const payload = {
+            company_name,
+            company_description,
+            ...details,
+        }
+
+        console.log('Submitting payload:', payload)
 
         try {
             await new Promise(res => setTimeout(res, 1000))
@@ -38,27 +46,29 @@ export default function GettingStartedPage() {
     }
 
     return (
-        <main className="min-h-screen flex items-center justify-center">
+        <main
+            id="getting-started"
+            className="min-h-screen flex items-center justify-center">
             <div className="h-screen flex flex-col items-center justify-center">
                 <AnimatePresence mode="wait">
                     {step === 0 && (
                         <StepCompanyName
-                            value={companyName}
+                            value={company_name}
                             onChange={setCompanyName}
                             step={step}
                         />
                     )}
                     {step === 1 && (
                         <StepCompanyAbout
-                            value={companyAbout}
+                            value={company_description}
                             onChange={setCompanyAbout}
                             step={step}
                         />
                     )}
                     {step === 2 && (
                         <StepCompanyDetails
-                            email={details.email}
-                            phone={details.phone}
+                            company_email={details.company_email}
+                            company_phone={details.company_phone}
                             workers={details.workers}
                             onChange={(field, value) =>
                                 setDetails({ ...details, [field]: value })

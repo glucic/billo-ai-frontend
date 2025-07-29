@@ -83,6 +83,26 @@
                 "passwordTooShort": "Password must be at least 8 characters long.",
                 "passwordsDontMatch": "Passwords do not match."
             }
+        },
+
+        "GettingStarted": {
+            "StepCompanyName": {
+                "label": "What's your company called?",
+                "placeholder": "Type your company’s name here"
+            },
+            "StepCompanyAbout": {
+                "label": "What does your company do? (Optional)",
+                "placeholder": "Tell us a little bit about your company"
+            },
+            "StepCompanyDetails": {
+                "title": "Company Details",
+                "emailLabel": "Your company email",
+                "emailPlaceholder": "example@company.com",
+                "phoneLabel": "Your phone number",
+                "phonePlaceholder": "+1 123 456 7890",
+                "workersLabel": "How many employees do you have?",
+                "workersPlaceholder": "For example: 50"
+            }
         }
     }
 }
