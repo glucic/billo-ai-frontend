@@ -5,6 +5,15 @@
         "contact": "Kontakt",
         "cta": "Anmelden"
     },
+    "Sidebar": {
+        "dashboard": "Dashboard",
+        "invoices": "Rechnungen",
+        "clients": "Kunden",
+        "settings": "Einstellungen",
+        "notifications": "Benachrichtigungen",
+        "help": "Hilfe",
+        "logout": "Abmelden"
+    },
     "LandingPage": {
         "HeroSection": {
             "title": "Willkommen bei Billo AI",
