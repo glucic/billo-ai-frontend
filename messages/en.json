@@ -1,73 +1,72 @@
 {
     "Navigation": {
-        "features": "Features",
-        "pricing": "Pricing",
-        "contact": "Contact",
+        "features": "Explore Features",
+        "pricing": "Pricing & Plans",
+        "contact": "Contact Us",
         "cta": "Sign In"
     },
     "Sidebar": {
         "dashboard": "Dashboard",
-        "invoices": "Rechnungen",
-        "clients": "Kunden",
-        "settings": "Einstellungen",
-        "notifications": "Benachrichtigungen",
-        "help": "Hilfe",
-        "logout": "Abmelden"
+        "invoices": "Invoices",
+        "clients": "Clients",
+        "settings": "Settings",
+        "notifications": "Notifications",
+        "help": "Help & Support",
+        "logout": "Log Out"
     },
     "LandingPage": {
         "HeroSection": {
-            "title": "Welcome to Billo AI",
-            "description": "Create professional invoices in seconds using AI. Generate, customize, and export invoices effortlessly with BilloAI.",
-            "primaryCta": "Get Started",
-            "secondaryCta": "Learn More"
+            "title": "Welcome to BilloAI",
+            "description": "The fastest way to create professional invoices with AI. Generate, customize, and send invoices in just seconds.",
+            "primaryCta": "Create Invoices Now",
+            "secondaryCta": "See All Features"
         },
         "Features": {
             "heading": "Why Choose BilloAI?",
             "feature1": {
-                "title": "Lightning Fast",
-                "description": "Generate invoices in seconds using AI-powered templates."
+                "title": "Fast & Efficient",
+                "description": "Create professional invoices in seconds with intelligent AI-powered templates."
             },
             "feature2": {
                 "title": "Customizable Layouts",
-                "description": "Easily customize PDF designs to match your branding."
+                "description": "Easily tailor PDF designs to fit your brand and style."
             },
             "feature3": {
                 "title": "Automated Billing",
-                "description": "Save time with recurring invoices and smart reminders."
+                "description": "Save time with recurring invoices and smart payment reminders."
             }
         }
     },
     "Auth": {
         "Login": {
-            "welcome": "Welcome to Billo",
-            "subtitle": "Sign in to continue to your dashboard",
-            "email": "E-Mail",
+            "welcome": "Welcome to BilloAI",
+            "subtitle": "Sign in to manage your invoices",
+            "email": "Email",
             "password": "Password",
-            "loginButton": "Login",
-            "forgotPassword": "Forgot password?",
+            "loginButton": "Sign In",
+            "forgotPassword": "Forgot your password?",
             "or": "OR",
             "signInGoogle": "Sign in with Google",
             "signInGithub": "Sign in with GitHub",
             "noAccount": "Don't have an account?",
-            "signUp": "Sign up",
-
+            "signUp": "Sign Up",
             "errors": {
                 "emailRequired": "Email is required.",
                 "emailInvalid": "Please enter a valid email address.",
                 "passwordRequired": "Password is required.",
-                "invalidCredentials": "The provided credentials are incorrect."
+                "invalidCredentials": "Invalid email or password."
             }
         },
         "Register": {
-            "welcome": "Create an account",
-            "subtitle": "Sign up to get started",
+            "welcome": "Create an Account",
+            "subtitle": "Sign up for free and start instantly",
             "username": "Username",
             "email": "Email",
             "password": "Password",
             "confirmPassword": "Confirm Password",
-            "registerButton": "Register",
+            "registerButton": "Sign Up",
             "haveAccount": "Already have an account?",
-            "login": "Login",
+            "login": "Sign In",
             "or": "OR",
             "signUpGoogle": "Sign up with Google",
             "signUpGithub": "Sign up with GitHub",
@@ -80,7 +79,7 @@
                 "emailRequired": "Email is required.",
                 "emailInvalid": "Please enter a valid email address.",
                 "passwordRequired": "Password is required.",
-                "confirmPasswordRequired": "Please confirm the password.",
+                "confirmPasswordRequired": "Please confirm your password.",
                 "passwordTooShort": "Password must be at least 8 characters long.",
                 "passwordsDontMatch": "Passwords do not match."
             }

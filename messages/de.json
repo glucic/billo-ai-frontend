@@ -1,9 +1,9 @@
 {
     "Navigation": {
-        "features": "Funktionen",
-        "pricing": "Preise",
-        "contact": "Kontakt",
-        "cta": "Anmelden"
+        "features": "Funktionen entdecken",
+        "pricing": "Preise & Pläne",
+        "contact": "Kontakt aufnehmen",
+        "cta": "Jetzt anmelden"
     },
     "Sidebar": {
         "dashboard": "Dashboard",
@@ -11,36 +11,36 @@
         "clients": "Kunden",
         "settings": "Einstellungen",
         "notifications": "Benachrichtigungen",
-        "help": "Hilfe",
+        "help": "Hilfe & Support",
         "logout": "Abmelden"
     },
     "LandingPage": {
         "HeroSection": {
-            "title": "Willkommen bei Billo AI",
-            "description": "Erstellen Sie professionelle Rechnungen in Sekundenschnelle mit KI. Generieren, anpassen und exportieren Sie Rechnungen mühelos mit BilloAI.",
-            "primaryCta": "Loslegen",
-            "secondaryCta": "Mehr erfahren"
+            "title": "Willkommen bei BilloAI",
+            "description": "Ihre schnellste Lösung für professionelle Rechnungen mit KI. Erstellen, anpassen und versenden Sie Rechnungen in nur wenigen Sekunden.",
+            "primaryCta": "Jetzt Rechnungen erstellen",
+            "secondaryCta": "Alle Funktionen ansehen"
         },
         "Features": {
-            "heading": "Warum BilloAI wählen?",
+            "heading": "Warum BilloAI?",
             "feature1": {
-                "title": "Blitzschnell",
-                "description": "Erstellen Sie Rechnungen in Sekunden mit KI-gestützten Vorlagen."
+                "title": "Schnell & effizient",
+                "description": "Erstellen Sie professionelle Rechnungen in Sekunden dank intelligenter KI-Vorlagen."
             },
             "feature2": {
-                "title": "Anpassbare Layouts",
-                "description": "Passen Sie PDF-Designs einfach an Ihr Branding an."
+                "title": "Individuelle Layouts",
+                "description": "Passen Sie PDF-Designs flexibel an Ihr Branding und Ihre Anforderungen an."
             },
             "feature3": {
-                "title": "Automatisierte Abrechnung",
-                "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und intelligenten Erinnerungen."
+                "title": "Automatische Prozesse",
+                "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und smarten Zahlungserinnerungen."
             }
         }
     },
     "Auth": {
         "Login": {
-            "welcome": "Willkommen bei Billo",
-            "subtitle": "Melden Sie sich an, um Ihr Dashboard zu öffnen",
+            "welcome": "Willkommen bei BilloAI",
+            "subtitle": "Melden Sie sich an, um Ihre Rechnungen zu verwalten",
             "email": "E-Mail",
             "password": "Passwort",
             "loginButton": "Anmelden",
@@ -48,30 +48,29 @@
             "or": "ODER",
             "signInGoogle": "Mit Google anmelden",
             "signInGithub": "Mit GitHub anmelden",
-            "noAccount": "Sie haben noch keinen Account?",
+            "noAccount": "Noch kein Konto?",
             "signUp": "Registrieren",
-
             "errors": {
                 "emailRequired": "E-Mail ist erforderlich.",
                 "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
                 "passwordRequired": "Passwort ist erforderlich.",
-                "invalidCredentials": "Die angegebenen Anmeldedaten sind ungültig."
+                "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt."
             }
         },
         "Register": {
-            "welcome": "Erstellen Sie ein Konto",
-            "subtitle": "Registrieren Sie sich, um loszulegen",
+            "welcome": "Konto erstellen",
+            "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
             "username": "Benutzername",
             "email": "E-Mail",
             "password": "Passwort",
             "confirmPassword": "Passwort bestätigen",
             "registerButton": "Registrieren",
-            "haveAccount": "Haben Sie bereits ein Konto?",
+            "haveAccount": "Bereits ein Konto?",
             "login": "Anmelden",
             "or": "ODER",
             "signUpGoogle": "Mit Google registrieren",
             "signUpGithub": "Mit GitHub registrieren",
-            "loading": "Lädt...",
+            "loading": "Wird geladen...",
             "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
             "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
             "errors": {

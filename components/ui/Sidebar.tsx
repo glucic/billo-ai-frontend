@@ -40,7 +40,7 @@ export const SidebarBody = ({
     return (
         <motion.div
             className={cn(
-                'h-full flex flex-col bg-neutral-100 dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700',
+                'h-full flex flex-col bg-neutral-100 dark:bg-neutral-800 border-r border-blue-500/30',
                 className,
             )}
             animate={{ width: open ? '300px' : '60px' }}

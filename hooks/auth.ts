@@ -139,22 +139,15 @@ export const useAuth = ({
     }
 
     const logout = async () => {
-        try {
-            await apiClient.post('/logout')
-            await mutateUser(null, false)
-            router.push('/login')
-        } catch {
-            // optionally handle logout errors
-        }
+        await csrf()
+        await apiClient.post('/logout')
+        await mutateUser(null, false)
+        router.push('/login')
     }
 
-    // Handle redirects based on middleware and user state
     React.useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user) {
             router.push(redirectIfAuthenticated)
-        }
-        if (middleware === 'auth' && user && !user.email_verified_at) {
-            //router.push('/verify-email')
         }
         if (
             window.location.pathname === '/verify-email' &&

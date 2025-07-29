@@ -10,8 +10,8 @@
 :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --accent: #2563eb; /* main blue */
-    --accent-light: #60a5fa; /* lighter blue */
+    --accent: #2563eb;
+    --accent-light: #60a5fa;
     --accent-glow: rgba(37, 99, 235, 0.15);
     --gradient-border: linear-gradient(to right, #000000, #2563eb);
     --color-background: var(--background);
