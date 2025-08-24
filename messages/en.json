@@ -12,7 +12,8 @@
         "settings": "Settings",
         "notifications": "Notifications",
         "help": "Help & Support",
-        "logout": "Log Out"
+        "logout": "Log Out",
+        "organisations": "Organisations"
     },
     "LandingPage": {
         "HeroSection": {

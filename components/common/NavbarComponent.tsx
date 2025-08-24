@@ -13,6 +13,10 @@ export default function Navbar() {
         { href: '#features', label: t('features') },
         { href: '#pricing', label: t('pricing') },
         { href: '#contact', label: t('contact') },
+        {
+            href: '/organisations',
+            label: t('organisations', { defaultValue: 'Organisations' }),
+        },
     ]
 
     return (

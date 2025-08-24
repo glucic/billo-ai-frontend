@@ -10,6 +10,7 @@ import {
     IconSettings,
     IconBell,
     IconHelpCircle,
+    IconBuildingSkyscraper,
 } from '@tabler/icons-react'
 
 import { useRouter } from 'next/navigation'
@@ -43,6 +44,13 @@ export default function AppLayout({ children }: AppLayoutProps) {
             href: '/clients',
             icon: (
                 <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+            ),
+        },
+        {
+            label: t('organisations', { defaultValue: 'Organisations' }),
+            href: '/organisations',
+            icon: (
+                <IconBuildingSkyscraper className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
             ),
         },
         {
