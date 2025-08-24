@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
+import { ThemeToggle } from './ThemeToggle'
 
 export default function Navbar() {
     const t = useTranslations('Navigation')

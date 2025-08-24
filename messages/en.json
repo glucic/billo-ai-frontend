@@ -104,5 +104,78 @@
                 "workersPlaceholder": "For example: 50"
             }
         }
+    },
+    "Dashboard": {
+        "title": "Welcome back, here’s your dashboard",
+        "metrics": {
+            "totalCompanies": "Total Companies",
+            "activeUsers": "Active Users",
+            "invoicesGenerated": "Invoices Generated"
+        },
+        "actions": {
+            "addCompany": "Add Company",
+            "createInvoice": "Create Invoice",
+            "viewReports": "View Reports"
+        },
+        "recentActivity": "Recent Activity",
+        "activity": {
+            "addedCompany": "Added company {name}",
+            "createdInvoice": "Created invoice for {name}",
+            "updatedProfile": "Updated profile information"
+        }
+    },
+
+    "Invoices": {
+        "title": "Invoices",
+        "metrics": {
+            "total": "Total Invoices",
+            "paid": "Paid",
+            "pending": "Pending",
+            "overdue": "Overdue"
+        },
+        "actions": {
+            "create": "Create Invoice",
+            "export": "Export"
+        },
+        "filters": {
+            "search": "Search invoices...",
+            "all": "All",
+            "paid": "Paid",
+            "pending": "Pending",
+            "overdue": "Overdue"
+        },
+        "table": {
+            "id": "Invoice ID",
+            "client": "Client",
+            "amount": "Amount",
+            "status": "Status",
+            "date": "Date"
+        }
+    },
+    "Clients": {
+        "title": "Clients",
+        "metrics": {
+            "total": "Total Clients",
+            "active": "Active",
+            "new": "New This Month"
+        },
+        "actions": {
+            "add": "Add Client",
+            "export": "Export"
+        },
+        "filters": {
+            "search": "Search clients...",
+            "all": "All",
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "table": {
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone",
+            "company": "Company",
+            "status": "Status",
+            "date": "Date Added"
+        }
     }
 }

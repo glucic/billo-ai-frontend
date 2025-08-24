@@ -102,6 +102,52 @@
                 "workersLabel": "Wie viele Mitarbeiter hast du?",
                 "workersPlaceholder": "Zum Beispiel: 50"
             }
+        },
+        "Dashboard": {
+            "title": "Welcome back, here’s your dashboard",
+            "metrics": {
+                "totalCompanies": "Total Companies",
+                "activeUsers": "Active Users",
+                "invoicesGenerated": "Invoices Generated"
+            },
+            "actions": {
+                "addCompany": "Add Company",
+                "createInvoice": "Create Invoice",
+                "viewReports": "View Reports"
+            },
+            "recentActivity": "Recent Activity",
+            "activity": {
+                "addedCompany": "Added company {name}",
+                "createdInvoice": "Created invoice for {name}",
+                "updatedProfile": "Updated profile information"
+            }
+        },
+        "Invoices": {
+            "title": "Invoices",
+            "metrics": {
+                "total": "Total Invoices",
+                "paid": "Paid",
+                "pending": "Pending",
+                "overdue": "Overdue"
+            },
+            "actions": {
+                "create": "Create Invoice",
+                "export": "Export"
+            },
+            "filters": {
+                "search": "Search invoices...",
+                "all": "All",
+                "paid": "Paid",
+                "pending": "Pending",
+                "overdue": "Overdue"
+            },
+            "table": {
+                "id": "Invoice ID",
+                "client": "Client",
+                "amount": "Amount",
+                "status": "Status",
+                "date": "Date"
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
         0px 0px 0px 1px rgba(25, 28, 33, 0.08);
 }
 
+/* Dark theme variables (default) */
 :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -20,6 +21,20 @@
     --color-accent-light: var(--accent-light);
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+}
+
+/* Light theme overrides */
+[data-theme='light'] {
+    --background: #f9fafb;
+    --foreground: #1f2937;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --gradient-border: linear-gradient(to right, #e5e7eb, #3b82f6);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-accent: var(--accent);
+    --color-accent-light: var(--accent-light);
 }
 
 body {
