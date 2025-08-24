@@ -60,7 +60,8 @@
         "Register": {
             "welcome": "Konto erstellen",
             "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
-            "username": "Benutzername",
+            "firstName": "Vorname",
+            "lastName": "Nachname",
             "email": "E-Mail",
             "password": "Passwort",
             "confirmPassword": "Passwort bestätigen",

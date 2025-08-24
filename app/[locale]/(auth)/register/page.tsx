@@ -12,7 +12,8 @@ import { RegisterHeader } from '@/components/auth/register/RegisterHeaderCompone
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
 
 type Errors = {
-    name?: string[]
+    first_name?: string[]
+    last_name?: string[]
     email?: string[]
     password?: string[]
     confirmPassword?: string[]
@@ -33,12 +34,14 @@ export default function RegisterPage() {
     const [status, setStatus] = useState<string | null>(null)
 
     const handleRegister = async ({
-        name,
+        first_name,
+        last_name,
         email,
         password,
         password_confirmation,
     }: {
-        name: string
+        first_name: string
+        last_name: string
         email: string
         password: string
         password_confirmation: string
@@ -49,7 +52,8 @@ export default function RegisterPage() {
 
         try {
             await registerUser({
-                name,
+                first_name,
+                last_name,
                 email,
                 password,
                 password_confirmation,

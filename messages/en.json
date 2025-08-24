@@ -60,7 +60,8 @@
         "Register": {
             "welcome": "Create an Account",
             "subtitle": "Sign up for free and start instantly",
-            "username": "Username",
+            "firstName": "First Name",
+            "lastName": "Last Name",
             "email": "Email",
             "password": "Password",
             "confirmPassword": "Confirm Password",

@@ -10,7 +10,8 @@ import {
 } from '@/components/ui'
 import { InputError } from '@/components/ui/InputError'
 
-const NAME_ID = 'name'
+const FIRST_NAME_ID = 'first_name'
+const LAST_NAME_ID = 'last_name'
 const EMAIL_ID = 'email'
 const PASSWORD_ID = 'password'
 const PASSWORD_CONFIRMATION_ID = 'password_confirmation'
@@ -22,14 +23,16 @@ export function RegisterForm({
 }: RegisterFormProps) {
     const t = useTranslations('Auth.Register')
 
-    const [name, setName] = useState('')
+    const [first_name, setFirstName] = useState('')
+    const [last_name, setLastName] = useState('')    
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [password_confirmation, setConfirmPassword] = useState('')
     const [clientError, setClientError] = useState<string | null>(null)
 
     const isFormValid =
-        name.trim() !== '' &&
+        first_name.trim() !== '' &&
+        last_name.trim() !== '' &&
         email.trim() !== '' &&
         password.trim() !== '' &&
         password_confirmation.trim() !== ''
@@ -48,7 +51,7 @@ export function RegisterForm({
             return
         }
 
-        onSubmit({ name, email, password, password_confirmation })
+        onSubmit({ first_name, last_name, email, password, password_confirmation })
     }
 
     return (
@@ -61,24 +64,46 @@ export function RegisterForm({
             />
 
             <LabelInputContainer>
-                <Label htmlFor={NAME_ID}>{t('username')}</Label>
+                <Label htmlFor={FIRST_NAME_ID}>{t('firstName')}</Label>
                 <InputField
-                    id={NAME_ID}
+                    id={FIRST_NAME_ID}
                     type="text"
-                    placeholder={t('username')}
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    placeholder={t('firstName')}
+                    value={first_name}
+                    onChange={e => setFirstName(e.target.value)}
                     required
-                    aria-label={t('username')}
+                    aria-label={t('firstName')}
                     aria-describedby={
-                        errors.name ? `${NAME_ID}-error` : undefined
+                        errors.first_name ? `${FIRST_NAME_ID}-error` : undefined
                     }
                     disabled={loading}
                     autoFocus
                 />
                 <InputError
-                    message={errors.name?.[0]}
-                    id={`${NAME_ID}-error`}
+                    message={errors.first_name?.[0]}
+                    id={`${FIRST_NAME_ID}-error`}
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                <Label htmlFor={LAST_NAME_ID}>{t('lastName')}</Label>
+                <InputField
+                    id={LAST_NAME_ID}
+                    type="text"
+                    placeholder={t('lastName')}
+                    value={last_name}
+                    onChange={e => setLastName(e.target.value)}
+                    required
+                    aria-label={t('lastName')}
+                    aria-describedby={
+                        errors.last_name ? `${LAST_NAME_ID}-error` : undefined
+                    }
+                    disabled={loading}
+                    autoFocus
+                />
+                <InputError
+                    message={errors.last_name?.[0]}
+                    id={`${LAST_NAME_ID}-error`}
                 />
             </LabelInputContainer>
 
