@@ -1,7 +1,12 @@
 'use client'
 
 import React from 'react'
-import { InputField, LabelInputContainer, Label } from '@/components/ui'
+import {
+    InputError,
+    InputField,
+    LabelInputContainer,
+    Label,
+} from '@/components/ui'
 import { WizardStepTransition } from './WizardStepTransition'
 import { useTranslations } from 'next-intl'
 
@@ -9,10 +14,12 @@ export function StepCompanyName({
     value,
     onChange,
     step,
+    error,
 }: {
     value: string
     onChange: (val: string) => void
     step: number
+    error?: string[]
 }) {
     const t = useTranslations('Auth.GettingStarted.StepCompanyName')
 
@@ -31,6 +38,7 @@ export function StepCompanyName({
                     placeholder={t('placeholder')}
                     className="text-lg p-5 w-full"
                 />
+                {error && <InputError messages={error} />}
             </LabelInputContainer>
         </WizardStepTransition>
     )

@@ -1,49 +1,30 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import { AnimatePresence } from 'framer-motion'
 import {
     StepCompanyName,
     StepCompanyAbout,
     StepCompanyDetails,
 } from '@/components/auth/getting-started'
-
 import { StatefulButton } from '@/components/ui'
-export default function GettingStartedPage() {
-    const router = useRouter()
-    const [loading, setLoading] = useState(false)
-    const [step, setStep] = useState(0)
+import { OrganisationWizardProvider, useOrganisationWizard } from '@/context/OrganisationWizardContext'
 
-    const [company_name, setCompanyName] = useState('')
-    const [company_description, setCompanyAbout] = useState('')
-    const [details, setDetails] = useState({
-        company_email: '',
-        company_phone: '',
-        workers: 0,
-    })
-
-    const next = () => setStep(prev => prev + 1)
-    const back = () => setStep(prev => prev - 1)
-
-    const handleSubmit = async () => {
-        setLoading(true)
-
-        const payload = {
-            company_name,
-            company_description,
-            ...details,
-        }
-
-        console.log('Submitting payload:', payload)
-
-        try {
-            await new Promise(res => setTimeout(res, 1000))
-            router.push('/dashboard')
-        } finally {
-            setLoading(false)
-        }
-    }
+function GettingStartedContent() {
+    const {
+        step,
+        nextStep,
+        previousStep,
+        companyName,
+        setCompanyName,
+        companyDescription,
+        setCompanyDescription,
+        companyDetails,
+        setCompanyDetails,
+        errors,
+        isLoading,
+        handleSubmit
+    } = useOrganisationWizard()
 
     return (
         <main
@@ -53,45 +34,64 @@ export default function GettingStartedPage() {
                 <AnimatePresence mode="wait">
                     {step === 0 && (
                         <StepCompanyName
-                            value={company_name}
+                            value={companyName}
                             onChange={setCompanyName}
                             step={step}
+                            error={errors.name}
                         />
                     )}
                     {step === 1 && (
                         <StepCompanyAbout
-                            value={company_description}
-                            onChange={setCompanyAbout}
+                            value={companyDescription}
+                            onChange={setCompanyDescription}
                             step={step}
+                            error={errors.description}
                         />
                     )}
                     {step === 2 && (
                         <StepCompanyDetails
-                            company_email={details.company_email}
-                            company_phone={details.company_phone}
-                            workers={details.workers}
-                            onChange={(field, value) =>
-                                setDetails({ ...details, [field]: value })
-                            }
+                            company_email={companyDetails.email}
+                            company_phone={companyDetails.phone}
+                            workers={companyDetails.employeeCount}
+                            onChange={(field, value) => {
+                                const mappedField = field === 'company_email' ? 'email' 
+                                    : field === 'company_phone' ? 'phone'
+                                    : field === 'workers' ? 'employeeCount'
+                                    : field
+                                setCompanyDetails(mappedField, value)
+                            }}
                             step={step}
+                            errors={errors}
                         />
                     )}
                 </AnimatePresence>
 
                 <div className="flex space-x-4 mt-8">
                     {step > 0 && (
-                        <StatefulButton onClick={back}>Back</StatefulButton>
+                        <StatefulButton onClick={previousStep} loading={isLoading}>
+                            Back
+                        </StatefulButton>
                     )}
                     {step < 2 && (
-                        <StatefulButton onClick={next}>Next</StatefulButton>
+                        <StatefulButton onClick={nextStep} loading={isLoading}>
+                            Next
+                        </StatefulButton>
                     )}
                     {step === 2 && (
-                        <StatefulButton onClick={handleSubmit}>
+                        <StatefulButton onClick={handleSubmit} loading={isLoading}>
                             Finish
                         </StatefulButton>
                     )}
                 </div>
             </div>
         </main>
+    )
+}
+
+export default function GettingStartedPage() {
+    return (
+        <OrganisationWizardProvider>
+            <GettingStartedContent />
+        </OrganisationWizardProvider>
     )
 }

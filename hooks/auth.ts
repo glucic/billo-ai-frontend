@@ -36,6 +36,15 @@ type ResendEmailVerificationProps = {
     setStatus: (status: string | null) => void
 }
 
+type CreateOrganisationProps = {
+    name: string
+    description: string
+    email: string
+    phone: string
+    employee_count: number
+    setErrors: (errors: Errors) => void
+}
+
 import { useAuthContext } from '@/context/AuthProvider'
 
 export const useAuth = ({
@@ -146,6 +155,24 @@ export const useAuth = ({
         router.push('/login')
     }
 
+    const createOrganisation = async ({
+        setErrors,
+        ...props
+    }: CreateOrganisationProps) => {
+        await csrf()
+        setErrors({})
+
+        try {
+            const response = await apiClient.post('/api/organisations', props)
+            return response.data
+        } catch (error: any) {
+            if (error.response?.data?.errors) {
+                setErrors(error.response.data.errors)
+            }
+            throw error
+        }
+    }
+
     React.useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user) {
             router.push(redirectIfAuthenticated)
@@ -170,5 +197,6 @@ export const useAuth = ({
         resetPassword,
         resendEmailVerification,
         logout,
+        createOrganisation,
     }
 }

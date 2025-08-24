@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { WizardStepTransition } from './WizardStepTransition'
-import { Label } from '@/components/ui'
+import { Label, InputError } from '@/components/ui'
 import { TextAreaField } from '@/components/ui/TextArea'
 import { useTranslations } from 'next-intl'
 
@@ -10,10 +10,12 @@ export function StepCompanyAbout({
     value,
     onChange,
     step,
+    error,
 }: {
     value: string
     onChange: (val: string) => void
     step: number
+    error?: string[]
 }) {
     const t = useTranslations('Auth.GettingStarted.StepCompanyAbout')
 
@@ -31,6 +33,7 @@ export function StepCompanyAbout({
                 placeholder={t('placeholder')}
                 className="w-120 h-32 resize-none"
             />
+            {error && <InputError messages={error} className="mt-2" />}
         </WizardStepTransition>
     )
 }

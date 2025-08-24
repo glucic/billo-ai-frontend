@@ -8,11 +8,13 @@ import { CheckIcon } from '@/components/ui/CheckIcon'
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
     children: React.ReactNode
+    loading?: boolean
 }
 
 export const StatefulButton = ({
     className,
     children,
+    loading,
     ...props
 }: ButtonProps) => {
     const [scope, animate] = useAnimate()

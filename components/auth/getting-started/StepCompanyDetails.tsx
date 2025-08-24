@@ -2,7 +2,12 @@
 
 import React from 'react'
 import { WizardStepTransition } from './WizardStepTransition'
-import { InputField, Label, LabelInputContainer } from '@/components/ui'
+import {
+    InputField,
+    Label,
+    LabelInputContainer,
+    InputError,
+} from '@/components/ui'
 import { useTranslations } from 'next-intl'
 
 export function StepCompanyDetails({
@@ -11,12 +16,14 @@ export function StepCompanyDetails({
     workers,
     onChange,
     step,
+    errors,
 }: {
     company_email: string
     company_phone: string
     workers: number
     onChange: (field: string, value: string) => void
     step: number
+    errors?: Record<string, string[]>
 }) {
     const t = useTranslations('Auth.GettingStarted.StepCompanyDetails')
 
@@ -37,6 +44,7 @@ export function StepCompanyDetails({
                         }
                         placeholder={t('emailPlaceholder')}
                     />
+                    {errors?.email && <InputError messages={errors.email} />}
                 </LabelInputContainer>
 
                 <LabelInputContainer>
@@ -49,6 +57,7 @@ export function StepCompanyDetails({
                         }
                         placeholder={t('phonePlaceholder')}
                     />
+                    {errors?.phone && <InputError messages={errors.phone} />}
                 </LabelInputContainer>
 
                 <LabelInputContainer>
@@ -60,6 +69,9 @@ export function StepCompanyDetails({
                         onChange={e => onChange('workers', e.target.value)}
                         placeholder={t('workersPlaceholder')}
                     />
+                    {errors?.employee_count && (
+                        <InputError messages={errors.employee_count} />
+                    )}
                 </LabelInputContainer>
             </div>
         </WizardStepTransition>
