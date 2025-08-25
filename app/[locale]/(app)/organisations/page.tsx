@@ -1,4 +1,4 @@
-import OrganisationDashboard from '@/components/dashboard/OrganisationDashboard'
+import OrganisationDashboard from '@/components/organisations/OrganisationDashboard'
 
 export default function OrganisationPage() {
     return (

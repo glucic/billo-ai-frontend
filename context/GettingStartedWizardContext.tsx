@@ -21,16 +21,22 @@ type OrganisationWizardContextType = {
     handleSubmit: () => Promise<void>
 }
 
-const OrganisationWizardContext = createContext<OrganisationWizardContextType | undefined>(undefined)
+const OrganisationWizardContext = createContext<
+    OrganisationWizardContextType | undefined
+>(undefined)
 
-export function OrganisationWizardProvider({ children }: { children: React.ReactNode }) {
+export function OrganisationWizardProvider({
+    children,
+}: {
+    children: React.ReactNode
+}) {
     const [step, setStep] = useState(0)
     const [companyName, setCompanyName] = useState('')
     const [companyDescription, setCompanyDescription] = useState('')
     const [companyDetails, setCompanyDetails] = useState({
         email: '',
         phone: '',
-        employeeCount: 1
+        employeeCount: 1,
     })
     const [errors, setErrors] = useState<Record<string, string[]>>({})
     const [isLoading, setIsLoading] = useState(false)
@@ -44,7 +50,7 @@ export function OrganisationWizardProvider({ children }: { children: React.React
     const handleDetailsChange = (field: string, value: string | number) => {
         setCompanyDetails(prev => ({
             ...prev,
-            [field]: value
+            [field]: value,
         }))
     }
 
@@ -79,7 +85,7 @@ export function OrganisationWizardProvider({ children }: { children: React.React
         setCompanyDetails: handleDetailsChange,
         errors,
         isLoading,
-        handleSubmit
+        handleSubmit,
     }
 
     return (
@@ -92,7 +98,9 @@ export function OrganisationWizardProvider({ children }: { children: React.React
 export const useOrganisationWizard = () => {
     const context = useContext(OrganisationWizardContext)
     if (!context) {
-        throw new Error('useOrganisationWizard must be used within OrganisationWizardProvider')
+        throw new Error(
+            'useOrganisationWizard must be used within OrganisationWizardProvider',
+        )
     }
     return context
 }

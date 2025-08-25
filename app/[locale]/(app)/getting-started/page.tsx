@@ -6,9 +6,9 @@ import {
     StepCompanyName,
     StepCompanyAbout,
     StepCompanyDetails,
-} from '@/components/auth/getting-started'
+} from '@/components/getting-started'
 import { StatefulButton } from '@/components/ui'
-import { OrganisationWizardProvider, useOrganisationWizard } from '@/context/OrganisationWizardContext'
+import { OrganisationWizardProvider, useOrganisationWizard } from '@/context/GettingStartedWizardContext'
 
 function GettingStartedContent() {
     const {

@@ -7,7 +7,7 @@ import MetricsGrid from '@/components/dashboard/MetricsGrid'
 
 import QuickActions from '@/components/dashboard/QuickActions'
 import ActivityList from '@/components/dashboard/ActivityList'
-import OrganisationDashboard from '@/components/dashboard/OrganisationDashboard'
+import OrganisationDashboard from '@/components/organisations/OrganisationDashboard'
 
 export default function DashboardPage() {
     const t = useTranslations('Dashboard')
@@ -51,8 +51,6 @@ export default function DashboardPage() {
             <QuickStats stats={quickStats} />
 
             <MetricsGrid metrics={metrics} />
-
-            <OrganisationDashboard />
 
             <QuickActions
                 actions={[
