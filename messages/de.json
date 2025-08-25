@@ -37,6 +37,33 @@
             }
         }
     },
+    "organisation": {
+        "title": "Organisationen",
+        "count": "{count} Organisationen gefunden",
+        "edit": "Organisation bearbeiten",
+        "delete": "Löschen",
+        "save": "Änderungen speichern",
+        "cancel": "Abbrechen",
+        "leave": "Organisation verlassen",
+        "join": "Organisation beitreten",
+        "fields": {
+            "name": "Name",
+            "email": "E-Mail",
+            "phone": "Telefon",
+            "address": "Adresse",
+            "employeeCount": "Mitarbeiteranzahl",
+            "description": "Beschreibung",
+            "members": "Mitglieder"
+        },
+        "errors": {
+            "loadFailed": "Fehler beim Laden der Organisationen",
+            "saveFailed": "Fehler beim Speichern der Änderungen",
+            "deleteFailed": "Fehler beim Löschen der Organisation",
+            "leaveFailed": "Fehler beim Verlassen der Organisation",
+            "joinFailed": "Fehler beim Beitreten zur Organisation"
+        },
+        "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?"
+    },
     "Auth": {
         "Login": {
             "welcome": "Willkommen bei BilloAI",
