@@ -38,7 +38,7 @@
             }
         }
     },
-    "organisation": {
+    "Organisation": {
         "title": "Organizations",
         "count": "{count} organizations found",
         "edit": "Edit Organization",
@@ -52,6 +52,10 @@
             "email": "Email",
             "phone": "Phone",
             "address": "Address",
+            "zip": "Zip Code",
+            "city": "City",
+            "country": "Country",
+            "state": "State/Province",
             "employeeCount": "Number of Employees",
             "description": "Description",
             "members": "Members"
@@ -113,7 +117,6 @@
                 "passwordsDontMatch": "Passwords do not match."
             }
         },
-
         "GettingStarted": {
             "StepCompanyName": {
                 "label": "What's your company called?",
@@ -159,35 +162,24 @@
     },
     "Invoices": {
         "title": "Invoices",
-        "metrics": {
-            "total": "Total Invoices",
-            "paid": "Paid",
-            "pending": "Pending",
-            "overdue": "Overdue"
-        },
-        "actions": {
-            "create": "Create Invoice",
-            "export": "Export"
-        },
-        "filters": {
-            "search": "Search invoices...",
-            "all": "All",
-            "paid": "Paid",
-            "pending": "Pending",
-            "overdue": "Overdue"
-        },
-        "table": {
-            "id": "Invoice ID",
-            "client": "Client",
-            "amount": "Amount",
-            "status": "Status",
-            "date": "Date"
-        },
         "Create": {
-            "issuer": "Issuer",
+            "InvoiceDetails": {
+                "title": "Invoice Details",
+                "invoiceNumber": "Invoice Number",
+                "invoiceDate": "Invoice Date",
+                "dueDate": "Due Date",
+                "reference": "Reference / PO Number"
+            },
+            "IssuerDetails": {
+                "title": "Issuer Details",
+                "selectIssuer": "Select Issuer"
+            },
+            "ClientDetails": {
+                "title": "Client Details",
+                "selectClient": "Select Client"
+            },
             "client": "Billing Entity",
             "items": "Items",
-            "selectOrganisation": "Select Organisation",
             "selectClient": "Select Client",
             "itemName": "Item Name",
             "itemDescription": "Item Description",
@@ -212,7 +204,9 @@
             "paymentInstructions": "Payment Instructions",
             "notesAndFooter": "Notes & Footer",
             "notes": "Notes to Client",
-            "footer": "Footer / Legal Text"
+            "footer": "Footer / Legal Text",
+            "save": "Save Invoice",
+            "cancel": "Cancel"
         }
     },
     "Clients": {

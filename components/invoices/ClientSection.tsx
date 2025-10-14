@@ -1,97 +1,164 @@
 import { useTranslations } from 'next-intl'
-import LabelInputContainer from '../ui/LabelInputContainer'
-import { Label } from '../ui/Label'
-import { InputField } from '../ui/InputField'
-import { TextAreaField } from '../ui/TextArea'
+import {
+    Label,
+    LabelInputContainer,
+    InputField,
+    SelectField,
+    ChevronDownIcon,
+    Button,
+} from '@/components/ui'
+import React from 'react'
+
+type ClientData = {
+    name: string
+    address: string
+    city: string
+    state: string
+    zip: string
+    phone: string
+    email: string
+}
+
+interface ClientSectionProps {
+    organisations: Array<{
+        id: number
+        name: string
+        [key: string]: any
+    }>
+    clientId: number | null
+    setClientId: (id: number | null) => void
+    client: ClientData
+    setClientField: (field: keyof ClientData, value: string) => void
+}
 
 export default function ClientSection({
-    organisations,
-    clientId,
-    setClientId,
     client,
-    errors,
-}: any) {
-    const t = useTranslations('Invoices.Create')
-    const orgT = useTranslations('organisation.fields')
+    setClientField,
+}: ClientSectionProps) {
+    const t = useTranslations('Invoices.Create.ClientDetails')
+    const orgT = useTranslations('Organisation.fields')
+    const [open, setOpen] = React.useState(true)
+
     return (
-        <section className="bg-white dark:bg-zinc-900 rounded-lg shadow p-6 mb-6">
-            <h2 className="text-xl font-bold mb-4">{t('client')}</h2>
-            <LabelInputContainer>
-                <Label htmlFor="client-org">{t('selectClient')}</Label>
-                <select
-                    id="client-org"
-                    className="mb-4 w-full rounded border p-2"
-                    value={clientId ?? ''}
-                    onChange={e => setClientId(Number(e.target.value) || null)}
-                    aria-label={t('selectClient')}>
-                    <option value="">{t('selectClient')}</option>
-                    {organisations.map((org: any) => (
-                        <option key={org.id} value={org.id}>
-                            {org.name}
-                        </option>
-                    ))}
-                </select>
-            </LabelInputContainer>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <LabelInputContainer>
-                    <Label htmlFor="client-name">{orgT('name')}</Label>
-                    <InputField
-                        id="client-name"
-                        value={client.name || ''}
-                        readOnly
-                        aria-label={orgT('name')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="client-address">{orgT('address')}</Label>
-                    <InputField
-                        id="client-address"
-                        value={client.address || ''}
-                        readOnly
-                        aria-label={orgT('address')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="client-phone">{orgT('phone')}</Label>
-                    <InputField
-                        id="client-phone"
-                        value={client.phone || ''}
-                        readOnly
-                        aria-label={orgT('phone')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="client-email">{orgT('email')}</Label>
-                    <InputField
-                        id="client-email"
-                        value={client.email || ''}
-                        readOnly
-                        aria-label={orgT('email')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="client-employee-count">
-                        {orgT('employeeCount')}
-                    </Label>
-                    <InputField
-                        id="client-employee-count"
-                        value={client.employee_count || ''}
-                        readOnly
-                        aria-label={orgT('employeeCount')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="client-description">
-                        {orgT('description')}
-                    </Label>
-                    <TextAreaField
-                        id="client-description"
-                        value={client.description || ''}
-                        readOnly
-                        aria-label={orgT('description')}
-                    />
-                </LabelInputContainer>
-            </div>
+        <section className="card rounded-lg">
+            <Button
+                variant="ghost"
+                animated={false}
+                className="flex items-center w-full justify-between focus:outline-none hover:cursor-pointer hover:bg-transparent"
+                aria-expanded={open}
+                aria-controls="client-fields"
+                onClick={() => setOpen(v => !v)}>
+                <h2 className="text-xl font-bold">{t('title')}</h2>
+                <span
+                    className={`transition-transform ${open ? '' : '-rotate-90'}`}>
+                    <ChevronDownIcon className="w-5 h-5" />
+                </span>
+            </Button>
+
+            {open && (
+                <div id="client-fields" className="grid grid-cols-1 gap-4 mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <LabelInputContainer>
+                            <Label htmlFor="client-name">{orgT('name')}</Label>
+                            <InputField
+                                required
+                                id="client-name"
+                                value={client.name}
+                                onChange={e =>
+                                    setClientField('name', e.target.value)
+                                }
+                                aria-label={orgT('name')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-email">
+                                {orgT('email')}
+                            </Label>
+                            <InputField
+                                type="email"
+                                id="client-email"
+                                value={client.email}
+                                onChange={e =>
+                                    setClientField('email', e.target.value)
+                                }
+                                aria-label={orgT('email')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-phone">
+                                {orgT('phone')}
+                            </Label>
+                            <InputField
+                                type="tel"
+                                id="client-phone"
+                                value={client.phone}
+                                onChange={e =>
+                                    setClientField('phone', e.target.value)
+                                }
+                                aria-label={orgT('phone')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-address">
+                                {orgT('address')}
+                            </Label>
+                            <InputField
+                                required
+                                id="client-address"
+                                value={client.address}
+                                onChange={e =>
+                                    setClientField('address', e.target.value)
+                                }
+                                aria-label={orgT('address')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-city">{orgT('city')}</Label>
+                            <InputField
+                                required
+                                id="client-city"
+                                value={client.city}
+                                onChange={e =>
+                                    setClientField('city', e.target.value)
+                                }
+                                aria-label={orgT('city')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-state">
+                                {orgT('state')}
+                            </Label>
+                            <InputField
+                                required
+                                id="client-state"
+                                value={client.state}
+                                onChange={e =>
+                                    setClientField('state', e.target.value)
+                                }
+                                aria-label={orgT('state')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="client-zip">{orgT('zip')}</Label>
+                            <InputField
+                                required
+                                id="client-zip"
+                                value={client.zip}
+                                onChange={e =>
+                                    setClientField('zip', e.target.value)
+                                }
+                                aria-label={orgT('zip')}
+                            />
+                        </LabelInputContainer>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }

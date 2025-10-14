@@ -7,7 +7,7 @@ import { OrganisationList } from './OrganisationList'
 import { OrganisationForm } from './OrganisationForm'
 
 export default function OrganisationDashboard() {
-    const t = useTranslations('organisation')
+    const t = useTranslations('Organisation')
     const {
         organisations,
         selected,

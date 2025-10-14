@@ -30,7 +30,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="flex">
             <aside>
                 <SidebarComponent />
             </aside>

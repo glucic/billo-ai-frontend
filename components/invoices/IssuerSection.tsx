@@ -1,86 +1,189 @@
 import { useTranslations } from 'next-intl'
-import LabelInputContainer from '../ui/LabelInputContainer'
-import { Label } from '../ui/Label'
-import { InputField } from '../ui/InputField'
-import { TextAreaField } from '../ui/TextArea'
+import {
+    Label,
+    LabelInputContainer,
+    InputField,
+    SelectField,
+    ChevronDownIcon,
+    Button,
+} from '@/components/ui'
+import React from 'react'
+
+type IssuerData = {
+    id: number
+    name: string
+    address: string
+    city: string
+    state: string
+    zip: string
+    phone: string
+    email: string
+}
+
+interface IssuerSectionProps {
+    organisations: Array<{
+        id: number
+        name: string
+        [key: string]: any
+    }>
+    issuerId: number | null
+    setIssuerId: (id: number | null) => void
+    issuer: IssuerData
+    setIssuerField: (field: keyof IssuerData, value: string) => void
+}
 
 export default function IssuerSection({
     organisations,
     issuerId,
     setIssuerId,
     issuer,
-    errors,
-}: any) {
-    const t = useTranslations('Invoices.Create')
-    const orgT = useTranslations('organisation.fields')
+    setIssuerField,
+}: IssuerSectionProps) {
+    const t = useTranslations('Invoices.Create.IssuerDetails')
+    const orgT = useTranslations('Organisation.fields')
+    const [open, setOpen] = React.useState(true)
+
     return (
-        <section className="bg-[var(--secondary-background)] rounded-lg shadow p-6 mb-6">
-            <h2 className="text-xl font-bold mb-4">{t('issuer')}</h2>
-            <LabelInputContainer>
-                <Label htmlFor="issuer-org">{t('selectOrganisation')}</Label>
-                <select
-                    id="issuer-org"
-                    className="mb-4 w-full rounded border p-2"
-                    value={issuerId ?? ''}
-                    onChange={e => setIssuerId(Number(e.target.value) || null)}
-                    aria-label={t('selectOrganisation')}>
-                    <option value="">{t('selectOrganisation')}</option>
-                    {organisations.map((org: any) => (
-                        <option key={org.id} value={org.id}>
-                            {org.name}
-                        </option>
-                    ))}
-                </select>
-            </LabelInputContainer>
-            <div className="flex flex-row flex-wrap gap-4 min-w-1">
-                <LabelInputContainer>
-                    <Label htmlFor="issuer-name">{orgT('name')}</Label>
-                    <InputField
-                        id="issuer-name"
-                        value={issuer.name || ''}
-                        readOnly
-                        aria-label={orgT('name')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="issuer-address">{orgT('address')}</Label>
-                    <InputField
-                        id="issuer-address"
-                        value={issuer.address || ''}
-                        readOnly
-                        aria-label={orgT('address')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="issuer-phone">{orgT('phone')}</Label>
-                    <InputField
-                        id="issuer-phone"
-                        value={issuer.phone || ''}
-                        readOnly
-                        aria-label={orgT('phone')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="issuer-email">{orgT('email')}</Label>
-                    <InputField
-                        id="issuer-email"
-                        value={issuer.email || ''}
-                        readOnly
-                        aria-label={orgT('email')}
-                    />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                    <Label htmlFor="issuer-description">
-                        {orgT('description')}
-                    </Label>
-                    <TextAreaField
-                        id="issuer-description"
-                        value={issuer.description || ''}
-                        readOnly
-                        aria-label={orgT('description')}
-                    />
-                </LabelInputContainer>
-            </div>
+        <section className="card rounded-lg">
+            <Button
+                variant="ghost"
+                animated={false}
+                className="flex items-center w-full justify-between focus:outline-none hover:cursor-pointer hover:bg-transparent"
+                aria-expanded={open}
+                aria-controls="issuer-fields"
+                onClick={() => setOpen(v => !v)}>
+                <h2 className="text-xl font-bold">{t('title')}</h2>
+                <span
+                    className={`transition-transform ${open ? '' : '-rotate-90'}`}>
+                    <ChevronDownIcon className="w-5 h-5" />
+                </span>
+            </Button>
+
+            {open && (
+                <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4">
+                    <LabelInputContainer>
+                        <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
+                        <SelectField
+                            className="mb-4"
+                            placeholder={t('selectIssuer')}
+                            value={issuerId ?? ''}
+                            onChange={value =>
+                                setIssuerId(Number(value) || null)
+                            }
+                            options={[
+                                {
+                                    label: t('selectIssuer'),
+                                    value: '',
+                                },
+                                ...organisations.map((org: any) => ({
+                                    label: org.name,
+                                    value: org.id,
+                                })),
+                            ]}
+                        />
+                    </LabelInputContainer>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-name">{orgT('name')}</Label>
+                            <InputField
+                                required
+                                id="issuer-name"
+                                value={issuer.name}
+                                onChange={e =>
+                                    setIssuerField('name', e.target.value)
+                                }
+                                aria-label={orgT('name')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-email">
+                                {orgT('email')}
+                            </Label>
+                            <InputField
+                                type="email"
+                                id="issuer-email"
+                                value={issuer.email}
+                                onChange={e =>
+                                    setIssuerField('email', e.target.value)
+                                }
+                                aria-label={orgT('email')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-phone">
+                                {orgT('phone')}
+                            </Label>
+                            <InputField
+                                type="tel"
+                                id="issuer-phone"
+                                value={issuer.phone}
+                                onChange={e =>
+                                    setIssuerField('phone', e.target.value)
+                                }
+                                aria-label={orgT('phone')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-address">
+                                {orgT('address')}
+                            </Label>
+                            <InputField
+                                required
+                                id="issuer-address"
+                                value={issuer.address}
+                                onChange={e =>
+                                    setIssuerField('address', e.target.value)
+                                }
+                                aria-label={orgT('address')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-city">{orgT('city')}</Label>
+                            <InputField
+                                required
+                                id="issuer-city"
+                                value={issuer.city}
+                                onChange={e =>
+                                    setIssuerField('city', e.target.value)
+                                }
+                                aria-label={orgT('city')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-state">
+                                {orgT('state')}
+                            </Label>
+                            <InputField
+                                required
+                                id="issuer-state"
+                                value={issuer.state}
+                                onChange={e =>
+                                    setIssuerField('state', e.target.value)
+                                }
+                                aria-label={orgT('state')}
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer>
+                            <Label htmlFor="issuer-zip">{orgT('zip')}</Label>
+                            <InputField
+                                required
+                                id="issuer-zip"
+                                value={issuer.zip}
+                                onChange={e =>
+                                    setIssuerField('zip', e.target.value)
+                                }
+                                aria-label={orgT('zip')}
+                            />
+                        </LabelInputContainer>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }

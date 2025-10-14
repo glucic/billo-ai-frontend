@@ -10,7 +10,7 @@ export const defaultMetadata: Metadata = {
 
 export default function LandingPage() {
     return (
-        <main id="landing-page" className="min-h-screen">
+        <main id="landing-page" className="h-screen overflow-auto">
             <Navbar />
             <Hero />
             <Features />
