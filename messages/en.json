@@ -135,25 +135,28 @@
         }
     },
     "Dashboard": {
-        "title": "Welcome back, here’s your dashboard",
+        "stats": {
+            "organisations": "Organisations",
+            "activeUsers": "Active Users",
+            "invoicesGenerated": "Invoices Generated",
+            "upcomingMeetings": "Upcoming Meetings"
+        },
         "metrics": {
             "totalCompanies": "Total Companies",
             "activeUsers": "Active Users",
             "invoicesGenerated": "Invoices Generated"
         },
+        "activity": {
+            "addedCompany": "Added {name}",
+            "createdInvoice": "Created an invoice for {name}",
+            "updatedProfile": "Updated profile"
+        },
         "actions": {
             "addCompany": "Add Company",
             "createInvoice": "Create Invoice",
             "viewReports": "View Reports"
-        },
-        "recentActivity": "Recent Activity",
-        "activity": {
-            "addedCompany": "Added company {name}",
-            "createdInvoice": "Created invoice for {name}",
-            "updatedProfile": "Updated profile information"
         }
     },
-
     "Invoices": {
         "title": "Invoices",
         "metrics": {
@@ -179,6 +182,37 @@
             "amount": "Amount",
             "status": "Status",
             "date": "Date"
+        },
+        "Create": {
+            "issuer": "Issuer",
+            "client": "Billing Entity",
+            "items": "Items",
+            "selectOrganisation": "Select Organisation",
+            "selectClient": "Select Client",
+            "itemName": "Item Name",
+            "itemDescription": "Item Description",
+            "rate": "Rate",
+            "quantity": "Quantity",
+            "invoiceDetails": "Invoice Details",
+            "invoiceNumber": "Invoice Number",
+            "invoiceDate": "Invoice Date",
+            "dueDate": "Due Date",
+            "reference": "Reference / PO Number",
+            "currencyAndTax": "Currency & Tax",
+            "currency": "Currency",
+            "taxRate": "Tax Rate (%)",
+            "discount": "Discount (%)",
+            "subtotal": "Subtotal",
+            "tax": "Tax",
+            "discountAmount": "Discount Amount",
+            "total": "Total",
+            "paymentInfo": "Payment Information",
+            "paymentTerms": "Payment Terms",
+            "bankDetails": "Bank Details",
+            "paymentInstructions": "Payment Instructions",
+            "notesAndFooter": "Notes & Footer",
+            "notes": "Notes to Client",
+            "footer": "Footer / Legal Text"
         }
     },
     "Clients": {

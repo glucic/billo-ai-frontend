@@ -2,87 +2,14 @@
 
 import React, { useEffect } from 'react'
 import { SidebarComponent } from '@/components/common/SidebarComponent'
-import {
-    IconDashboard,
-    IconReceipt,
-    IconUsers,
-    IconLogout,
-    IconSettings,
-    IconBell,
-    IconHelpCircle,
-    IconBuildingSkyscraper,
-} from '@tabler/icons-react'
-
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/auth'
-import { useTranslations } from 'next-intl'
 
 interface AppLayoutProps {
     children: React.ReactNode
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
-    const t = useTranslations('Sidebar')
-
-    const sidebarLinks = [
-        {
-            label: t('dashboard'),
-            href: '/dashboard',
-            icon: (
-                <IconDashboard className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('invoices'),
-            href: '/invoices',
-            icon: (
-                <IconReceipt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('clients'),
-            href: '/clients',
-            icon: (
-                <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('organisations', { defaultValue: 'Organisations' }),
-            href: '/organisations',
-            icon: (
-                <IconBuildingSkyscraper className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('settings'),
-            href: '/settings',
-            icon: (
-                <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('notifications'),
-            href: '/notifications',
-            icon: (
-                <IconBell className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('help'),
-            href: '/help',
-            icon: (
-                <IconHelpCircle className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-        {
-            label: t('logout'),
-            href: '/logout',
-            icon: (
-                <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-            ),
-        },
-    ]
-
     const router = useRouter()
     const { user, loading } = useAuth({
         middleware: 'auth',
@@ -102,14 +29,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
         )
     }
 
-    if (!user) {
-        return null
-    }
-
     return (
         <div className="flex h-screen">
             <aside>
-                <SidebarComponent links={sidebarLinks} />
+                <SidebarComponent />
             </aside>
 
             <main className="flex-1 p-5 overflow-y-auto relative">

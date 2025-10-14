@@ -12,7 +12,8 @@
         "settings": "Einstellungen",
         "notifications": "Benachrichtigungen",
         "help": "Hilfe & Support",
-        "logout": "Abmelden"
+        "logout": "Abmelden",
+        "organisations": "Organisationen"
     },
     "LandingPage": {
         "HeroSection": {
@@ -130,52 +131,83 @@
                 "workersLabel": "Wie viele Mitarbeiter hast du?",
                 "workersPlaceholder": "Zum Beispiel: 50"
             }
+        }
+    },
+    "Dashboard": {
+        "stats": {
+            "organisations": "Organisations",
+            "activeUsers": "Active Users",
+            "invoicesGenerated": "Invoices Generated",
+            "upcomingMeetings": "Upcoming Meetings"
         },
-        "Dashboard": {
-            "title": "Welcome back, here’s your dashboard",
-            "metrics": {
-                "totalCompanies": "Total Companies",
-                "activeUsers": "Active Users",
-                "invoicesGenerated": "Invoices Generated"
-            },
-            "actions": {
-                "addCompany": "Add Company",
-                "createInvoice": "Create Invoice",
-                "viewReports": "View Reports"
-            },
-            "recentActivity": "Recent Activity",
-            "activity": {
-                "addedCompany": "Added company {name}",
-                "createdInvoice": "Created invoice for {name}",
-                "updatedProfile": "Updated profile information"
-            }
+        "metrics": {
+            "totalCompanies": "Total Companies",
+            "activeUsers": "Active Users",
+            "invoicesGenerated": "Invoices Generated"
         },
-        "Invoices": {
-            "title": "Invoices",
-            "metrics": {
-                "total": "Total Invoices",
-                "paid": "Paid",
-                "pending": "Pending",
-                "overdue": "Overdue"
-            },
-            "actions": {
-                "create": "Create Invoice",
-                "export": "Export"
-            },
-            "filters": {
-                "search": "Search invoices...",
-                "all": "All",
-                "paid": "Paid",
-                "pending": "Pending",
-                "overdue": "Overdue"
-            },
-            "table": {
-                "id": "Invoice ID",
-                "client": "Client",
-                "amount": "Amount",
-                "status": "Status",
-                "date": "Date"
-            }
+        "activity": {
+            "addedCompany": "Added {name}",
+            "createdInvoice": "Created an invoice for {name}",
+            "updatedProfile": "Updated profile"
+        },
+        "actions": {
+            "addCompany": "Add Company",
+            "createInvoice": "Create Invoice",
+            "viewReports": "View Reports"
+        }
+    },
+
+    "Invoices": {
+        "title": "Rechnungen",
+        "metrics": {
+            "total": "Gesamtanzahl Rechnungen",
+            "paid": "Bezahlt",
+            "pending": "Ausstehend",
+            "overdue": "Überfällig"
+        },
+        "actions": {
+            "create": "Rechnung erstellen",
+            "export": "Exportieren"
+        },
+        "filters": {
+            "search": "Rechnungen durchsuchen...",
+            "all": "Alle",
+            "paid": "Bezahlt",
+            "pending": "Ausstehend",
+            "overdue": "Überfällig"
+        },
+        "table": {
+            "id": "Rechnungs-ID",
+            "client": "Kunde",
+            "amount": "Betrag",
+            "status": "Status",
+            "date": "Datum"
+        }
+    },
+    "Clients": {
+        "title": "Kunden",
+        "metrics": {
+            "total": "Gesamtanzahl Kunden",
+            "active": "Aktiv",
+            "new": "Neu in diesem Monat"
+        },
+        "actions": {
+            "add": "Kunde hinzufügen",
+            "export": "Exportieren"
+        },
+        "filters": {
+            "search": "Kunden durchsuchen...",
+            "all": "Alle",
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+        },
+        "table": {
+            "name": "Name",
+            "email": "E-Mail",
+            "phone": "Telefon",
+            "company": "Firma",
+            "status": "Status",
+            "date": "Hinzugefügt am"
         }
     }
 }
