@@ -181,7 +181,6 @@ export default function CreateInvoicePage() {
                     </section>
                 </form>
 
-                {/* Sticky Full-Height Aside */}
                 <aside
                     id="pdf-invoice-preview"
                     className="w-full md:w-[45%] flex-shrink-0 sticky top-0 h-full border-l border-neutral-300 dark:border-neutral-700 p-4 overflow-hidden">

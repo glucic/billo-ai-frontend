@@ -32,11 +32,23 @@
     --z-dropdown: 1000;
     --z-modal: 1100;
     --z-toast: 1200;
+
+    --input-height: 40px;
+    --input-radius: var(--radius-md);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(24, 24, 27, 0.6);
+    --input-blur: 12px;
+    --input-padding-x: 12px;
+    --input-padding-y: 8px;
+    --input-text: var(--foreground);
+    --input-placeholder: rgba(255, 255, 255, 0.4);
+    --input-shadow: var(--shadow-input);
 }
 
 [data-theme='light'] {
     --background: #f9fafb;
     --foreground: #1f2937;
+    --secondary-background: #ffffff;
 
     --accent: #3b82f6;
     --accent-light: #60a5fa;
@@ -48,6 +60,11 @@
     --color-foreground: var(--foreground);
     --color-accent: var(--accent);
     --color-accent-light: var(--accent-light);
+
+    --input-border: rgba(0, 0, 0, 0.1);
+    --input-bg: rgba(249, 250, 251, 0.8);
+    --input-text: #1f2937;
+    --input-placeholder: rgba(31, 41, 55, 0.4);
 }
 
 html {
@@ -71,9 +88,6 @@ body {
     background: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-}
-
-body {
     overflow: hidden;
 }
 
@@ -107,6 +121,7 @@ p {
     line-height: 1.6;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -130,20 +145,8 @@ p {
     margin: 1rem;
 }
 
-.glass {
-    backdrop-filter: blur(12px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-}
-
 .bg-accent-glow {
     background: var(--accent-glow);
     filter: blur(80px);
     border-radius: 9999px;
-}
-
-[data-theme='dark'] {
-    --border-color: rgba(255, 255, 255, 0.08);
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.25);
 }

@@ -15,7 +15,7 @@ interface SelectFieldProps {
 export const SelectField = React.forwardRef<HTMLDivElement, SelectFieldProps>(
     ({ options, value, onChange, placeholder, className }, ref) => {
         const [open, setOpen] = React.useState(false)
-        const radius = 100
+        const radius = 0
         const [visible, setVisible] = React.useState(false)
         const mouseX = useMotionValue(0)
         const mouseY = useMotionValue(0)
@@ -36,21 +36,41 @@ export const SelectField = React.forwardRef<HTMLDivElement, SelectFieldProps>(
                 onMouseLeave={() => setVisible(false)}
                 style={{
                     background: useMotionTemplate`
-            radial-gradient(
-              ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-              #3b82f6,
-              transparent 80%
-            )
-          `,
+                        radial-gradient(
+                            ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
+                            var(--color-accent),
+                            transparent 90%
+                        )
+                    `,
                 }}
                 className={cn(
                     'relative rounded-lg p-[2px] cursor-pointer transition duration-300',
                     className,
                 )}>
                 <div
-                    className="flex items-center justify-between h-10 px-3 bg-gray-50 dark:bg-zinc-800 rounded-md shadow-input"
+                    className={cn(
+                        `flex items-center justify-between h-[var(--input-height)] w-full
+                        border border-[var(--input-border)]
+                        px-[var(--input-padding-x)] py-[var(--input-padding-y)]
+                        bg-[var(--input-bg)]/70
+                        backdrop-blur-[var(--input-blur)]
+                        hover:bg-[var(--accent-glow)]
+                        rounded-[var(--input-radius)] 
+                        shadow-[var(--input-shadow)]
+                        text-sm text-[var(--input-text)]
+                        placeholder:text-[var(--input-placeholder)]
+                        transition-all duration-300
+                        focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]
+                        focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-background)]
+                        focus-visible:outline-none
+                        disabled:cursor-not-allowed disabled:opacity-50`,
+                        className,
+                    )}
                     onClick={() => setOpen(o => !o)}>
-                    <span className={cn(!selected && 'text-neutral-400')}>
+                    <span
+                        className={cn(
+                            !selected && 'text-[var(--input-placeholder)]',
+                        )}>
                         {selected?.label || placeholder || 'Select...'}
                     </span>
                     <ChevronDownIcon className="w-4 h-4 text-neutral-500" />
@@ -61,11 +81,12 @@ export const SelectField = React.forwardRef<HTMLDivElement, SelectFieldProps>(
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute z-10 mt-1 w-full bg-gray-50 dark:bg-zinc-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                        className={`absolute z-10 mt-1 w-full bg-[var(--input-bg)] backdrop-blur-[var(--input-blur)]
+                            rounded-[var(--input-radius)] shadow-[var(--input-shadow)] max-h-60 overflow-auto`}>
                         {options.map(opt => (
                             <li
                                 key={opt.value}
-                                className="px-3 py-2 hover:bg-[var(--accent-glow)] dark:hover:bg-[var(--accent-glow)]"
+                                className="px-[var(--input-padding-x)] py-[var(--input-padding-y)] hover:bg-[var(--accent-glow)] cursor-pointer"
                                 onClick={() => {
                                     onChange(opt.value)
                                     setOpen(false)
