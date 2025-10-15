@@ -36,7 +36,7 @@
     --input-height: 40px;
     --input-radius: var(--radius-md);
     --input-border: rgba(255, 255, 255, 0.1);
-    --input-bg: rgba(24, 24, 27, 0.6);
+    --input-bg: rgba(35, 35, 39, 0.6);
     --input-blur: 12px;
     --input-padding-x: 12px;
     --input-padding-y: 8px;
@@ -121,7 +121,6 @@ p {
     line-height: 1.6;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -143,6 +142,15 @@ p {
     box-shadow: var(--shadow-input);
     padding: 1rem;
     margin: 1rem;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .bg-accent-glow {

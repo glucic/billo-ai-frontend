@@ -63,6 +63,7 @@ export default function ClientSection({
                             <InputField
                                 required
                                 id="client-name"
+                                placeholder={orgT('name')}
                                 value={client.name}
                                 onChange={e =>
                                     setClientField('name', e.target.value)
@@ -78,6 +79,7 @@ export default function ClientSection({
                             <InputField
                                 type="email"
                                 id="client-email"
+                                placeholder={orgT('email')}
                                 value={client.email}
                                 onChange={e =>
                                     setClientField('email', e.target.value)
@@ -93,6 +95,7 @@ export default function ClientSection({
                             <InputField
                                 type="tel"
                                 id="client-phone"
+                                placeholder={orgT('phone')}
                                 value={client.phone}
                                 onChange={e =>
                                     setClientField('phone', e.target.value)
@@ -108,6 +111,7 @@ export default function ClientSection({
                             <InputField
                                 required
                                 id="client-address"
+                                placeholder={orgT('address')}
                                 value={client.address}
                                 onChange={e =>
                                     setClientField('address', e.target.value)
@@ -121,6 +125,7 @@ export default function ClientSection({
                             <InputField
                                 required
                                 id="client-city"
+                                placeholder={orgT('city')}
                                 value={client.city}
                                 onChange={e =>
                                     setClientField('city', e.target.value)
@@ -136,6 +141,7 @@ export default function ClientSection({
                             <InputField
                                 required
                                 id="client-state"
+                                placeholder={orgT('state')}
                                 value={client.state}
                                 onChange={e =>
                                     setClientField('state', e.target.value)

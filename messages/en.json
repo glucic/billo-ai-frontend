@@ -162,6 +162,10 @@
     },
     "Invoices": {
         "title": "Invoices",
+        "editMode": "Edit Mode",
+        "previewMode": "Preview Mode",
+        "showToolbar": "Show Toolbar",
+        "hideToolbar": "Hide Toolbar",
         "Create": {
             "InvoiceDetails": {
                 "title": "Invoice Details",
@@ -177,6 +181,15 @@
             "ClientDetails": {
                 "title": "Client Details",
                 "selectClient": "Select Client"
+            },
+            "Items": {
+                "title": "Items",
+                "addItem": "Add Item",
+                "removeItem": "Remove Item",
+                "name": "Item Name",
+                "description": "Item Description",
+                "rate": "Rate",
+                "quantity": "Quantity"
             },
             "client": "Billing Entity",
             "items": "Items",

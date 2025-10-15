@@ -88,6 +88,7 @@ export default function IssuerSection({
                             <InputField
                                 required
                                 id="issuer-name"
+                                placeholder={orgT('name')}
                                 value={issuer.name}
                                 onChange={e =>
                                     setIssuerField('name', e.target.value)
@@ -103,6 +104,7 @@ export default function IssuerSection({
                             <InputField
                                 type="email"
                                 id="issuer-email"
+                                placeholder={orgT('email')}
                                 value={issuer.email}
                                 onChange={e =>
                                     setIssuerField('email', e.target.value)
@@ -118,6 +120,7 @@ export default function IssuerSection({
                             <InputField
                                 type="tel"
                                 id="issuer-phone"
+                                placeholder={orgT('phone')}
                                 value={issuer.phone}
                                 onChange={e =>
                                     setIssuerField('phone', e.target.value)
@@ -133,6 +136,7 @@ export default function IssuerSection({
                             <InputField
                                 required
                                 id="issuer-address"
+                                placeholder={orgT('address')}
                                 value={issuer.address}
                                 onChange={e =>
                                     setIssuerField('address', e.target.value)
@@ -146,6 +150,7 @@ export default function IssuerSection({
                             <InputField
                                 required
                                 id="issuer-city"
+                                placeholder={orgT('city')}
                                 value={issuer.city}
                                 onChange={e =>
                                     setIssuerField('city', e.target.value)
@@ -161,6 +166,7 @@ export default function IssuerSection({
                             <InputField
                                 required
                                 id="issuer-state"
+                                placeholder={orgT('state')}
                                 value={issuer.state}
                                 onChange={e =>
                                     setIssuerField('state', e.target.value)
@@ -174,6 +180,7 @@ export default function IssuerSection({
                             <InputField
                                 required
                                 id="issuer-zip"
+                                placeholder={orgT('zip')}
                                 value={issuer.zip}
                                 onChange={e =>
                                     setIssuerField('zip', e.target.value)

@@ -3,6 +3,11 @@
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import dynamic from 'next/dynamic'
+import {
+    RiFullscreenLine,
+    RiFullscreenExitLine,
+    RiToolsLine,
+} from 'react-icons/ri'
 
 import {
     InvoiceDetailsSection,
@@ -44,14 +49,22 @@ const PDFInvoicePreview = dynamic(
 
 export default function CreateInvoicePage() {
     const t = useTranslations('Invoices.Create')
-    const [invoiceNumber, setInvoiceNumber] = useState('INV-' + Date.now())
-    const [invoiceDate, setInvoiceDate] = useState(
-        format(new Date(), 'yyyy-MM-dd'),
-    )
-    const [dueDate, setDueDate] = useState('')
-    const [reference, setReference] = useState('')
+    const [isPreviewFullWidth, setIsPreviewFullWidth] = useState(false)
+    const [showToolbar, setShowToolbar] = useState(false)
 
     const { organisations, fetchOrganisations } = useOrganisations()
+
+    const [invoiceDetailsId, setInvoiceDetailsId] = useState<number | null>(
+        null,
+    )
+    const [invoiceDetails, setInvoiceDetails] = useState({
+        id: 0,
+        invoiceNumber: 'INV-' + Date.now(),
+        invoiceDate: format(new Date(), 'yyyy-MM-dd'),
+        dueDate: '',
+        reference: '',
+    })
+
     const [issuerId, setIssuerId] = useState<number | null>(null)
     const [issuer, setIssuer] = useState<Organisation>({
         id: 0,
@@ -64,7 +77,8 @@ export default function CreateInvoicePage() {
         zip: '',
     })
     const [clientId, setClientId] = useState<number | null>(null)
-    const [client, setClient] = useState<any>({
+    const [client, setClient] = useState<Organisation>({
+        id: 0,
         name: '',
         address: '',
         phone: '',
@@ -73,6 +87,16 @@ export default function CreateInvoicePage() {
         state: '',
         zip: '',
     })
+
+    const [items, setItems] = useState<InvoiceItem[]>([
+        {
+            name: '',
+            description: '',
+            rate: 0,
+            quantity: 1,
+        },
+    ])
+
     const [errors] = useState<any>({})
 
     useEffect(() => {
@@ -97,15 +121,25 @@ export default function CreateInvoicePage() {
         }
     }, [issuerId, organisations])
 
-    const setIssuerField = (field: keyof typeof issuer, value: string) => {
-        setIssuer((prev: typeof issuer) => ({
+    const setInvoiceDetailsField = (
+        field: keyof typeof invoiceDetails,
+        value: string,
+    ) => {
+        setInvoiceDetails(prev => ({
             ...prev,
             [field]: value,
         }))
     }
 
-    const setClientField = (field: keyof typeof client, value: string) => {
-        setClient((prev: typeof client) => ({
+    const setIssuerField = (field: keyof Organisation, value: string) => {
+        setIssuer((prev: Organisation) => ({
+            ...prev,
+            [field]: value,
+        }))
+    }
+
+    const setClientField = (field: keyof Organisation, value: string) => {
+        setClient((prev: Organisation) => ({
             ...prev,
             [field]: value,
         }))
@@ -114,14 +148,10 @@ export default function CreateInvoicePage() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = {
-            invoiceDetails: {
-                invoiceNumber,
-                invoiceDate,
-                dueDate,
-                reference,
-            },
+            invoiceDetails,
             issuer,
             client,
+            items,
         }
         console.log('Form Data:', formData)
     }
@@ -130,20 +160,51 @@ export default function CreateInvoicePage() {
         <main
             id="create-invoice"
             className="flex flex-col h-screen overflow-hidden text-[var(--color-foreground)] p-4 md:p-6">
+            <div className="flex justify-end items-center gap-2 mb-4">
+                <Button
+                    type="button"
+                    variant="secondary"
+                    animated={false}
+                    onClick={() => setIsPreviewFullWidth(v => !v)}
+                    className="px-3 py-2 flex items-center gap-2">
+                    {isPreviewFullWidth ? (
+                        <RiFullscreenExitLine />
+                    ) : (
+                        <RiFullscreenLine />
+                    )}
+                    <span className="hidden md:inline">
+                        {isPreviewFullWidth ? 'Exit Fullscreen' : 'Fullscreen'}
+                    </span>
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="secondary"
+                    animated={false}
+                    onClick={() => setShowToolbar(v => !v)}
+                    className="px-3 py-2 flex items-center gap-2">
+                    <RiToolsLine />
+                    <span className="hidden md:inline">
+                        {showToolbar ? 'Hide Toolbar' : 'Show Toolbar'}
+                    </span>
+                </Button>
+            </div>
+
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 flex-1 h-0">
                 <form
                     id="create-invoice-form"
                     onSubmit={handleSubmit}
-                    className="flex-1 overflow-y-auto pr-2 md:pr-4">
+                    className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
+                        isPreviewFullWidth
+                            ? 'flex-none w-0 md:w-0 opacity-0 hidden md:block'
+                            : 'flex-1 opacity-100'
+                    }`}>
                     <InvoiceDetailsSection
-                        invoiceNumber={invoiceNumber}
-                        setInvoiceNumber={setInvoiceNumber}
-                        invoiceDate={invoiceDate}
-                        setInvoiceDate={setInvoiceDate}
-                        dueDate={dueDate}
-                        setDueDate={setDueDate}
-                        reference={reference}
-                        setReference={setReference}
+                        invoiceDetailsId={invoiceDetailsId}
+                        setInvoiceDetailsId={setInvoiceDetailsId}
+                        invoiceDetails={invoiceDetails}
+                        setInvoiceDetailsField={setInvoiceDetailsField}
+                        error={errors.invoiceDetails}
                     />
 
                     <IssuerSection
@@ -160,6 +221,12 @@ export default function CreateInvoicePage() {
                         setClientId={setClientId}
                         client={client}
                         setClientField={setClientField}
+                    />
+
+                    <ItemsSection
+                        value={items}
+                        onChange={setItems}
+                        error={errors.items}
                     />
 
                     <section className="sticky bottom-0 left-0 w-full bg-[var(--background)] border-t border-neutral-300 dark:border-neutral-700 py-4 flex justify-end px-6 flex-row gap-2">
@@ -183,11 +250,17 @@ export default function CreateInvoicePage() {
 
                 <aside
                     id="pdf-invoice-preview"
-                    className="w-full md:w-[45%] flex-shrink-0 sticky top-0 h-full border-l border-neutral-300 dark:border-neutral-700 p-4 overflow-hidden">
+                    className={`flex-shrink-0 sticky top-0 h-screen border-l border-neutral-300 dark:border-neutral-700 p-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                        isPreviewFullWidth
+                            ? 'w-full md:w-full'
+                            : 'w-full md:w-[45%]'
+                    }`}>
                     <PDFInvoicePreview
-                        invoiceNumber={invoiceNumber}
+                        showToolbar={showToolbar}
+                        invoiceDetails={invoiceDetails}
                         issuer={issuer}
                         client={client}
+                        items={items}
                     />
                 </aside>
             </div>

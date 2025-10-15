@@ -7,13 +7,15 @@ import {
     StyleSheet,
 } from '@react-pdf/renderer'
 
-function PDFInvoiceDocument({ invoiceNumber, issuer, client }: any) {
+function PDFInvoiceDocument({ invoiceDetails, issuer, client, items }: any) {
     return (
         <Document>
             <Page size="A4" style={styles.body}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Invoice</Text>
-                    <Text>#{invoiceNumber}</Text>
+                    <Text>{invoiceDetails.invoiceNumber}</Text>
+                    <Text>{invoiceDetails.dueDate}</Text>{' '}
+                    <Text>{invoiceDetails.invoiceDate}</Text>
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.subtitle}>From:</Text>
@@ -55,7 +57,10 @@ const styles = StyleSheet.create({
 export default function PDFInvoicePreview(props: any) {
     return (
         <div className="w-full h-[900px] bg-white rounded shadow overflow-hidden">
-            <PDFViewer width="100%" height="100%" showToolbar={false}>
+            <PDFViewer
+                width="100%"
+                height="100%"
+                showToolbar={props.showToolbar}>
                 <PDFInvoiceDocument {...props} />
             </PDFViewer>
         </div>

@@ -8,20 +8,33 @@ import {
 } from '@/components/ui'
 import React from 'react'
 
+interface InvoiceDetails {
+    id: number
+    invoiceNumber: string
+    invoiceDate: string
+    dueDate: string
+    reference: string
+}
+
+interface InvoiceDetailsSectionProps {
+    invoiceDetailsId: number | null
+    setInvoiceDetailsId: (id: number | null) => void
+    invoiceDetails: InvoiceDetails
+    setInvoiceDetailsField: (field: keyof InvoiceDetails, value: string) => void
+    error?: { [K in keyof InvoiceDetails]?: string }
+}
+
 export default function InvoiceDetailsSection({
-    invoiceNumber,
-    setInvoiceNumber,
-    invoiceDate,
-    setInvoiceDate,
-    dueDate,
-    setDueDate,
-    reference,
-    setReference,
-}: any) {
+    invoiceDetailsId,
+    setInvoiceDetailsId,
+    invoiceDetails,
+    setInvoiceDetailsField,
+    error,
+}: InvoiceDetailsSectionProps) {
     const t = useTranslations('Invoices.Create.InvoiceDetails')
     const [open, setOpen] = React.useState(true)
     return (
-        <section className="card rounded-lg">
+        <section className="card rounded-lg glass">
             <Button
                 variant="ghost"
                 animated={false}
@@ -48,10 +61,20 @@ export default function InvoiceDetailsSection({
                             id="invoice-number"
                             readOnly
                             required
-                            value={invoiceNumber}
-                            onChange={e => setInvoiceNumber(e.target.value)}
+                            value={invoiceDetails.invoiceNumber}
+                            onChange={e =>
+                                setInvoiceDetailsField(
+                                    'invoiceNumber',
+                                    e.target.value,
+                                )
+                            }
                             aria-label={t('invoiceNumber')}
                         />
+                        {error?.invoiceNumber && (
+                            <span className="text-sm text-red-500">
+                                {error.invoiceNumber}
+                            </span>
+                        )}
                     </LabelInputContainer>
                     <LabelInputContainer>
                         <Label htmlFor="invoice-date">{t('invoiceDate')}</Label>
@@ -59,27 +82,53 @@ export default function InvoiceDetailsSection({
                             id="invoice-date"
                             type="date"
                             required
-                            value={invoiceDate}
-                            onChange={e => setInvoiceDate(e.target.value)}
+                            value={invoiceDetails.invoiceDate}
+                            onChange={e =>
+                                setInvoiceDetailsField(
+                                    'invoiceDate',
+                                    e.target.value,
+                                )
+                            }
                             aria-label={t('invoiceDate')}
                         />
+                        {error?.invoiceDate && (
+                            <span className="text-sm text-red-500">
+                                {error.invoiceDate}
+                            </span>
+                        )}
                     </LabelInputContainer>
                     <LabelInputContainer>
                         <Label htmlFor="due-date">{t('dueDate')}</Label>
                         <InputField
                             id="due-date"
                             type="date"
-                            value={dueDate}
-                            onChange={e => setDueDate(e.target.value)}
+                            value={invoiceDetails.dueDate}
+                            onChange={e =>
+                                setInvoiceDetailsField(
+                                    'dueDate',
+                                    e.target.value,
+                                )
+                            }
                             aria-label={t('dueDate')}
                         />
+                        {error?.dueDate && (
+                            <span className="text-sm text-red-500">
+                                {error.dueDate}
+                            </span>
+                        )}
                     </LabelInputContainer>
                     <LabelInputContainer>
                         <Label htmlFor="reference">{t('reference')}</Label>
                         <InputField
                             id="reference"
-                            value={reference}
-                            onChange={e => setReference(e.target.value)}
+                            value={invoiceDetails.reference}
+                            placeholder={t('reference')}
+                            onChange={e =>
+                                setInvoiceDetailsField(
+                                    'reference',
+                                    e.target.value,
+                                )
+                            }
                             aria-label={t('reference')}
                         />
                     </LabelInputContainer>
