@@ -1,3 +1,5 @@
+'use client'
+
 import { useTranslations } from 'next-intl'
 import {
     Label,
@@ -7,32 +9,22 @@ import {
     Button,
 } from '@/components/ui'
 import React from 'react'
-
-interface InvoiceDetails {
-    id: number
-    invoiceNumber: string
-    invoiceDate: string
-    dueDate: string
-    reference: string
-}
+import { InvoiceDetails } from '@/types/invoice'
 
 interface InvoiceDetailsSectionProps {
-    invoiceDetailsId: number | null
-    setInvoiceDetailsId: (id: number | null) => void
     invoiceDetails: InvoiceDetails
     setInvoiceDetailsField: (field: keyof InvoiceDetails, value: string) => void
     error?: { [K in keyof InvoiceDetails]?: string }
 }
 
 export default function InvoiceDetailsSection({
-    invoiceDetailsId,
-    setInvoiceDetailsId,
     invoiceDetails,
     setInvoiceDetailsField,
     error,
 }: InvoiceDetailsSectionProps) {
     const t = useTranslations('Invoices.Create.InvoiceDetails')
     const [open, setOpen] = React.useState(true)
+
     return (
         <section className="card rounded-lg glass">
             <Button
@@ -76,6 +68,7 @@ export default function InvoiceDetailsSection({
                             </span>
                         )}
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="invoice-date">{t('invoiceDate')}</Label>
                         <InputField
@@ -97,6 +90,7 @@ export default function InvoiceDetailsSection({
                             </span>
                         )}
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="due-date">{t('dueDate')}</Label>
                         <InputField
@@ -117,6 +111,7 @@ export default function InvoiceDetailsSection({
                             </span>
                         )}
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="reference">{t('reference')}</Label>
                         <InputField
@@ -131,6 +126,11 @@ export default function InvoiceDetailsSection({
                             }
                             aria-label={t('reference')}
                         />
+                        {error?.reference && (
+                            <span className="text-sm text-red-500">
+                                {error.reference}
+                            </span>
+                        )}
                     </LabelInputContainer>
                 </div>
             )}

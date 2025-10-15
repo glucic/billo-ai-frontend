@@ -1,3 +1,5 @@
+'use client'
+
 import { useTranslations } from 'next-intl'
 import {
     Label,
@@ -8,27 +10,15 @@ import {
     Button,
 } from '@/components/ui'
 import React from 'react'
-
-type ClientData = {
-    name: string
-    address: string
-    city: string
-    state: string
-    zip: string
-    phone: string
-    email: string
-}
+import { Organisation } from '@/types/Organisation'
+import { Client } from '@/types/invoice'
 
 interface ClientSectionProps {
-    organisations: Array<{
-        id: number
-        name: string
-        [key: string]: any
-    }>
+    organisations: Organisation[]
     clientId: number | null
     setClientId: (id: number | null) => void
-    client: ClientData
-    setClientField: (field: keyof ClientData, value: string) => void
+    client: Client
+    setClientField: (field: keyof Client, value: string) => void
 }
 
 export default function ClientSection({

@@ -10,48 +10,23 @@ import {
     ChevronDownIcon,
 } from '@/components/ui'
 import { Trash2 as TrashIcon } from 'lucide-react'
-
-export type InvoiceItem = {
-    name: string
-    description: string
-    rate: number
-    quantity: number
-}
+import { InvoiceItem } from '@/types/invoice'
 
 interface ItemsSectionProps {
     value: InvoiceItem[]
-    onChange: (items: InvoiceItem[]) => void
-    error?: string
+    onUpdateItem: (index: number, field: keyof InvoiceItem, value: any) => void
+    onAddItem: () => void
+    onRemoveItem: (index: number) => void
 }
 
 export default function ItemsSection({
     value,
-    onChange,
-    error,
+    onUpdateItem,
+    onAddItem,
+    onRemoveItem,
 }: ItemsSectionProps) {
     const t = useTranslations('Invoices.Create.Items')
     const [open, setOpen] = React.useState(true)
-
-    const handleItemChange = (
-        idx: number,
-        field: keyof InvoiceItem,
-        val: any,
-    ) => {
-        onChange(
-            value.map((item, i) =>
-                i === idx ? { ...item, [field]: val } : item,
-            ),
-        )
-    }
-
-    const addItem = () =>
-        onChange([
-            ...value,
-            { name: '', description: '', rate: 0, quantity: 1 },
-        ])
-
-    const removeItem = (idx: number) =>
-        onChange(value.filter((_: InvoiceItem, i: number) => i !== idx))
 
     return (
         <section className="card rounded-lg">
@@ -71,7 +46,7 @@ export default function ItemsSection({
 
             {open && (
                 <div id="items-fields" className="flex flex-col gap-4 mt-4">
-                    {value.map((item: InvoiceItem, idx: number) => (
+                    {value.map((item, idx) => (
                         <div
                             key={idx}
                             className="grid grid-cols-1 md:grid-cols-6 gap-2 items-end">
@@ -83,7 +58,7 @@ export default function ItemsSection({
                                     id={`item-name-${idx}`}
                                     value={item.name}
                                     onChange={e =>
-                                        handleItemChange(
+                                        onUpdateItem(
                                             idx,
                                             'name',
                                             e.target.value,
@@ -101,7 +76,7 @@ export default function ItemsSection({
                                     id={`item-description-${idx}`}
                                     value={item.description}
                                     onChange={e =>
-                                        handleItemChange(
+                                        onUpdateItem(
                                             idx,
                                             'description',
                                             e.target.value,
@@ -120,7 +95,7 @@ export default function ItemsSection({
                                     type="number"
                                     value={item.rate}
                                     onChange={e =>
-                                        handleItemChange(
+                                        onUpdateItem(
                                             idx,
                                             'rate',
                                             Number(e.target.value),
@@ -139,7 +114,7 @@ export default function ItemsSection({
                                     type="number"
                                     value={item.quantity}
                                     onChange={e =>
-                                        handleItemChange(
+                                        onUpdateItem(
                                             idx,
                                             'quantity',
                                             Number(e.target.value),
@@ -153,7 +128,7 @@ export default function ItemsSection({
                                 <Button
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => removeItem(idx)}
+                                    onClick={() => onRemoveItem(idx)}
                                     aria-label={t('removeItem')}
                                     className="p-2 text-red-500 hover:text-red-700">
                                     <TrashIcon className="w-5 h-5" />
@@ -165,9 +140,9 @@ export default function ItemsSection({
                     <Button
                         type="button"
                         variant="secondary"
-                        animated={true}
+                        animated
                         className="w-full py-6"
-                        onClick={addItem}>
+                        onClick={onAddItem}>
                         {t('addItem')}
                     </Button>
                 </div>

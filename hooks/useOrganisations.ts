@@ -1,25 +1,6 @@
 import { useState, useCallback } from 'react'
 import apiClient from '@/lib/apiClient'
-
-export interface Organisation {
-    id: number
-    name: string
-    address: string
-    phone: string
-    email: string
-    description: string
-    employee_count: number
-    users: User[]
-    created_at: string
-    updated_at: string
-}
-
-export interface User {
-    id: number
-    name: string
-    email: string
-    role: string
-}
+import { Organisation } from '@/types/Organisation'
 
 export interface UseOrganisationsReturn {
     organisations: Organisation[]
