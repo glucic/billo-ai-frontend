@@ -9,7 +9,7 @@ import {
     InvoiceDetails,
     InvoiceItem,
     Invoice,
-} from '@/types/invoice'
+} from '@/types/Invoice'
 import { useOrganisations } from '@/hooks/useOrganisations'
 
 export function useInvoiceForm(initialInvoiceId?: number) {
@@ -166,5 +166,129 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         saving,
         error,
         saveInvoice,
+    }
+}
+
+interface PaginationMeta {
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+}
+
+export function listInvoices() {
+    const [invoices, setInvoices] = useState<Invoice[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState<PaginationMeta | null>(null)
+
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [sortBy, setSortBy] = useState<
+        | 'invoice_number'
+        | 'invoice_date'
+        | 'created_at'
+        | 'client_name'
+        | 'total'
+    >('created_at')
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+    const [searchTerm, setSearchTerm] = useState('')
+
+    const mapApiInvoice = (apiInvoice: any): Invoice => {
+        const invoiceDetails: InvoiceDetails = {
+            id: apiInvoice.id,
+            invoiceNumber: apiInvoice.invoice_number,
+            invoiceDate: apiInvoice.invoice_date,
+            dueDate: apiInvoice.due_date ?? '',
+            reference: apiInvoice.reference ?? '',
+        }
+
+        const issuer: Issuer = apiInvoice.issuer ?? {
+            name: '',
+            address: '',
+            city: '',
+            state: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }
+
+        const client: Client = apiInvoice.client ?? {
+            name: '',
+            address: '',
+            city: '',
+            state: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }
+
+        const items: InvoiceItem[] =
+            apiInvoice.items?.map((item: any) => ({
+                name: item.name,
+                description: item.description ?? '',
+                rate: Number(item.rate),
+                quantity: Number(item.quantity),
+                subtotal: Number(item.rate) * Number(item.quantity),
+            })) ?? []
+
+        return { invoiceDetails, issuer, client, items }
+    }
+
+    const fetchInvoices = useCallback(async () => {
+        setLoading(true)
+        setError(null)
+        try {
+            const res = await apiClient.get('/api/invoices', {
+                params: {
+                    page,
+                    per_page: rowsPerPage,
+                    sort_by: sortBy,
+                    sort_order: sortOrder,
+                    search: searchTerm,
+                },
+            })
+
+            const data = res.data.data
+            const mappedInvoices = (data.data || []).map((inv: any) =>
+                mapApiInvoice(inv),
+            )
+
+            setInvoices(mappedInvoices)
+            setPagination({
+                current_page: data.current_page,
+                last_page: data.last_page,
+                per_page: data.per_page,
+                total: data.total,
+            })
+        } catch (err: any) {
+            console.error(err)
+            setError(err.response?.data?.message || 'Failed to load invoices.')
+        } finally {
+            setLoading(false)
+        }
+    }, [page, rowsPerPage, sortBy, sortOrder, searchTerm])
+
+    useEffect(() => {
+        fetchInvoices()
+    }, [fetchInvoices])
+
+    return {
+        invoices,
+        loading,
+        error,
+        pagination,
+        page,
+        setPage,
+        rowsPerPage,
+        setRowsPerPage,
+        sortBy,
+        setSortBy,
+        sortOrder,
+        setSortOrder,
+        searchTerm,
+        setSearchTerm,
+        fetchInvoices,
     }
 }

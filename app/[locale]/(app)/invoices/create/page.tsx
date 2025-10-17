@@ -15,11 +15,6 @@ import IssuerSection from '@/components/invoices/IssuerSection'
 import ClientSection from '@/components/invoices/ClientSection'
 import ItemsSection from '@/components/invoices/ItemsSection'
 
-const PDFInvoicePreview = dynamic(
-    () => import('@/components/invoices/PDFInvoicePreview'),
-    { ssr: false },
-)
-
 export default function CreateInvoicePage() {
     const t = useTranslations('Invoices.Create')
     const [isPreviewFullWidth, setIsPreviewFullWidth] = useState(false)
@@ -53,9 +48,7 @@ export default function CreateInvoicePage() {
         try {
             await saveInvoice()
             setSuccess(true)
-        } catch {
-            // error is handled inside the hook
-        }
+        } catch {}
     }
 
     return (
@@ -145,13 +138,7 @@ export default function CreateInvoicePage() {
                             ? 'w-full md:w-full'
                             : 'w-full md:w-[45%]'
                     }`}>
-                    <PDFInvoicePreview
-                        showToolbar={showToolbar}
-                        invoiceDetails={invoiceDetails}
-                        issuer={issuer}
-                        client={client}
-                        items={items}
-                    />
+                    
                 </aside>
             </div>
         </main>

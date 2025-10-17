@@ -10,7 +10,7 @@ import {
     ChevronDownIcon,
 } from '@/components/ui'
 import { Trash2 as TrashIcon } from 'lucide-react'
-import { InvoiceItem } from '@/types/invoice'
+import { InvoiceItem } from '@/types/Invoice'
 
 interface ItemsSectionProps {
     value: InvoiceItem[]

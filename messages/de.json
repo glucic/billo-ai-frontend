@@ -161,6 +161,28 @@
         }
     },
     "Invoices": {
+        "searchPlaceholder": "Rechnungen durchsuchen...",
+        "selectIssuer": "Aussteller auswählen",
+        "create": "Rechnung erstellen",
+        "loading": "Rechnungen werden geladen...",
+        "noInvoices": "Keine Rechnungen gefunden",
+        "rowsPerPage": "Zeilen pro Seite",
+        "of": "von",
+        "page": "Seite",
+        "sort": {
+            "created": "Erstellungsdatum",
+            "number": "Rechnungsnummer",
+            "date": "Rechnungsdatum",
+            "asc": "Aufsteigend",
+            "desc": "Absteigend"
+        },
+        "columns": {
+            "number": "Nummer",
+            "date": "Datum",
+            "client": "Kunde",
+            "total": "Gesamtbetrag",
+            "actions": "Aktionen"
+        },
         "title": "Rechnungen",
         "editMode": "Bearbeitungsmodus",
         "previewMode": "Vorschaumodus",

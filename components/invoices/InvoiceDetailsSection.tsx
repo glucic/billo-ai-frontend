@@ -9,7 +9,7 @@ import {
     Button,
 } from '@/components/ui'
 import React from 'react'
-import { InvoiceDetails } from '@/types/invoice'
+import { InvoiceDetails } from '@/types/Invoice'
 
 interface InvoiceDetailsSectionProps {
     invoiceDetails: InvoiceDetails

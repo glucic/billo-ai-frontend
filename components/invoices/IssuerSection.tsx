@@ -11,7 +11,7 @@ import {
 } from '@/components/ui'
 import React from 'react'
 import { Organisation } from '@/types/Organisation'
-import { Issuer } from '@/types/invoice'
+import { Issuer } from '@/types/Invoice'
 
 interface IssuerSectionProps {
     organisations: Organisation[]

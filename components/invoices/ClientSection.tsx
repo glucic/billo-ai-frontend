@@ -11,7 +11,7 @@ import {
 } from '@/components/ui'
 import React from 'react'
 import { Organisation } from '@/types/Organisation'
-import { Client } from '@/types/invoice'
+import { Client } from '@/types/Invoice'
 
 interface ClientSectionProps {
     organisations: Organisation[]

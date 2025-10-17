@@ -38,6 +38,30 @@
             }
         }
     },
+    "Invoices": {
+        "searchPlaceholder": "Search invoices...",
+        "selectIssuer": "Select Issuer",
+        "create": "Create Invoice",
+        "loading": "Loading invoices...",
+        "noInvoices": "No invoices found",
+        "rowsPerPage": "Rows per page",
+        "of": "of",
+        "page": "Page",
+        "sort": {
+            "created": "Created Date",
+            "number": "Invoice Number",
+            "date": "Invoice Date",
+            "asc": "Ascending",
+            "desc": "Descending"
+        },
+        "columns": {
+            "number": "Number",
+            "date": "Date",
+            "client": "Client",
+            "total": "Total",
+            "actions": "Actions"
+        }
+    },
     "Organisation": {
         "title": "Organizations",
         "count": "{count} organizations found",
