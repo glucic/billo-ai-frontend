@@ -12,13 +12,13 @@
     "settings": "Settings",
     "notifications": "Notifications",
     "help": "Help & Support",
-    "logout": "Logout",
+    "logout": "Log Out",
     "organisations": "Organisations"
   },
   "LandingPage": {
     "HeroSection": {
       "title": "Welcome to BilloAI",
-      "description": "Your fastest solution for professional invoices powered by AI. Create, customize, and send invoices in just a few seconds.",
+      "description": "Your fastest solution for professional invoices powered by AI. Create, customize, and send invoices in just seconds.",
       "primaryCta": "Create Invoices Now",
       "secondaryCta": "View All Features"
     },
@@ -26,11 +26,11 @@
       "heading": "Why BilloAI?",
       "feature1": {
         "title": "Fast & Efficient",
-        "description": "Create professional invoices in seconds thanks to intelligent AI templates."
+        "description": "Create professional invoices in seconds with intelligent AI templates."
       },
       "feature2": {
         "title": "Custom Layouts",
-        "description": "Easily customize PDF designs to match your branding and requirements."
+        "description": "Easily adapt PDF designs to your branding and business needs."
       },
       "feature3": {
         "title": "Automated Processes",
@@ -48,29 +48,29 @@
     "leave": "Leave Organisation",
     "join": "Join Organisation",
     "companyInfo": "Company Details",
-    "addressInfo": "Address Details",
+    "addressInfo": "Address Information",
     "fields": {
       "name": "Name",
       "email": "Email",
       "phone": "Phone",
-      "street": "Street and House Number",
+      "street": "Street",
       "zip": "Postal Code",
       "city": "City",
       "country": "Country",
-      "region": "State / Region",
+      "region": "State/Province",
       "employeeCount": "Number of Employees",
       "description": "Description",
       "members": "Members"
     },
     "errors": {
-      "loadFailed": "Failed to load organisations",
-      "saveFailed": "Failed to save changes",
-      "deleteFailed": "Failed to delete organisation",
-      "leaveFailed": "Failed to leave organisation",
-      "joinFailed": "Failed to join organisation"
+      "loadFailed": "Failed to load organisations.",
+      "saveFailed": "Failed to save changes.",
+      "deleteFailed": "Failed to delete organisation.",
+      "leaveFailed": "Failed to leave organisation.",
+      "joinFailed": "Failed to join organisation."
     },
     "confirmDelete": "Are you sure you want to delete this organisation?",
-    "notFound": "No organisations found."
+    "notFound": "No organisations available."
   },
   "Auth": {
     "Login": {
@@ -79,22 +79,22 @@
       "email": "Email",
       "password": "Password",
       "loginButton": "Login",
-      "forgotPassword": "Forgot Password?",
+      "forgotPassword": "Forgot password?",
       "or": "OR",
       "signInGoogle": "Sign in with Google",
       "signInGithub": "Sign in with GitHub",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign Up",
+      "noAccount": "Don’t have an account?",
+      "signUp": "Register",
       "errors": {
         "emailRequired": "Email is required.",
         "emailInvalid": "Please enter a valid email address.",
         "passwordRequired": "Password is required.",
-        "invalidCredentials": "Email or password is incorrect."
+        "invalidCredentials": "Incorrect email or password."
       }
     },
     "Register": {
       "welcome": "Create an Account",
-      "subtitle": "Create your free account and start instantly",
+      "subtitle": "Create your free account and start right away",
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
@@ -107,7 +107,7 @@
       "signUpGoogle": "Sign up with Google",
       "signUpGithub": "Sign up with GitHub",
       "loading": "Loading...",
-      "allFieldsRequired": "Please fill out all fields.",
+      "allFieldsRequired": "Please fill in all required fields.",
       "passwordsDontMatch": "Passwords do not match.",
       "errors": {
         "general": "An error occurred. Please try again.",
@@ -122,23 +122,23 @@
     },
     "GettingStarted": {
       "StepCompanyName": {
-        "label": "What is your company's name?",
-        "placeholder": "Enter your company's name here"
+        "label": "What is your company name?",
+        "placeholder": "Enter your company name here"
       },
       "StepCompanyAbout": {
         "label": "What does your company do? (optional)",
-        "placeholder": "Tell us a little about your company"
+        "placeholder": "Tell us a bit about your company"
       },
       "StepCompanyDetails": {
         "title": "Company Details",
         "emailLabel": "Company Email Address",
         "emailPlaceholder": "example@company.com",
         "phoneLabel": "Company Phone Number",
-        "phonePlaceholder": "+1 234 567 890",
+        "phonePlaceholder": "+1 555 123 4567",
         "workersLabel": "How many employees does your company have?",
         "workersPlaceholder": "For example: 50",
         "addressSection": "Address Information",
-        "streetLabel": "Street and House Number",
+        "streetLabel": "Street and Number",
         "streetPlaceholder": "e.g. Main Street 12",
         "cityLabel": "City",
         "cityPlaceholder": "e.g. Berlin",
@@ -153,13 +153,13 @@
     "stats": {
       "organisations": "Organisations",
       "activeUsers": "Active Users",
-      "invoicesGenerated": "Invoices Created",
+      "invoicesGenerated": "Invoices Generated",
       "upcomingMeetings": "Upcoming Meetings"
     },
     "metrics": {
       "totalCompanies": "Total Companies",
       "activeUsers": "Active Users",
-      "invoicesGenerated": "Invoices Created"
+      "invoicesGenerated": "Invoices Generated"
     },
     "activity": {
       "addedCompany": "Added {name}",
@@ -182,7 +182,7 @@
     "of": "of",
     "page": "Page",
     "sort": {
-      "created": "Creation Date",
+      "created": "Created Date",
       "number": "Invoice Number",
       "date": "Invoice Date",
       "asc": "Ascending",
@@ -200,7 +200,32 @@
     "previewMode": "Preview Mode",
     "showToolbar": "Show Toolbar",
     "hideToolbar": "Hide Toolbar",
+    "PDF": {
+      "title": "Invoice",
+      "invoiceNumber": "Invoice Number",
+      "invoiceDate": "Invoice Date",
+      "dueDate": "Due Date",
+      "reference": "Reference",
+      "from": "From",
+      "billTo": "Bill To",
+      "items": "Items",
+      "name": "Item",
+      "description": "Description",
+      "quantity": "Quantity",
+      "unitPrice": "Unit Price",
+      "subtotal": "Subtotal",
+      "sumNet": "Subtotal (Net)",
+      "discount": "Discount",
+      "totalNet": "Total (Net)",
+      "shipping": "Shipping Costs",
+      "tax": "VAT",
+      "totalGross": "Total (Gross)",
+      "deposit": "Deposit",
+      "payments": "Payments",
+      "amountDue": "Amount Due"
+    },
     "Create": {
+      "saveSuccess": "Invoice saved successfully!",
       "InvoiceDetails": {
         "title": "Invoice Details",
         "invoiceNumber": "Invoice Number",
@@ -220,26 +245,25 @@
         "title": "Items",
         "addItem": "Add Item",
         "removeItem": "Remove Item",
-        "name": "Name",
+        "name": "Item Name",
         "description": "Description",
-        "rate": "Price",
+        "rate": "Rate",
         "quantity": "Quantity"
       },
-      "currencyAndTax": "Currency & Taxes",
-      "currency": "Currency",
-      "taxRate": "Tax Rate (%)",
-      "discount": "Discount (%)",
-      "subtotal": "Subtotal",
-      "tax": "Tax",
-      "discountAmount": "Discount Amount",
-      "total": "Total",
-      "paymentInfo": "Payment Information",
-      "paymentTerms": "Payment Terms",
-      "bankDetails": "Bank Details",
-      "paymentInstructions": "Payment Instructions",
-      "notesAndFooter": "Notes & Footer",
-      "notes": "Notes for the Client",
-      "footer": "Footer / Legal Text",
+      "Totals": {
+        "title": "Totals Overview",
+        "currency": "Currency",
+        "sum": "Sum",
+        "totalNet": "Total (Net)",
+        "totalGross": "Total (Gross)",
+        "mwst": "VAT",
+        "discount": "Discount (%)",
+        "discountAmount": "Discount Amount",
+        "shipping": "Shipping",
+        "deposit": "Deposit",
+        "payments": "Payments",
+        "amountDue": "Amount Due"
+      },
       "save": "Save Invoice",
       "cancel": "Cancel"
     }
@@ -266,6 +290,8 @@
       "email": "Email",
       "phone": "Phone",
       "company": "Company",
+      "street": "Street",
+      "state": "State / Region",
       "status": "Status",
       "date": "Added On"
     }

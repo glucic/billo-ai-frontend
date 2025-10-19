@@ -77,7 +77,7 @@ export function SidebarComponent() {
     ]
 
     return (
-        <div className="h-full border-r border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800">
+        <div className="h-screen border-r border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800">
             <Sidebar>
                 <SidebarBody className="justify-between gap-10">
                     <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
@@ -90,8 +90,8 @@ export function SidebarComponent() {
                     <div>
                         <SidebarLink
                             link={{
-                                label: user.first_name + ' ' + user.last_name,
-                                href: '/settings/profile/' + user.id,
+                                label: user?.first_name + ' ' + user?.last_name,
+                                href: '/settings/profile/' + user?.id,
                                 icon: (
                                     <img
                                         src="https://assets.aceternity.com/manu.png"

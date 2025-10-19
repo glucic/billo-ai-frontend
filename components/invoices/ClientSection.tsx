@@ -94,18 +94,18 @@ export default function ClientSection({
                         </LabelInputContainer>
 
                         <LabelInputContainer>
-                            <Label htmlFor="client-address">
-                                {orgT('address')}
+                            <Label htmlFor="client-street">
+                                {orgT('street')}
                             </Label>
                             <InputField
                                 required
                                 id="client-address"
-                                placeholder={orgT('address')}
+                                placeholder={orgT('street')}
                                 value={client.street}
                                 onChange={e =>
                                     setClientField('street', e.target.value)
                                 }
-                                aria-label={orgT('address')}
+                                aria-label={orgT('street')}
                             />
                         </LabelInputContainer>
 
@@ -124,18 +124,18 @@ export default function ClientSection({
                         </LabelInputContainer>
 
                         <LabelInputContainer>
-                            <Label htmlFor="client-state">
-                                {orgT('state')}
+                            <Label htmlFor="client-region">
+                                {orgT('region')}
                             </Label>
                             <InputField
                                 required
-                                id="client-state"
-                                placeholder={orgT('state')}
+                                id="client-region"
+                                placeholder={orgT('region')}
                                 value={client.region}
                                 onChange={e =>
                                     setClientField('region', e.target.value)
                                 }
-                                aria-label={orgT('state')}
+                                aria-label={orgT('region')}
                             />
                         </LabelInputContainer>
 
@@ -143,6 +143,7 @@ export default function ClientSection({
                             <Label htmlFor="client-zip">{orgT('zip')}</Label>
                             <InputField
                                 required
+                                placeholder={orgT('zip')}
                                 id="client-zip"
                                 value={client.zip}
                                 onChange={e =>

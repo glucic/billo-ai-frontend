@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { OrganisationLogo } from './OrganisationLogo'
-import { Organisation } from '@/hooks/useOrganisations'
+import { Organisation } from '@/types/Organisation'
 
 interface OrganisationListProps {
     organisations: Organisation[]
@@ -13,7 +13,6 @@ interface OrganisationListProps {
 
 export function OrganisationList({
     organisations,
-    onLeave,
 }: OrganisationListProps) {
     const t = useTranslations('Organisation')
 

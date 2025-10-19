@@ -4,32 +4,37 @@ import { useState } from 'react'
 import { Button } from '@/components/ui'
 import { useTranslations } from 'next-intl'
 import { useInvoiceForm } from '@/hooks/useInvoice'
-import InvoiceDetailsSection from '@/components/invoices/InvoiceDetailsSection'
-import IssuerSection from '@/components/invoices/IssuerSection'
-import ClientSection from '@/components/invoices/ClientSection'
-import ItemsSection from '@/components/invoices/ItemsSection'
-import PDFInvoicePreview from '@/components/invoices/PDFInvoicePreview'
+import {
+    InvoiceDetailsSection,
+    IssuerSection,
+    ClientSection,
+    ItemsSection,
+    PDFInvoicePreview,
+    TotalsSection,
+} from '@/components/invoices'
 
 export default function CreateInvoicePage() {
     const t = useTranslations('Invoices.Create')
     const [success, setSuccess] = useState(false)
-    const [showPreview, setShowPreview] = useState(true)
+    const [showPreview] = useState(true)
 
     const {
         invoiceDetails,
+        setInvoiceDetailsField,
         issuer,
+        setIssuerField,
         issuerId,
         setIssuerId,
-        setIssuerField,
         client,
+        setClientField,
         clientId,
         setClientId,
-        setClientField,
         items,
         addItem,
         removeItem,
         updateItem,
-        setInvoiceDetailsField,
+        totals,
+        setTotalsField,
         saveInvoice,
         organisations,
         saving,
@@ -45,7 +50,7 @@ export default function CreateInvoicePage() {
         } catch {}
     }
 
-    const invoice = { invoiceDetails, issuer, client, items }
+    const invoice = { invoiceDetails, issuer, client, items, totals }
 
     return (
         <main className="flex flex-col h-screen overflow-hidden text-[var(--color-foreground)] p-4 md:p-6">
@@ -78,15 +83,22 @@ export default function CreateInvoicePage() {
 
                     <ItemsSection
                         value={items}
+                        currency={totals.currency}
                         onUpdateItem={updateItem}
                         onAddItem={addItem}
                         onRemoveItem={removeItem}
                     />
 
+                    <TotalsSection
+                        items={items}
+                        totals={totals}
+                        setTotalsField={setTotalsField}
+                    />
+
                     {error && <div className="text-red-500 mb-2">{error}</div>}
                     {success && (
                         <div className="text-green-500 mb-2">
-                            Invoice saved successfully!
+                            {t('saveSuccess') || 'Invoice saved successfully!'}
                         </div>
                     )}
 
@@ -104,7 +116,7 @@ export default function CreateInvoicePage() {
                 </form>
 
                 {showPreview && (
-                    <div className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] h-[85vh] transition-all duration-300">
+                    <div className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
                         <PDFInvoicePreview invoice={invoice} />
                     </div>
                 )}

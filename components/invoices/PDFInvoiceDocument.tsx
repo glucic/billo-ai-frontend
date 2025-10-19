@@ -1,113 +1,193 @@
 'use client'
 
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
-import { InvoiceDetails, Issuer, Client, InvoiceItem } from '@/types/Invoice'
+import {
+    InvoiceDetails,
+    Issuer,
+    Client,
+    InvoiceItem,
+    InvoiceTotals,
+} from '@/types/Invoice'
 
 interface PDFInvoiceDocumentProps {
     invoiceDetails: InvoiceDetails
     issuer: Issuer
     client: Client
     items: InvoiceItem[]
+    totals: InvoiceTotals
+    t: Record<string, string>
 }
 
 export default function PDFInvoiceDocument({
-    invoiceDetails,
-    issuer,
-    client,
-    items,
-}: PDFInvoiceDocumentProps) {
-    const subtotal = items.reduce((acc, i) => acc + i.rate * i.quantity, 0)
-    const formatEuro = (v: number) => `${v.toFixed(2).replace('.', ',')} €`
+                                               invoiceDetails,
+                                               issuer,
+                                               client,
+                                               items,
+                                               totals,
+                                               t,
+                                           }: PDFInvoiceDocumentProps) {
+    const symbol = totals.currency === 'EUR' ? '€' : totals.currency
+    const formatValue = (v: number) =>
+        `${v.toFixed(2).replace('.', ',')} ${symbol}`
 
     return (
         <Document>
             <Page size="A4" style={styles.body}>
                 {/* Header */}
                 <View style={styles.header}>
-                    <Text style={styles.title}>Rechnung</Text>
+                    <Text style={styles.title}>{t['title']}</Text>
                     <View style={{ textAlign: 'right' }}>
                         <Text>
-                            Rechnungsnummer: {invoiceDetails.invoiceNumber}
+                            {t['invoiceNumber']}: {invoiceDetails.invoiceNumber}
                         </Text>
                         <Text>
-                            Rechnungsdatum: {invoiceDetails.invoiceDate}
+                            {t['invoiceDate']}: {invoiceDetails.invoiceDate}
                         </Text>
                         {invoiceDetails.dueDate && (
                             <Text>
-                                Fälligkeitsdatum: {invoiceDetails.dueDate}
+                                {t['dueDate']}: {invoiceDetails.dueDate}
                             </Text>
                         )}
                         {invoiceDetails.reference && (
-                            <Text>Referenz: {invoiceDetails.reference}</Text>
+                            <Text>
+                                {t['reference']}: {invoiceDetails.reference}
+                            </Text>
                         )}
                     </View>
                 </View>
 
                 {/* Issuer */}
                 <View style={styles.section}>
-                    <Text style={styles.subtitle}>Von:</Text>
+                    <Text style={styles.subtitle}>{t['from']}</Text>
                     <Text>{issuer.name}</Text>
                     <Text>{issuer.street}</Text>
                     <Text>
-                        {issuer.city}, {issuer.state} {issuer.zip}
+                        {issuer.zip} {issuer.city}, {issuer.region}
                     </Text>
-                    <Text>{issuer.email}</Text>
-                    <Text>{issuer.phone}</Text>
+                    {issuer.email && <Text>{issuer.email}</Text>}
+                    {issuer.phone && <Text>{issuer.phone}</Text>}
                 </View>
 
                 {/* Client */}
                 <View style={styles.section}>
-                    <Text style={styles.subtitle}>Rechnung an:</Text>
+                    <Text style={styles.subtitle}>{t['billTo']}</Text>
                     <Text>{client.name}</Text>
                     <Text>{client.street}</Text>
                     <Text>
-                        {client.city}, {client.state} {client.zip}
+                        {client.zip} {client.city}, {client.region}
                     </Text>
-                    <Text>{client.email}</Text>
-                    <Text>{client.phone}</Text>
+                    {client.email && <Text>{client.email}</Text>}
+                    {client.phone && <Text>{client.phone}</Text>}
                 </View>
 
                 {/* Items */}
                 <View style={styles.section}>
-                    <Text style={styles.subtitle}>Positionen:</Text>
+                    <Text style={styles.subtitle}>{t['items']}</Text>
+
                     <View style={[styles.itemRow, styles.itemHeader]}>
-                        <Text style={{ flex: 2 }}>Name</Text>
-                        <Text style={{ flex: 3 }}>Beschreibung</Text>
+                        <Text style={{ flex: 2 }}>{t['name']}</Text>
+                        <Text style={{ flex: 3 }}>{t['description']}</Text>
                         <Text style={{ flex: 1, textAlign: 'right' }}>
-                            Menge
+                            {t['quantity']}
                         </Text>
                         <Text style={{ flex: 1, textAlign: 'right' }}>
-                            Preis
+                            {t['unitPrice']}
                         </Text>
                         <Text style={{ flex: 1, textAlign: 'right' }}>
-                            Zwischensumme
+                            {t['subtotal']}
                         </Text>
                     </View>
 
                     {items.map((item, idx) => (
                         <View key={idx} style={styles.itemRow}>
                             <Text style={{ flex: 2 }}>{item.name}</Text>
-                            <Text style={{ flex: 3 }}>{item.description}</Text>
+                            <Text style={{ flex: 3 }}>
+                                {item.description || '-'}
+                            </Text>
                             <Text style={{ flex: 1, textAlign: 'right' }}>
                                 {item.quantity}
                             </Text>
                             <Text style={{ flex: 1, textAlign: 'right' }}>
-                                {formatEuro(item.rate)}
+                                {formatValue(item.rate)}
                             </Text>
                             <Text style={{ flex: 1, textAlign: 'right' }}>
-                                {formatEuro(item.rate * item.quantity)}
+                                {formatValue(item.rate * item.quantity)}
                             </Text>
                         </View>
                     ))}
                 </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.total}>
-                        Zwischensumme: {formatEuro(subtotal)}
-                    </Text>
-                    <Text style={styles.total}>
-                        Gesamt: {formatEuro(subtotal)}
-                    </Text>
+                {/* Totals */}
+                <View style={[styles.section, styles.totalsSection]}>
+                    <View style={styles.totalsRow}>
+                        <Text>{t['sumNet']}</Text>
+                        <Text>{formatValue(totals.sum)}</Text>
+                    </View>
+
+                    {totals.discount > 0 && (
+                        <View style={styles.totalsRow}>
+                            <Text>
+                                {t['discount']} ({totals.discount}%)
+                            </Text>
+                            <Text>
+                                -{formatValue(totals.sum - totals.totalNet)}
+                            </Text>
+                        </View>
+                    )}
+
+                    <View style={styles.totalsRow}>
+                        <Text>{t['totalNet']}</Text>
+                        <Text>{formatValue(totals.totalNet)}</Text>
+                    </View>
+
+                    {totals.shipping > 0 && (
+                        <View style={styles.totalsRow}>
+                            <Text>{t['shipping']}</Text>
+                            <Text>+{formatValue(totals.shipping)}</Text>
+                        </View>
+                    )}
+
+                    <View style={styles.totalsRow}>
+                        <Text>
+                            {t['tax']} ({totals.taxRate}%)
+                        </Text>
+                        <Text>
+                            +
+                            {formatValue(
+                                totals.totalGross -
+                                totals.totalNet -
+                                totals.shipping,
+                            )}
+                        </Text>
+                    </View>
+
+                    <View style={styles.totalsDivider} />
+
+                    <View style={[styles.totalsRow, styles.totalBold]}>
+                        <Text>{t['totalGross']}</Text>
+                        <Text>{formatValue(totals.totalGross)}</Text>
+                    </View>
+
+                    {totals.deposit > 0 && (
+                        <View style={styles.totalsRow}>
+                            <Text>{t['deposit']}</Text>
+                            <Text>-{formatValue(totals.deposit)}</Text>
+                        </View>
+                    )}
+
+                    {totals.payments > 0 && (
+                        <View style={styles.totalsRow}>
+                            <Text>{t['payments']}</Text>
+                            <Text>-{formatValue(totals.payments)}</Text>
+                        </View>
+                    )}
+
+                    <View style={styles.totalsDivider} />
+
+                    <View style={[styles.totalsRow, styles.amountDue]}>
+                        <Text>{t['amountDue']}</Text>
+                        <Text>{formatValue(totals.amountDue)}</Text>
+                    </View>
                 </View>
             </Page>
         </Document>
@@ -115,15 +195,15 @@ export default function PDFInvoiceDocument({
 }
 
 const styles = StyleSheet.create({
-    body: { padding: 32, fontSize: 12 },
+    body: { padding: 32, fontSize: 11, fontFamily: 'Helvetica' },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 16,
+        marginBottom: 20,
     },
     title: { fontSize: 24, fontWeight: 'bold' },
     subtitle: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
         marginTop: 8,
         marginBottom: 4,
@@ -131,7 +211,6 @@ const styles = StyleSheet.create({
     section: { marginBottom: 12 },
     itemRow: {
         flexDirection: 'row',
-        marginBottom: 2,
         borderBottomWidth: 0.5,
         borderBottomColor: '#999',
         paddingVertical: 2,
@@ -142,10 +221,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
     },
-    total: {
-        fontWeight: 'bold',
-        fontSize: 14,
-        marginTop: 8,
-        textAlign: 'right',
+    totalsSection: {
+        marginTop: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#000',
+        paddingTop: 8,
     },
+    totalsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 3,
+    },
+    totalsDivider: {
+        borderTopWidth: 0.8,
+        borderTopColor: '#666',
+        marginVertical: 5,
+    },
+    totalBold: { fontWeight: 'bold' },
+    amountDue: { fontWeight: 'bold', fontSize: 13, marginTop: 4 },
 })
