@@ -11,14 +11,17 @@ export interface UseOrganisationsReturn {
     deleting: boolean
     error: string | null
     fetchOrganisations: () => Promise<void>
-    handleSelect: (org: Organisation) => void
+    fetchOrganisationById: (id: string | number) => Promise<void>
+
     handleChange: (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => void
-    handleDelete: () => Promise<void>
-    handleSave: () => Promise<void>
+    handleSave: (id?: number) => Promise<void>
+    handleDelete: (id?: number) => Promise<void>
+
     handleLeave: (orgId: number) => Promise<void>
     handleJoin: (orgId: number) => Promise<void>
+
     setSelected: (org: Organisation | null) => void
     setForm: (form: Partial<Organisation>) => void
 }
@@ -38,28 +41,55 @@ export function useOrganisations(): UseOrganisationsReturn {
             const res = await apiClient.get('/api/organisations')
             setOrganisations(res.data.data || res.data)
             setError(null)
-        } catch (err) {
+        } catch {
             setError('Failed to load organisations')
         } finally {
             setLoading(false)
         }
     }, [])
 
-    const handleSelect = (org: Organisation) => {
-        setSelected(org)
-        setForm(org)
-        setError(null)
-    }
+    const fetchOrganisationById = useCallback(async (id: string | number) => {
+        setLoading(true)
+        try {
+            const res = await apiClient.get(`/api/organisations/${id}`)
+            const org = res.data.data || res.data
+            setSelected(org)
+            setForm(org)
+            setError(null)
+        } catch {
+            setError('Failed to load organisation')
+        } finally {
+            setLoading(false)
+        }
+    }, [])
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-        setForm({ ...form, [e.target.name]: e.target.value })
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const handleDelete = async () => {
+    const handleSave = async (id?: number) => {
+        const orgId = id || selected?.id
+        if (!orgId) return
+        setSaving(true)
+        setError(null)
+        try {
+            await apiClient.put(`/api/organisations/${orgId}`, form)
+            setOrganisations(orgs =>
+                orgs.map(o => (o.id === orgId ? { ...o, ...form } : o)),
+            )
+        } catch {
+            setError('Failed to save changes')
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const handleDelete = async (id?: number) => {
+        const orgId = id || selected?.id
+        if (!orgId) return
         if (
-            !selected ||
             !window.confirm(
                 'Are you sure you want to delete this organisation?',
             )
@@ -68,8 +98,8 @@ export function useOrganisations(): UseOrganisationsReturn {
         setDeleting(true)
         setError(null)
         try {
-            await apiClient.delete(`/api/organisations/${selected.id}`)
-            setOrganisations(orgs => orgs.filter(o => o.id !== selected.id))
+            await apiClient.delete(`/api/organisations/${orgId}`)
+            setOrganisations(orgs => orgs.filter(o => o.id !== orgId))
             setSelected(null)
         } catch {
             setError('Failed to delete organisation')
@@ -78,32 +108,11 @@ export function useOrganisations(): UseOrganisationsReturn {
         }
     }
 
-    const handleSave = async () => {
-        if (!selected) return
-        setSaving(true)
-        setError(null)
-        try {
-            await apiClient.put(`/api/organisations/${selected.id}`, form)
-            setOrganisations(orgs =>
-                orgs.map(o =>
-                    o.id === selected.id
-                        ? ({ ...o, ...form } as Organisation)
-                        : o,
-                ),
-            )
-            setSelected(null)
-        } catch {
-            setError('Failed to save changes')
-        } finally {
-            setSaving(false)
-        }
-    }
-
     const handleLeave = async (orgId: number) => {
         try {
             await apiClient.post(`/api/organisations/${orgId}/leave`)
             await fetchOrganisations()
-        } catch (err) {
+        } catch {
             setError('Failed to leave organisation')
         }
     }
@@ -112,7 +121,7 @@ export function useOrganisations(): UseOrganisationsReturn {
         try {
             await apiClient.post(`/api/organisations/${orgId}/join`)
             await fetchOrganisations()
-        } catch (err) {
+        } catch {
             setError('Failed to join organisation')
         }
     }
@@ -126,10 +135,10 @@ export function useOrganisations(): UseOrganisationsReturn {
         deleting,
         error,
         fetchOrganisations,
-        handleSelect,
+        fetchOrganisationById,
         handleChange,
-        handleDelete,
         handleSave,
+        handleDelete,
         handleLeave,
         handleJoin,
         setSelected,

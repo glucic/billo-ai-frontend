@@ -26,9 +26,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const [issuerId, setIssuerId] = useState<number | null>(null)
     const [issuer, setIssuer] = useState<Issuer>({
         name: '',
-        address: '',
+        street: '',
         city: '',
-        state: '',
+        region: '',
         zip: '',
         phone: '',
         email: '',
@@ -37,9 +37,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const [clientId, setClientId] = useState<number | null>(null)
     const [client, setClient] = useState<Client>({
         name: '',
-        address: '',
+        street: '',
         city: '',
-        state: '',
+        region: '',
         zip: '',
         phone: '',
         email: '',
@@ -62,9 +62,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         if (org)
             setIssuer({
                 name: org.name,
-                address: org.address,
+                street: org.street,
                 city: org.city,
-                state: org.state,
+                region: org.region,
                 zip: org.zip,
                 phone: org.phone,
                 email: org.email,
@@ -76,9 +76,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         if (org)
             setClient({
                 name: org.name,
-                address: org.address,
+                street: org.street,
                 city: org.city,
-                state: org.state,
+                region: org.region,
                 zip: org.zip,
                 phone: org.phone,
                 email: org.email,

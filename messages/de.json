@@ -1,291 +1,273 @@
 {
-    "Navigation": {
-        "features": "Funktionen entdecken",
-        "pricing": "Preise & Pläne",
-        "contact": "Kontakt aufnehmen",
-        "cta": "Jetzt anmelden"
+  "Navigation": {
+    "features": "Funktionen entdecken",
+    "pricing": "Preise & Pläne",
+    "contact": "Kontakt aufnehmen",
+    "cta": "Jetzt anmelden"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "invoices": "Rechnungen",
+    "clients": "Kunden",
+    "settings": "Einstellungen",
+    "notifications": "Benachrichtigungen",
+    "help": "Hilfe & Support",
+    "logout": "Abmelden",
+    "organisations": "Organisationen"
+  },
+  "LandingPage": {
+    "HeroSection": {
+      "title": "Willkommen bei BilloAI",
+      "description": "Ihre schnellste Lösung für professionelle Rechnungen mit KI. Erstellen, anpassen und versenden Sie Rechnungen in nur wenigen Sekunden.",
+      "primaryCta": "Jetzt Rechnungen erstellen",
+      "secondaryCta": "Alle Funktionen ansehen"
     },
-    "Sidebar": {
-        "dashboard": "Dashboard",
-        "invoices": "Rechnungen",
-        "clients": "Kunden",
-        "settings": "Einstellungen",
-        "notifications": "Benachrichtigungen",
-        "help": "Hilfe & Support",
-        "logout": "Abmelden",
-        "organisations": "Organisationen"
-    },
-    "LandingPage": {
-        "HeroSection": {
-            "title": "Willkommen bei BilloAI",
-            "description": "Ihre schnellste Lösung für professionelle Rechnungen mit KI. Erstellen, anpassen und versenden Sie Rechnungen in nur wenigen Sekunden.",
-            "primaryCta": "Jetzt Rechnungen erstellen",
-            "secondaryCta": "Alle Funktionen ansehen"
-        },
-        "Features": {
-            "heading": "Warum BilloAI?",
-            "feature1": {
-                "title": "Schnell & effizient",
-                "description": "Erstellen Sie professionelle Rechnungen in Sekunden dank intelligenter KI-Vorlagen."
-            },
-            "feature2": {
-                "title": "Individuelle Layouts",
-                "description": "Passen Sie PDF-Designs flexibel an Ihr Branding und Ihre Anforderungen an."
-            },
-            "feature3": {
-                "title": "Automatische Prozesse",
-                "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und smarten Zahlungserinnerungen."
-            }
-        }
-    },
-    "Organisation": {
-        "title": "Organisationen",
-        "count": "{count} Organisationen gefunden",
-        "edit": "Organisation bearbeiten",
-        "delete": "Löschen",
-        "save": "Änderungen speichern",
-        "cancel": "Abbrechen",
-        "leave": "Organisation verlassen",
-        "join": "Organisation beitreten",
-        "fields": {
-            "name": "Name",
-            "email": "E-Mail",
-            "phone": "Telefon",
-            "address": "Adresse",
-            "zip": "Postleitzahl",
-            "city": "Stadt",
-            "country": "Land",
-            "state": "Bundesland/Provinz",
-            "employeeCount": "Mitarbeiteranzahl",
-            "description": "Beschreibung",
-            "members": "Mitglieder"
-        },
-        "errors": {
-            "loadFailed": "Fehler beim Laden der Organisationen",
-            "saveFailed": "Fehler beim Speichern der Änderungen",
-            "deleteFailed": "Fehler beim Löschen der Organisation",
-            "leaveFailed": "Fehler beim Verlassen der Organisation",
-            "joinFailed": "Fehler beim Beitreten zur Organisation"
-        },
-        "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?"
-    },
-    "Auth": {
-        "Login": {
-            "welcome": "Willkommen bei BilloAI",
-            "subtitle": "Melden Sie sich an, um Ihre Rechnungen zu verwalten",
-            "email": "E-Mail",
-            "password": "Passwort",
-            "loginButton": "Anmelden",
-            "forgotPassword": "Passwort vergessen?",
-            "or": "ODER",
-            "signInGoogle": "Mit Google anmelden",
-            "signInGithub": "Mit GitHub anmelden",
-            "noAccount": "Noch kein Konto?",
-            "signUp": "Registrieren",
-            "errors": {
-                "emailRequired": "E-Mail ist erforderlich.",
-                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-                "passwordRequired": "Passwort ist erforderlich.",
-                "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt."
-            }
-        },
-        "Register": {
-            "welcome": "Konto erstellen",
-            "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
-            "firstName": "Vorname",
-            "lastName": "Nachname",
-            "email": "E-Mail",
-            "password": "Passwort",
-            "confirmPassword": "Passwort bestätigen",
-            "registerButton": "Registrieren",
-            "haveAccount": "Bereits ein Konto?",
-            "login": "Anmelden",
-            "or": "ODER",
-            "signUpGoogle": "Mit Google registrieren",
-            "signUpGithub": "Mit GitHub registrieren",
-            "loading": "Wird geladen...",
-            "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
-            "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
-            "errors": {
-                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-                "nameRequired": "Benutzername ist erforderlich.",
-                "emailRequired": "E-Mail ist erforderlich.",
-                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-                "passwordRequired": "Passwort ist erforderlich.",
-                "confirmPasswordRequired": "Bitte bestätigen Sie das Passwort.",
-                "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
-                "passwordsDontMatch": "Die Passwörter stimmen nicht überein."
-            }
-        },
-        "GettingStarted": {
-            "StepCompanyName": {
-                "label": "What's your company called?",
-                "placeholder": "Type your company’s name here"
-            },
-            "StepCompanyAbout": {
-                "label": "What does your company do? (Optional)",
-                "placeholder": "Tell us a little bit about your company"
-            },
-            "StepCompanyDetails": {
-                "title": "Company Details",
-                "emailLabel": "Your company email",
-                "emailPlaceholder": "example@company.com",
-                "phoneLabel": "Your phone number",
-                "phonePlaceholder": "+1 123 456 7890",
-                "workersLabel": "How many employees do you have?",
-                "workersPlaceholder": "For example: 50"
-            }
-        }
-    },
-    "Dashboard": {
-        "stats": {
-            "organisations": "Organisations",
-            "activeUsers": "Active Users",
-            "invoicesGenerated": "Invoices Generated",
-            "upcomingMeetings": "Upcoming Meetings"
-        },
-        "metrics": {
-            "totalCompanies": "Total Companies",
-            "activeUsers": "Active Users",
-            "invoicesGenerated": "Invoices Generated"
-        },
-        "activity": {
-            "addedCompany": "Added {name}",
-            "createdInvoice": "Created an invoice for {name}",
-            "updatedProfile": "Updated profile"
-        },
-        "actions": {
-            "addCompany": "Add Company",
-            "createInvoice": "Create Invoice",
-            "viewReports": "View Reports"
-        }
-    },
-    "Invoices": {
-        "searchPlaceholder": "Rechnungen durchsuchen...",
-        "selectIssuer": "Aussteller auswählen",
-        "create": "Rechnung erstellen",
-        "loading": "Rechnungen werden geladen...",
-        "noInvoices": "Keine Rechnungen gefunden",
-        "rowsPerPage": "Zeilen pro Seite",
-        "of": "von",
-        "page": "Seite",
-        "sort": {
-            "created": "Erstellungsdatum",
-            "number": "Rechnungsnummer",
-            "date": "Rechnungsdatum",
-            "asc": "Aufsteigend",
-            "desc": "Absteigend"
-        },
-        "columns": {
-            "number": "Nummer",
-            "date": "Datum",
-            "client": "Kunde",
-            "total": "Gesamtbetrag",
-            "actions": "Aktionen"
-        },
-        "title": "Rechnungen",
-        "editMode": "Bearbeitungsmodus",
-        "previewMode": "Vorschaumodus",
-        "showToolbar": "Symbolleiste anzeigen",
-        "hideToolbar": "Symbolleiste ausblenden",
-        "metrics": {
-            "total": "Gesamtanzahl Rechnungen",
-            "paid": "Bezahlt",
-            "pending": "Ausstehend",
-            "overdue": "Überfällig"
-        },
-        "actions": {
-            "create": "Rechnung erstellen",
-            "export": "Exportieren"
-        },
-        "filters": {
-            "search": "Rechnungen durchsuchen...",
-            "all": "Alle",
-            "paid": "Bezahlt",
-            "pending": "Ausstehend",
-            "overdue": "Überfällig"
-        },
-        "table": {
-            "id": "Rechnungs-ID",
-            "client": "Kunde",
-            "amount": "Betrag",
-            "status": "Status",
-            "date": "Datum"
-        },
-        "Create": {
-            "InvoiceDetails": {
-                "title": "Rechnungsdetails",
-                "invoiceNumber": "Rechnungsnummer",
-                "invoiceDate": "Rechnungsdatum",
-                "dueDate": "Fälligkeitsdatum",
-                "reference": "Referenz / Bestellnummer"
-            },
-            "IssuerDetails": {
-                "title": "Absenderdetails",
-                "selectIssuer": "Absender auswählen"
-            },
-            "ClientDetails": {
-                "title": "Kundendetails",
-                "selectClient": "Kunde auswählen"
-            },
-            "Items": {
-                "title": "Items",
-                "addItem": "Add Item",
-                "removeItem": "Remove Item",
-                "name": "Item Name",
-                "description": "Item Description",
-                "rate": "Rate",
-                "quantity": "Quantity"
-            },
-            "client": "Rechnungsempfänger",
-            "items": "Positionen",
-            "itemName": "Bezeichnung",
-            "itemDescription": "Beschreibung",
-            "rate": "Preis",
-            "quantity": "Menge",
-            "currencyAndTax": "Währung & Steuern",
-            "currency": "Währung",
-            "taxRate": "Steuersatz (%)",
-            "discount": "Rabatt (%)",
-            "subtotal": "Zwischensumme",
-            "tax": "Steuer",
-            "discountAmount": "Rabattbetrag",
-            "total": "Gesamtbetrag",
-            "paymentInfo": "Zahlungsinformationen",
-            "paymentTerms": "Zahlungsbedingungen",
-            "bankDetails": "Bankverbindung",
-            "paymentInstructions": "Zahlungsanweisungen",
-            "notesAndFooter": "Notizen & Fußzeile",
-            "notes": "Notizen für den Kunden",
-            "footer": "Fußzeile / Rechtstext",
-            "save": "Rechnung speichern",
-            "cancel": "Abbrechen"
-        }
-    },
-    "Clients": {
-        "title": "Kunden",
-        "metrics": {
-            "total": "Gesamtanzahl Kunden",
-            "active": "Aktiv",
-            "new": "Neu in diesem Monat"
-        },
-        "actions": {
-            "add": "Kunde hinzufügen",
-            "export": "Exportieren"
-        },
-        "filters": {
-            "search": "Kunden durchsuchen...",
-            "all": "Alle",
-            "active": "Aktiv",
-            "inactive": "Inaktiv"
-        },
-        "table": {
-            "name": "Name",
-            "email": "E-Mail",
-            "phone": "Telefon",
-            "company": "Firma",
-            "status": "Status",
-            "date": "Hinzugefügt am"
-        }
+    "Features": {
+      "heading": "Warum BilloAI?",
+      "feature1": {
+        "title": "Schnell & effizient",
+        "description": "Erstellen Sie professionelle Rechnungen in Sekunden dank intelligenter KI-Vorlagen."
+      },
+      "feature2": {
+        "title": "Individuelle Layouts",
+        "description": "Passen Sie PDF-Designs flexibel an Ihr Branding und Ihre Anforderungen an."
+      },
+      "feature3": {
+        "title": "Automatische Prozesse",
+        "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und smarten Zahlungserinnerungen."
+      }
     }
+  },
+  "Organisation": {
+    "title": "Organisationen",
+    "count": "{count} Organisationen gefunden",
+    "edit": "Organisation bearbeiten",
+    "delete": "Löschen",
+    "save": "Änderungen speichern",
+    "cancel": "Abbrechen",
+    "leave": "Organisation verlassen",
+    "join": "Organisation beitreten",
+    "companyInfo": "Unternehmensdetails",
+    "addressInfo": "Adressdetails",
+    "fields": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "street": "Straße",
+      "zip": "Postleitzahl",
+      "city": "Stadt",
+      "country": "Land",
+      "region": "Bundesland/Provinz",
+      "employeeCount": "Mitarbeiteranzahl",
+      "description": "Beschreibung",
+      "members": "Mitglieder"
+    },
+    "errors": {
+      "loadFailed": "Fehler beim Laden der Organisationen",
+      "saveFailed": "Fehler beim Speichern der Änderungen",
+      "deleteFailed": "Fehler beim Löschen der Organisation",
+      "leaveFailed": "Fehler beim Verlassen der Organisation",
+      "joinFailed": "Fehler beim Beitreten zur Organisation"
+    },
+    "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?",
+    "notFound": "Keine Organisationen vorhanden."
+  },
+  "Auth": {
+    "Login": {
+      "welcome": "Willkommen bei BilloAI",
+      "subtitle": "Melden Sie sich an, um Ihre Rechnungen zu verwalten",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "loginButton": "Anmelden",
+      "forgotPassword": "Passwort vergessen?",
+      "or": "ODER",
+      "signInGoogle": "Mit Google anmelden",
+      "signInGithub": "Mit GitHub anmelden",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren",
+      "errors": {
+        "emailRequired": "E-Mail ist erforderlich.",
+        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "passwordRequired": "Passwort ist erforderlich.",
+        "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt."
+      }
+    },
+    "Register": {
+      "welcome": "Konto erstellen",
+      "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "registerButton": "Registrieren",
+      "haveAccount": "Bereits ein Konto?",
+      "login": "Anmelden",
+      "or": "ODER",
+      "signUpGoogle": "Mit Google registrieren",
+      "signUpGithub": "Mit GitHub registrieren",
+      "loading": "Wird geladen...",
+      "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
+      "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
+      "errors": {
+        "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "nameRequired": "Benutzername ist erforderlich.",
+        "emailRequired": "E-Mail ist erforderlich.",
+        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "passwordRequired": "Passwort ist erforderlich.",
+        "confirmPasswordRequired": "Bitte bestätigen Sie das Passwort.",
+        "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+        "passwordsDontMatch": "Die Passwörter stimmen nicht überein."
+      }
+    },
+    "GettingStarted": {
+      "StepCompanyName": {
+        "label": "Wie heißt Ihr Unternehmen?",
+        "placeholder": "Geben Sie hier den Namen Ihres Unternehmens ein"
+      },
+      "StepCompanyAbout": {
+        "label": "Womit beschäftigt sich Ihr Unternehmen? (optional)",
+        "placeholder": "Erzählen Sie uns ein wenig über Ihr Unternehmen"
+      },
+      "StepCompanyDetails": {
+        "title": "Unternehmensdetails",
+        "emailLabel": "E-Mail-Adresse Ihres Unternehmens",
+        "emailPlaceholder": "beispiel@unternehmen.com",
+        "phoneLabel": "Telefonnummer Ihres Unternehmens",
+        "phonePlaceholder": "+49 123 456 789",
+        "workersLabel": "Wie viele Mitarbeiter hat Ihr Unternehmen?",
+        "workersPlaceholder": "Zum Beispiel: 50",
+        "addressSection": "Adressinformationen",
+        "streetLabel": "Straße und Hausnummer",
+        "streetPlaceholder": "z. B. Hauptstraße 12",
+        "cityLabel": "Stadt",
+        "cityPlaceholder": "z. B. Berlin",
+        "zipLabel": "Postleitzahl",
+        "zipPlaceholder": "z. B. 10115",
+        "regionLabel": "Bundesland / Region",
+        "regionPlaceholder": "z. B. Berlin"
+      }
+    }
+  },
+  "Dashboard": {
+    "stats": {
+      "organisations": "Organisationen",
+      "activeUsers": "Aktive Benutzer",
+      "invoicesGenerated": "Erstellte Rechnungen",
+      "upcomingMeetings": "Bevorstehende Meetings"
+    },
+    "metrics": {
+      "totalCompanies": "Gesamtzahl Unternehmen",
+      "activeUsers": "Aktive Benutzer",
+      "invoicesGenerated": "Erstellte Rechnungen"
+    },
+    "activity": {
+      "addedCompany": "{name} hinzugefügt",
+      "createdInvoice": "Rechnung für {name} erstellt",
+      "updatedProfile": "Profil aktualisiert"
+    },
+    "actions": {
+      "addCompany": "Unternehmen hinzufügen",
+      "createInvoice": "Rechnung erstellen",
+      "viewReports": "Berichte ansehen"
+    }
+  },
+  "Invoices": {
+    "searchPlaceholder": "Rechnungen durchsuchen...",
+    "selectIssuer": "Aussteller auswählen",
+    "create": "Rechnung erstellen",
+    "loading": "Rechnungen werden geladen...",
+    "noInvoices": "Keine Rechnungen gefunden",
+    "rowsPerPage": "Zeilen pro Seite",
+    "of": "von",
+    "page": "Seite",
+    "sort": {
+      "created": "Erstellungsdatum",
+      "number": "Rechnungsnummer",
+      "date": "Rechnungsdatum",
+      "asc": "Aufsteigend",
+      "desc": "Absteigend"
+    },
+    "columns": {
+      "number": "Nummer",
+      "date": "Datum",
+      "client": "Kunde",
+      "total": "Gesamtbetrag",
+      "actions": "Aktionen"
+    },
+    "title": "Rechnungen",
+    "editMode": "Bearbeitungsmodus",
+    "previewMode": "Vorschaumodus",
+    "showToolbar": "Symbolleiste anzeigen",
+    "hideToolbar": "Symbolleiste ausblenden",
+    "Create": {
+      "InvoiceDetails": {
+        "title": "Rechnungsdetails",
+        "invoiceNumber": "Rechnungsnummer",
+        "invoiceDate": "Rechnungsdatum",
+        "dueDate": "Fälligkeitsdatum",
+        "reference": "Referenz / Bestellnummer"
+      },
+      "IssuerDetails": {
+        "title": "Absenderdetails",
+        "selectIssuer": "Absender auswählen"
+      },
+      "ClientDetails": {
+        "title": "Kundendetails",
+        "selectClient": "Kunde auswählen"
+      },
+      "Items": {
+        "title": "Positionen",
+        "addItem": "Position hinzufügen",
+        "removeItem": "Position entfernen",
+        "name": "Bezeichnung",
+        "description": "Beschreibung",
+        "rate": "Preis",
+        "quantity": "Menge"
+      },
+      "currencyAndTax": "Währung & Steuern",
+      "currency": "Währung",
+      "taxRate": "Steuersatz (%)",
+      "discount": "Rabatt (%)",
+      "subtotal": "Zwischensumme",
+      "tax": "Steuer",
+      "discountAmount": "Rabattbetrag",
+      "total": "Gesamtbetrag",
+      "paymentInfo": "Zahlungsinformationen",
+      "paymentTerms": "Zahlungsbedingungen",
+      "bankDetails": "Bankverbindung",
+      "paymentInstructions": "Zahlungsanweisungen",
+      "notesAndFooter": "Notizen & Fußzeile",
+      "notes": "Notizen für den Kunden",
+      "footer": "Fußzeile / Rechtstext",
+      "save": "Rechnung speichern",
+      "cancel": "Abbrechen"
+    }
+  },
+  "Clients": {
+    "title": "Kunden",
+    "metrics": {
+      "total": "Gesamtanzahl Kunden",
+      "active": "Aktiv",
+      "new": "Neu in diesem Monat"
+    },
+    "actions": {
+      "add": "Kunde hinzufügen",
+      "export": "Exportieren"
+    },
+    "filters": {
+      "search": "Kunden durchsuchen...",
+      "all": "Alle",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "table": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "company": "Firma",
+      "status": "Status",
+      "date": "Hinzugefügt am"
+    }
+  }
 }

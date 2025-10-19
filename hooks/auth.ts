@@ -42,6 +42,10 @@ type CreateOrganisationProps = {
     email: string
     phone: string
     employee_count: number
+    street?: string
+    city?: string
+    zip?: string
+    region?: string
     setErrors: (errors: Errors) => void
 }
 

@@ -1,70 +1,84 @@
-import { Organisation } from '@/hooks/useOrganisations'
+'use client'
+
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { OrganisationLogo } from './OrganisationLogo'
+import { Organisation } from '@/hooks/useOrganisations'
 
 interface OrganisationListProps {
     organisations: Organisation[]
-    onSelect: (org: Organisation) => void
     onLeave: (orgId: number) => void
 }
 
 export function OrganisationList({
     organisations,
-    onSelect,
     onLeave,
 }: OrganisationListProps) {
-    const t = useTranslations('organisation')
+    const t = useTranslations('Organisation')
+
+    if (!organisations?.length) {
+        return (
+            <p className="text-[var(--input-placeholder)] text-sm">
+                {t('errors.loadFailed', {
+                    defaultValue: t('notFound'),
+                })}
+            </p>
+        )
+    }
 
     return (
-        <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {organisations.map(org => (
                 <li
                     key={org.id}
                     className={cn(
-                        'relative group rounded-lg border shadow-sm',
-                        'bg-white dark:bg-zinc-900',
-                        'border-gray-200 dark:border-gray-800',
-                        'transition-all duration-200',
-                        'hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50',
+                        'relative group rounded-[var(--radius-lg)] border transition-all duration-300',
+                        'bg-[var(--secondary-background)] border-[var(--input-border)] shadow-[var(--shadow-input)]',
+                        'hover:border-[var(--color-accent)] hover:shadow-[0_0_12px_var(--accent-glow)]',
                     )}>
-                    <div
-                        className="p-6 cursor-pointer"
-                        onClick={() => onSelect(org)}>
+                    <Link
+                        href={`/organisations/${org.id}`}
+                        className="block p-6 rounded-[var(--radius-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]">
                         <div className="flex items-start gap-4 mb-4">
                             <OrganisationLogo name={org.name} size="lg" />
                             <div className="flex-1">
                                 <div className="flex items-start justify-between w-full">
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-1">
+                                        <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-1">
                                             {org.name}
                                         </h3>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {org.email}
-                                        </p>
+                                        {org.email && (
+                                            <p className="text-sm text-[var(--input-placeholder)]">
+                                                {org.email}
+                                            </p>
+                                        )}
                                     </div>
-                                    <div className="bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full">
-                                        <span className="text-sm text-blue-700 dark:text-blue-300">
+                                    <div className="px-3 py-1 rounded-full bg-[var(--accent-glow)]">
+                                        <span className="text-sm text-[var(--color-accent-light)]">
                                             {t('fields.members')}:{' '}
                                             {org.users?.length || 0}
                                         </span>
                                     </div>
                                 </div>
+
                                 <div className="space-y-2 mt-3">
-                                    {org.address && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                                            📍 {org.address}
+                                    {org.street && (
+                                        <p className="text-sm text-[var(--input-text)]">
+                                            📍 {org.street}
                                         </p>
                                     )}
                                     {org.description && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                        <p className="text-sm text-[var(--input-placeholder)] line-clamp-2">
                                             {org.description}
                                         </p>
                                     )}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
+
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
                 </li>
             ))}
         </ul>

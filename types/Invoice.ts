@@ -1,7 +1,6 @@
 import { Organisation } from '@/types/Organisation'
 
-export interface Issuer
-    extends Omit<
+export type Issuer = Omit<
         Organisation,
         | 'id'
         | 'description'
@@ -9,10 +8,9 @@ export interface Issuer
         | 'users'
         | 'created_at'
         | 'updated_at'
-    > {}
+    >
 
-export interface Client
-    extends Omit<
+export type Client = Omit<
         Organisation,
         | 'id'
         | 'description'
@@ -20,7 +18,7 @@ export interface Client
         | 'users'
         | 'created_at'
         | 'updated_at'
-    > {}
+    >
 
 export interface InvoiceDetails {
     id?: number

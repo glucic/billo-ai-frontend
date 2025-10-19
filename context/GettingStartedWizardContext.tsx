@@ -14,6 +14,10 @@ type OrganisationWizardContextType = {
         email: string
         phone: string
         employeeCount: number
+        street: string
+        city: string
+        zip: string
+        region: string
     }
     setCompanyDetails: (field: string, value: string | number) => void
     errors: Record<string, string[]>
@@ -37,6 +41,10 @@ export function OrganisationWizardProvider({
         email: '',
         phone: '',
         employeeCount: 1,
+        street: '',
+        city: '',
+        zip: '',
+        region: '',
     })
     const [errors, setErrors] = useState<Record<string, string[]>>({})
     const [isLoading, setIsLoading] = useState(false)
@@ -63,6 +71,10 @@ export function OrganisationWizardProvider({
                 email: companyDetails.email,
                 phone: companyDetails.phone,
                 employee_count: companyDetails.employeeCount,
+                street: companyDetails.street,
+                city: companyDetails.city,
+                zip: companyDetails.zip,
+                region: companyDetails.region,
                 setErrors,
             })
             router.push('/dashboard')

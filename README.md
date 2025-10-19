@@ -58,7 +58,7 @@ yarn install
 Create a `.env.local` file and add:
 
 ```
-NEXT_PUBLIC_APP_URL=https://billoai.app
+APP_URL=https://billoai.app
 ```
 
 4. Run the development server

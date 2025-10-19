@@ -1,275 +1,273 @@
 {
-    "Navigation": {
-        "features": "Explore Features",
-        "pricing": "Pricing & Plans",
-        "contact": "Contact Us",
-        "cta": "Sign In"
+  "Navigation": {
+    "features": "Discover Features",
+    "pricing": "Pricing & Plans",
+    "contact": "Contact Us",
+    "cta": "Sign Up Now"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "invoices": "Invoices",
+    "clients": "Clients",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "help": "Help & Support",
+    "logout": "Logout",
+    "organisations": "Organisations"
+  },
+  "LandingPage": {
+    "HeroSection": {
+      "title": "Welcome to BilloAI",
+      "description": "Your fastest solution for professional invoices powered by AI. Create, customize, and send invoices in just a few seconds.",
+      "primaryCta": "Create Invoices Now",
+      "secondaryCta": "View All Features"
     },
-    "Sidebar": {
-        "dashboard": "Dashboard",
-        "invoices": "Invoices",
-        "clients": "Clients",
-        "settings": "Settings",
-        "notifications": "Notifications",
-        "help": "Help & Support",
-        "logout": "Log Out",
-        "organisations": "Organisations"
-    },
-    "LandingPage": {
-        "HeroSection": {
-            "title": "Welcome to BilloAI",
-            "description": "The fastest way to create professional invoices with AI. Generate, customize, and send invoices in just seconds.",
-            "primaryCta": "Create Invoices Now",
-            "secondaryCta": "See All Features"
-        },
-        "Features": {
-            "heading": "Why Choose BilloAI?",
-            "feature1": {
-                "title": "Fast & Efficient",
-                "description": "Create professional invoices in seconds with intelligent AI-powered templates."
-            },
-            "feature2": {
-                "title": "Customizable Layouts",
-                "description": "Easily tailor PDF designs to fit your brand and style."
-            },
-            "feature3": {
-                "title": "Automated Billing",
-                "description": "Save time with recurring invoices and smart payment reminders."
-            }
-        }
-    },
-    "Invoices": {
-        "searchPlaceholder": "Search invoices...",
-        "selectIssuer": "Select Issuer",
-        "create": "Create Invoice",
-        "loading": "Loading invoices...",
-        "noInvoices": "No invoices found",
-        "rowsPerPage": "Rows per page",
-        "of": "of",
-        "page": "Page",
-        "sort": {
-            "created": "Created Date",
-            "number": "Invoice Number",
-            "date": "Invoice Date",
-            "asc": "Ascending",
-            "desc": "Descending"
-        },
-        "columns": {
-            "number": "Number",
-            "date": "Date",
-            "client": "Client",
-            "total": "Total",
-            "actions": "Actions"
-        }
-    },
-    "Organisation": {
-        "title": "Organizations",
-        "count": "{count} organizations found",
-        "edit": "Edit Organization",
-        "delete": "Delete",
-        "save": "Save Changes",
-        "cancel": "Cancel",
-        "leave": "Leave Organization",
-        "join": "Join Organization",
-        "fields": {
-            "name": "Name",
-            "email": "Email",
-            "phone": "Phone",
-            "address": "Address",
-            "zip": "Zip Code",
-            "city": "City",
-            "country": "Country",
-            "state": "State/Province",
-            "employeeCount": "Number of Employees",
-            "description": "Description",
-            "members": "Members"
-        },
-        "errors": {
-            "loadFailed": "Failed to load organizations",
-            "saveFailed": "Failed to save changes",
-            "deleteFailed": "Failed to delete organization",
-            "leaveFailed": "Failed to leave organization",
-            "joinFailed": "Failed to join organization"
-        },
-        "confirmDelete": "Are you sure you want to delete this organization?"
-    },
-    "Auth": {
-        "Login": {
-            "welcome": "Welcome to BilloAI",
-            "subtitle": "Sign in to manage your invoices",
-            "email": "Email",
-            "password": "Password",
-            "loginButton": "Sign In",
-            "forgotPassword": "Forgot your password?",
-            "or": "OR",
-            "signInGoogle": "Sign in with Google",
-            "signInGithub": "Sign in with GitHub",
-            "noAccount": "Don't have an account?",
-            "signUp": "Sign Up",
-            "errors": {
-                "emailRequired": "Email is required.",
-                "emailInvalid": "Please enter a valid email address.",
-                "passwordRequired": "Password is required.",
-                "invalidCredentials": "Invalid email or password."
-            }
-        },
-        "Register": {
-            "welcome": "Create an Account",
-            "subtitle": "Sign up for free and start instantly",
-            "firstName": "First Name",
-            "lastName": "Last Name",
-            "email": "Email",
-            "password": "Password",
-            "confirmPassword": "Confirm Password",
-            "registerButton": "Sign Up",
-            "haveAccount": "Already have an account?",
-            "login": "Sign In",
-            "or": "OR",
-            "signUpGoogle": "Sign up with Google",
-            "signUpGithub": "Sign up with GitHub",
-            "loading": "Loading...",
-            "allFieldsRequired": "Please fill out all fields.",
-            "passwordsDontMatch": "Passwords do not match.",
-            "errors": {
-                "general": "An error occurred. Please try again.",
-                "nameRequired": "Username is required.",
-                "emailRequired": "Email is required.",
-                "emailInvalid": "Please enter a valid email address.",
-                "passwordRequired": "Password is required.",
-                "confirmPasswordRequired": "Please confirm your password.",
-                "passwordTooShort": "Password must be at least 8 characters long.",
-                "passwordsDontMatch": "Passwords do not match."
-            }
-        },
-        "GettingStarted": {
-            "StepCompanyName": {
-                "label": "What's your company called?",
-                "placeholder": "Type your company’s name here"
-            },
-            "StepCompanyAbout": {
-                "label": "What does your company do? (Optional)",
-                "placeholder": "Tell us a little bit about your company"
-            },
-            "StepCompanyDetails": {
-                "title": "Company Details",
-                "emailLabel": "Your company email",
-                "emailPlaceholder": "example@company.com",
-                "phoneLabel": "Your phone number",
-                "phonePlaceholder": "+1 123 456 7890",
-                "workersLabel": "How many employees do you have?",
-                "workersPlaceholder": "For example: 50"
-            }
-        }
-    },
-    "Dashboard": {
-        "stats": {
-            "organisations": "Organisations",
-            "activeUsers": "Active Users",
-            "invoicesGenerated": "Invoices Generated",
-            "upcomingMeetings": "Upcoming Meetings"
-        },
-        "metrics": {
-            "totalCompanies": "Total Companies",
-            "activeUsers": "Active Users",
-            "invoicesGenerated": "Invoices Generated"
-        },
-        "activity": {
-            "addedCompany": "Added {name}",
-            "createdInvoice": "Created an invoice for {name}",
-            "updatedProfile": "Updated profile"
-        },
-        "actions": {
-            "addCompany": "Add Company",
-            "createInvoice": "Create Invoice",
-            "viewReports": "View Reports"
-        }
-    },
-    "Invoices": {
-        "title": "Invoices",
-        "editMode": "Edit Mode",
-        "previewMode": "Preview Mode",
-        "showToolbar": "Show Toolbar",
-        "hideToolbar": "Hide Toolbar",
-        "Create": {
-            "InvoiceDetails": {
-                "title": "Invoice Details",
-                "invoiceNumber": "Invoice Number",
-                "invoiceDate": "Invoice Date",
-                "dueDate": "Due Date",
-                "reference": "Reference / PO Number"
-            },
-            "IssuerDetails": {
-                "title": "Issuer Details",
-                "selectIssuer": "Select Issuer"
-            },
-            "ClientDetails": {
-                "title": "Client Details",
-                "selectClient": "Select Client"
-            },
-            "Items": {
-                "title": "Items",
-                "addItem": "Add Item",
-                "removeItem": "Remove Item",
-                "name": "Item Name",
-                "description": "Item Description",
-                "rate": "Rate",
-                "quantity": "Quantity"
-            },
-            "client": "Billing Entity",
-            "items": "Items",
-            "selectClient": "Select Client",
-            "itemName": "Item Name",
-            "itemDescription": "Item Description",
-            "rate": "Rate",
-            "quantity": "Quantity",
-            "invoiceDetails": "Invoice Details",
-            "invoiceNumber": "Invoice Number",
-            "invoiceDate": "Invoice Date",
-            "dueDate": "Due Date",
-            "reference": "Reference / PO Number",
-            "currencyAndTax": "Currency & Tax",
-            "currency": "Currency",
-            "taxRate": "Tax Rate (%)",
-            "discount": "Discount (%)",
-            "subtotal": "Subtotal",
-            "tax": "Tax",
-            "discountAmount": "Discount Amount",
-            "total": "Total",
-            "paymentInfo": "Payment Information",
-            "paymentTerms": "Payment Terms",
-            "bankDetails": "Bank Details",
-            "paymentInstructions": "Payment Instructions",
-            "notesAndFooter": "Notes & Footer",
-            "notes": "Notes to Client",
-            "footer": "Footer / Legal Text",
-            "save": "Save Invoice",
-            "cancel": "Cancel"
-        }
-    },
-    "Clients": {
-        "title": "Clients",
-        "metrics": {
-            "total": "Total Clients",
-            "active": "Active",
-            "new": "New This Month"
-        },
-        "actions": {
-            "add": "Add Client",
-            "export": "Export"
-        },
-        "filters": {
-            "search": "Search clients...",
-            "all": "All",
-            "active": "Active",
-            "inactive": "Inactive"
-        },
-        "table": {
-            "name": "Name",
-            "email": "Email",
-            "phone": "Phone",
-            "company": "Company",
-            "status": "Status",
-            "date": "Date Added"
-        }
+    "Features": {
+      "heading": "Why BilloAI?",
+      "feature1": {
+        "title": "Fast & Efficient",
+        "description": "Create professional invoices in seconds thanks to intelligent AI templates."
+      },
+      "feature2": {
+        "title": "Custom Layouts",
+        "description": "Easily customize PDF designs to match your branding and requirements."
+      },
+      "feature3": {
+        "title": "Automated Processes",
+        "description": "Save time with recurring invoices and smart payment reminders."
+      }
     }
+  },
+  "Organisation": {
+    "title": "Organisations",
+    "count": "{count} organisations found",
+    "edit": "Edit Organisation",
+    "delete": "Delete",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "leave": "Leave Organisation",
+    "join": "Join Organisation",
+    "companyInfo": "Company Details",
+    "addressInfo": "Address Details",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "street": "Street and House Number",
+      "zip": "Postal Code",
+      "city": "City",
+      "country": "Country",
+      "region": "State / Region",
+      "employeeCount": "Number of Employees",
+      "description": "Description",
+      "members": "Members"
+    },
+    "errors": {
+      "loadFailed": "Failed to load organisations",
+      "saveFailed": "Failed to save changes",
+      "deleteFailed": "Failed to delete organisation",
+      "leaveFailed": "Failed to leave organisation",
+      "joinFailed": "Failed to join organisation"
+    },
+    "confirmDelete": "Are you sure you want to delete this organisation?",
+    "notFound": "No organisations found."
+  },
+  "Auth": {
+    "Login": {
+      "welcome": "Welcome to BilloAI",
+      "subtitle": "Sign in to manage your invoices",
+      "email": "Email",
+      "password": "Password",
+      "loginButton": "Login",
+      "forgotPassword": "Forgot Password?",
+      "or": "OR",
+      "signInGoogle": "Sign in with Google",
+      "signInGithub": "Sign in with GitHub",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "errors": {
+        "emailRequired": "Email is required.",
+        "emailInvalid": "Please enter a valid email address.",
+        "passwordRequired": "Password is required.",
+        "invalidCredentials": "Email or password is incorrect."
+      }
+    },
+    "Register": {
+      "welcome": "Create an Account",
+      "subtitle": "Create your free account and start instantly",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "registerButton": "Register",
+      "haveAccount": "Already have an account?",
+      "login": "Login",
+      "or": "OR",
+      "signUpGoogle": "Sign up with Google",
+      "signUpGithub": "Sign up with GitHub",
+      "loading": "Loading...",
+      "allFieldsRequired": "Please fill out all fields.",
+      "passwordsDontMatch": "Passwords do not match.",
+      "errors": {
+        "general": "An error occurred. Please try again.",
+        "nameRequired": "Username is required.",
+        "emailRequired": "Email is required.",
+        "emailInvalid": "Please enter a valid email address.",
+        "passwordRequired": "Password is required.",
+        "confirmPasswordRequired": "Please confirm your password.",
+        "passwordTooShort": "Password must be at least 8 characters long.",
+        "passwordsDontMatch": "Passwords do not match."
+      }
+    },
+    "GettingStarted": {
+      "StepCompanyName": {
+        "label": "What is your company's name?",
+        "placeholder": "Enter your company's name here"
+      },
+      "StepCompanyAbout": {
+        "label": "What does your company do? (optional)",
+        "placeholder": "Tell us a little about your company"
+      },
+      "StepCompanyDetails": {
+        "title": "Company Details",
+        "emailLabel": "Company Email Address",
+        "emailPlaceholder": "example@company.com",
+        "phoneLabel": "Company Phone Number",
+        "phonePlaceholder": "+1 234 567 890",
+        "workersLabel": "How many employees does your company have?",
+        "workersPlaceholder": "For example: 50",
+        "addressSection": "Address Information",
+        "streetLabel": "Street and House Number",
+        "streetPlaceholder": "e.g. Main Street 12",
+        "cityLabel": "City",
+        "cityPlaceholder": "e.g. Berlin",
+        "zipLabel": "Postal Code",
+        "zipPlaceholder": "e.g. 10115",
+        "regionLabel": "State / Region",
+        "regionPlaceholder": "e.g. Berlin"
+      }
+    }
+  },
+  "Dashboard": {
+    "stats": {
+      "organisations": "Organisations",
+      "activeUsers": "Active Users",
+      "invoicesGenerated": "Invoices Created",
+      "upcomingMeetings": "Upcoming Meetings"
+    },
+    "metrics": {
+      "totalCompanies": "Total Companies",
+      "activeUsers": "Active Users",
+      "invoicesGenerated": "Invoices Created"
+    },
+    "activity": {
+      "addedCompany": "Added {name}",
+      "createdInvoice": "Created invoice for {name}",
+      "updatedProfile": "Updated profile"
+    },
+    "actions": {
+      "addCompany": "Add Company",
+      "createInvoice": "Create Invoice",
+      "viewReports": "View Reports"
+    }
+  },
+  "Invoices": {
+    "searchPlaceholder": "Search invoices...",
+    "selectIssuer": "Select Issuer",
+    "create": "Create Invoice",
+    "loading": "Loading invoices...",
+    "noInvoices": "No invoices found",
+    "rowsPerPage": "Rows per page",
+    "of": "of",
+    "page": "Page",
+    "sort": {
+      "created": "Creation Date",
+      "number": "Invoice Number",
+      "date": "Invoice Date",
+      "asc": "Ascending",
+      "desc": "Descending"
+    },
+    "columns": {
+      "number": "Number",
+      "date": "Date",
+      "client": "Client",
+      "total": "Total Amount",
+      "actions": "Actions"
+    },
+    "title": "Invoices",
+    "editMode": "Edit Mode",
+    "previewMode": "Preview Mode",
+    "showToolbar": "Show Toolbar",
+    "hideToolbar": "Hide Toolbar",
+    "Create": {
+      "InvoiceDetails": {
+        "title": "Invoice Details",
+        "invoiceNumber": "Invoice Number",
+        "invoiceDate": "Invoice Date",
+        "dueDate": "Due Date",
+        "reference": "Reference / Order Number"
+      },
+      "IssuerDetails": {
+        "title": "Sender Details",
+        "selectIssuer": "Select Sender"
+      },
+      "ClientDetails": {
+        "title": "Client Details",
+        "selectClient": "Select Client"
+      },
+      "Items": {
+        "title": "Items",
+        "addItem": "Add Item",
+        "removeItem": "Remove Item",
+        "name": "Name",
+        "description": "Description",
+        "rate": "Price",
+        "quantity": "Quantity"
+      },
+      "currencyAndTax": "Currency & Taxes",
+      "currency": "Currency",
+      "taxRate": "Tax Rate (%)",
+      "discount": "Discount (%)",
+      "subtotal": "Subtotal",
+      "tax": "Tax",
+      "discountAmount": "Discount Amount",
+      "total": "Total",
+      "paymentInfo": "Payment Information",
+      "paymentTerms": "Payment Terms",
+      "bankDetails": "Bank Details",
+      "paymentInstructions": "Payment Instructions",
+      "notesAndFooter": "Notes & Footer",
+      "notes": "Notes for the Client",
+      "footer": "Footer / Legal Text",
+      "save": "Save Invoice",
+      "cancel": "Cancel"
+    }
+  },
+  "Clients": {
+    "title": "Clients",
+    "metrics": {
+      "total": "Total Clients",
+      "active": "Active",
+      "new": "New This Month"
+    },
+    "actions": {
+      "add": "Add Client",
+      "export": "Export"
+    },
+    "filters": {
+      "search": "Search clients...",
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "status": "Status",
+      "date": "Added On"
+    }
+  }
 }

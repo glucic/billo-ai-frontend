@@ -3,10 +3,10 @@ import type { User } from '@/types/User'
 export interface Organisation {
     id: number
     name: string
-    address: string
+    street: string
     city?: string
-    state?: string
     zip?: string
+    region?: string
     phone?: string
     email?: string
     description?: string

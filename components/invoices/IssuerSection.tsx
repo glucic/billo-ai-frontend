@@ -74,9 +74,9 @@ export default function IssuerSection({
                             'name',
                             'email',
                             'phone',
-                            'address',
+                            'street',
                             'city',
-                            'state',
+                            'region',
                             'zip',
                         ].map(field => (
                             <LabelInputContainer key={field}>

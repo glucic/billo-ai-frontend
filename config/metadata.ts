@@ -14,7 +14,7 @@ export const defaultMetadata: Metadata = {
         'Business Tools',
     ],
     metadataBase: new URL(
-        process.env.NEXT_PUBLIC_APP_URL ?? 'https://billoai.app',
+        process.env.BACKEND_URL ?? 'https://billoai.app',
     ),
     openGraph: {
         title: 'BilloAI – AI-Powered Invoice Generation',

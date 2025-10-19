@@ -47,7 +47,7 @@ export default function PDFInvoiceDocument({
                 <View style={styles.section}>
                     <Text style={styles.subtitle}>Von:</Text>
                     <Text>{issuer.name}</Text>
-                    <Text>{issuer.address}</Text>
+                    <Text>{issuer.street}</Text>
                     <Text>
                         {issuer.city}, {issuer.state} {issuer.zip}
                     </Text>
@@ -59,7 +59,7 @@ export default function PDFInvoiceDocument({
                 <View style={styles.section}>
                     <Text style={styles.subtitle}>Rechnung an:</Text>
                     <Text>{client.name}</Text>
-                    <Text>{client.address}</Text>
+                    <Text>{client.street}</Text>
                     <Text>
                         {client.city}, {client.state} {client.zip}
                     </Text>

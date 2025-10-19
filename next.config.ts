@@ -1,7 +1,13 @@
-import {NextConfig} from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
- 
-const nextConfig: NextConfig = {};
- 
-const withNextIntl = createNextIntlPlugin();
-export default withNextIntl(nextConfig);
+import { NextConfig } from 'next'
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin()
+
+const nextConfig: NextConfig = {
+    env: {
+        BACKEND_URL: process.env.BACKEND_URL,
+    },
+    transpilePackages: ['@react-pdf/renderer'],
+}
+
+export default withNextIntl(nextConfig)

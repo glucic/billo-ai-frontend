@@ -53,12 +53,21 @@ function GettingStartedContent() {
                             company_email={companyDetails.email}
                             company_phone={companyDetails.phone}
                             workers={companyDetails.employeeCount}
+                            street={companyDetails.street}
+                            city={companyDetails.city}
+                            zip={companyDetails.zip}
+                            region={companyDetails.region}
                             onChange={(field, value) => {
-                                const mappedField = field === 'company_email' ? 'email' 
-                                    : field === 'company_phone' ? 'phone'
-                                    : field === 'workers' ? 'employeeCount'
-                                    : field
-                                setCompanyDetails(mappedField, value)
+                                const mapping: Record<string, string> = {
+                                    company_email: 'email',
+                                    company_phone: 'phone',
+                                    workers: 'employeeCount',
+                                    street: 'street',
+                                    city: 'city',
+                                    zip: 'zip',
+                                    region: 'region',
+                                }
+                                setCompanyDetails(mapping[field] || field, value)
                             }}
                             step={step}
                             errors={errors}

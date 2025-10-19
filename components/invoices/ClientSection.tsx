@@ -5,7 +5,6 @@ import {
     Label,
     LabelInputContainer,
     InputField,
-    SelectField,
     ChevronDownIcon,
     Button,
 } from '@/components/ui'
@@ -102,9 +101,9 @@ export default function ClientSection({
                                 required
                                 id="client-address"
                                 placeholder={orgT('address')}
-                                value={client.address}
+                                value={client.street}
                                 onChange={e =>
-                                    setClientField('address', e.target.value)
+                                    setClientField('street', e.target.value)
                                 }
                                 aria-label={orgT('address')}
                             />
@@ -132,9 +131,9 @@ export default function ClientSection({
                                 required
                                 id="client-state"
                                 placeholder={orgT('state')}
-                                value={client.state}
+                                value={client.region}
                                 onChange={e =>
-                                    setClientField('state', e.target.value)
+                                    setClientField('region', e.target.value)
                                 }
                                 aria-label={orgT('state')}
                             />

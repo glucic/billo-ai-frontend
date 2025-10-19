@@ -1,12 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import dynamic from 'next/dynamic'
-import {
-    RiFullscreenLine,
-    RiFullscreenExitLine,
-    RiToolsLine,
-} from 'react-icons/ri'
 import { Button } from '@/components/ui'
 import { useTranslations } from 'next-intl'
 import { useInvoiceForm } from '@/hooks/useInvoice'
@@ -14,12 +8,12 @@ import InvoiceDetailsSection from '@/components/invoices/InvoiceDetailsSection'
 import IssuerSection from '@/components/invoices/IssuerSection'
 import ClientSection from '@/components/invoices/ClientSection'
 import ItemsSection from '@/components/invoices/ItemsSection'
+import PDFInvoicePreview from '@/components/invoices/PDFInvoicePreview'
 
 export default function CreateInvoicePage() {
     const t = useTranslations('Invoices.Create')
-    const [isPreviewFullWidth, setIsPreviewFullWidth] = useState(false)
-    const [showToolbar, setShowToolbar] = useState(false)
     const [success, setSuccess] = useState(false)
+    const [showPreview, setShowPreview] = useState(true)
 
     const {
         invoiceDetails,
@@ -51,38 +45,15 @@ export default function CreateInvoicePage() {
         } catch {}
     }
 
+    const invoice = { invoiceDetails, issuer, client, items }
+
     return (
         <main className="flex flex-col h-screen overflow-hidden text-[var(--color-foreground)] p-4 md:p-6">
-            <div className="flex justify-end items-center gap-2 mb-4">
-                <Button
-                    onClick={() => setIsPreviewFullWidth(v => !v)}
-                    variant="secondary">
-                    {isPreviewFullWidth ? (
-                        <RiFullscreenExitLine />
-                    ) : (
-                        <RiFullscreenLine />
-                    )}
-                    <span className="hidden md:inline">
-                        {isPreviewFullWidth ? 'Exit Fullscreen' : 'Fullscreen'}
-                    </span>
-                </Button>
-                <Button
-                    onClick={() => setShowToolbar(v => !v)}
-                    variant="secondary">
-                    <RiToolsLine />
-                    <span className="hidden md:inline">
-                        {showToolbar ? 'Hide Toolbar' : 'Show Toolbar'}
-                    </span>
-                </Button>
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-4 md:gap-8 flex-1 h-0">
+            <div className="flex flex-1 gap-8 overflow-hidden">
                 <form
                     onSubmit={handleSubmit}
                     className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
-                        isPreviewFullWidth
-                            ? 'flex-none w-0 md:w-0 opacity-0 hidden md:block'
-                            : 'flex-1 opacity-100'
+                        showPreview ? 'flex-1' : 'flex-[1_1_100%]'
                     }`}>
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
@@ -119,7 +90,7 @@ export default function CreateInvoicePage() {
                         </div>
                     )}
 
-                    <section className="sticky bottom-0 left-0 w-full bg-[var(--background)] border-t border-neutral-300 dark:border-neutral-700 py-4 flex justify-end px-6 flex-row gap-2">
+                    <section className="sticky bottom-0 left-0 w-full bg-[var(--background)] border-t border-[var(--accent)] py-4 flex justify-end px-6 flex-row gap-2">
                         <Button variant="ghost" href="/invoices">
                             {t('cancel')}
                         </Button>
@@ -132,14 +103,11 @@ export default function CreateInvoicePage() {
                     </section>
                 </form>
 
-                <aside
-                    className={`flex-shrink-0 sticky top-0 h-screen border-l border-neutral-300 dark:border-neutral-700 p-4 overflow-hidden transition-all duration-300 ease-in-out ${
-                        isPreviewFullWidth
-                            ? 'w-full md:w-full'
-                            : 'w-full md:w-[45%]'
-                    }`}>
-                    
-                </aside>
+                {showPreview && (
+                    <div className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] h-[85vh] transition-all duration-300">
+                        <PDFInvoicePreview invoice={invoice} />
+                    </div>
+                )}
             </div>
         </main>
     )

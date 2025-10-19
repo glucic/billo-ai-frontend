@@ -36,8 +36,8 @@
     --input-height: 40px;
     --input-radius: var(--radius-md);
     --input-border: rgba(255, 255, 255, 0.1);
-    --input-bg: rgba(35, 35, 39, 0.6);
-    --input-blur: 12px;
+    --input-bg: rgba(74, 74, 74, 0.21);
+    --input-blur: 15px;
     --input-padding-x: 12px;
     --input-padding-y: 8px;
     --input-text: var(--foreground);
