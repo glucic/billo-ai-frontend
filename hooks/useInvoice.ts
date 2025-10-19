@@ -14,6 +14,9 @@ import {
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
 
+/* ──────────────────────────────────────────────
+ * useInvoiceForm – handles invoice create/edit
+ * ────────────────────────────────────────────── */
 export function useInvoiceForm(initialInvoiceId?: number) {
     const { organisations, fetchOrganisations } = useOrganisations()
 
@@ -75,7 +78,17 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 
     // ─── Fetch Organisations ──────────────────────────────
     useEffect(() => {
-        fetchOrganisations()
+        const load = async () => {
+            setLoading(true)
+            try {
+                await fetchOrganisations()
+            } catch (err) {
+                console.error('Failed to load organisations:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        load()
     }, [fetchOrganisations])
 
     // ─── Auto-fill Issuer / Client from orgs ──────────────────────────────
@@ -136,7 +149,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const addItem = () => {
         setItems(prev => [
             ...prev,
-            { id: Date.now(), name: '', description: '', rate: 0, quantity: 1 },
+            { name: '', description: '', rate: 0, quantity: 1 },
         ])
     }
 
@@ -187,12 +200,28 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         setSaving(true)
         setError(null)
 
+        // recalculate totals before saving
+        const calc = calculateTotals({
+            items,
+            taxRate: totals.taxRate,
+            discount: totals.discount,
+            shipping: totals.shipping,
+            deposit: totals.deposit,
+            payments: totals.payments,
+        })
+
         const payload: Invoice = {
             invoiceDetails,
             issuer,
             client,
             items,
-            totals,
+            totals: {
+                ...totals,
+                sum: calc.subtotal ?? 0,
+                totalNet: (calc.subtotal ?? 0) - (calc.discountAmount ?? 0),
+                totalGross: calc.total ?? 0,
+                amountDue: calc.amountDue ?? 0,
+            },
         }
 
         try {
@@ -231,5 +260,145 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         saving,
         error,
         saveInvoice,
+    }
+}
+
+/* ──────────────────────────────────────────────
+ * listInvoices – fetch & manage paginated list
+ * ────────────────────────────────────────────── */
+interface PaginationMeta {
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+}
+
+export function listInvoices() {
+    const [invoices, setInvoices] = useState<Invoice[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState<PaginationMeta | null>(null)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+
+    const [sortBy, setSortBy] = useState<
+        | 'invoice_number'
+        | 'invoice_date'
+        | 'created_at'
+        | 'client_name'
+        | 'total'
+    >('created_at')
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+
+    const [searchTerm, setSearchTerm] = useState('')
+
+    const mapApiInvoice = (apiInvoice: any): Invoice => {
+        const invoiceDetails: InvoiceDetails = {
+            id: apiInvoice.id,
+            invoiceNumber: apiInvoice.invoice_number,
+            invoiceDate: apiInvoice.invoice_date,
+            dueDate: apiInvoice.due_date ?? '',
+            reference: apiInvoice.reference ?? '',
+        }
+
+        const issuer: Issuer = apiInvoice.issuer ?? {
+            name: '',
+            street: '',
+            city: '',
+            region: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }
+
+        const client: Client = apiInvoice.client ?? {
+            name: '',
+            street: '',
+            city: '',
+            region: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }
+
+        const items: InvoiceItem[] =
+            apiInvoice.items?.map((item: any) => ({
+                name: item.name,
+                description: item.description ?? '',
+                rate: Number(item.rate),
+                quantity: Number(item.quantity),
+            })) ?? []
+
+        const totals: InvoiceTotals = apiInvoice.totals ?? {
+            currency: 'EUR',
+            taxRate: 19,
+            discount: 0,
+            shipping: 0,
+            deposit: 0,
+            payments: 0,
+            sum: 0,
+            totalNet: 0,
+            totalGross: 0,
+            amountDue: 0,
+        }
+
+        return { invoiceDetails, issuer, client, items, totals }
+    }
+
+    const fetchInvoices = useCallback(async () => {
+        setLoading(true)
+        setError(null)
+        try {
+            const res = await apiClient.get('/api/invoices', {
+                params: {
+                    page,
+                    per_page: rowsPerPage,
+                    sort_by: sortBy,
+                    sort_order: sortOrder,
+                    search: searchTerm,
+                },
+            })
+
+            const data = res.data.data
+            const mappedInvoices = (data.data || []).map((inv: any) =>
+                mapApiInvoice(inv),
+            )
+
+            setInvoices(mappedInvoices)
+            setPagination({
+                current_page: data.current_page,
+                last_page: data.last_page,
+                per_page: data.per_page,
+                total: data.total,
+            })
+        } catch (err: any) {
+            console.error(err)
+            setError(err.response?.data?.message || 'Failed to load invoices.')
+        } finally {
+            setLoading(false)
+        }
+    }, [page, rowsPerPage, sortBy, sortOrder, searchTerm])
+
+    useEffect(() => {
+        fetchInvoices()
+    }, [fetchInvoices])
+
+    return {
+        invoices,
+        loading,
+        error,
+        pagination,
+        page,
+        setPage,
+        rowsPerPage,
+        setRowsPerPage,
+        sortBy,
+        setSortBy,
+        sortOrder,
+        setSortOrder,
+        searchTerm,
+        setSearchTerm,
+        fetchInvoices,
     }
 }
