@@ -62,7 +62,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputProps>(
                         focus-visible:outline-none
                         disabled:cursor-not-allowed disabled:opacity-50`,
                         error
-                            ? 'border-red-500 focus-visible:ring-red-500 focus-visible:ring-offset-red-100'
+                            ? 'border-[var(--error)] focus-visible:ring-[var(--error)] focus-visible:ring-offset-[var(--error)]/50 hover:bg-[var(--error)]/10'
                             : 'border-[var(--input-border)]',
                         className,
                     )}

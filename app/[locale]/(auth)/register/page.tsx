@@ -26,7 +26,7 @@ export default function RegisterPage() {
 
     const { register: registerUser } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/getting-started',
+        redirectIfAuthenticated: '/dashboard',
     })
 
     const [loading, setLoading] = useState(false)
