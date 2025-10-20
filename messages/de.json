@@ -86,10 +86,12 @@
       "noAccount": "Noch kein Konto?",
       "signUp": "Registrieren",
       "errors": {
+        "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
         "emailRequired": "E-Mail ist erforderlich.",
         "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
         "passwordRequired": "Passwort ist erforderlich.",
-        "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt."
+        "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt.",
+        "tooManyAttempts": "Zu viele Anmeldeversuche. Bitte versuchen Sie es in wenigen Minuten erneut."
       }
     },
     "Register": {
@@ -111,42 +113,18 @@
       "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
       "errors": {
         "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-        "nameRequired": "Benutzername ist erforderlich.",
+        "first_nameRequired": "Vorname ist erforderlich.",
+        "last_nameRequired": "Nachname ist erforderlich.",
         "emailRequired": "E-Mail ist erforderlich.",
         "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "emailTaken": "Diese E-Mail wird bereits verwendet.",
         "passwordRequired": "Passwort ist erforderlich.",
-        "confirmPasswordRequired": "Bitte bestätigen Sie das Passwort.",
         "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
-        "passwordsDontMatch": "Die Passwörter stimmen nicht überein."
+        "passwordMismatch": "Passwörter stimmen nicht überein."
       }
     },
-    "GettingStarted": {
-      "StepCompanyName": {
-        "label": "Wie heißt Ihr Unternehmen?",
-        "placeholder": "Geben Sie hier den Namen Ihres Unternehmens ein"
-      },
-      "StepCompanyAbout": {
-        "label": "Womit beschäftigt sich Ihr Unternehmen? (optional)",
-        "placeholder": "Erzählen Sie uns ein wenig über Ihr Unternehmen"
-      },
-      "StepCompanyDetails": {
-        "title": "Unternehmensdetails",
-        "emailLabel": "E-Mail-Adresse Ihres Unternehmens",
-        "emailPlaceholder": "beispiel@unternehmen.com",
-        "phoneLabel": "Telefonnummer Ihres Unternehmens",
-        "phonePlaceholder": "+49 123 456 789",
-        "workersLabel": "Wie viele Mitarbeiter hat Ihr Unternehmen?",
-        "workersPlaceholder": "Zum Beispiel: 50",
-        "addressSection": "Adressinformationen",
-        "streetLabel": "Straße und Hausnummer",
-        "streetPlaceholder": "z. B. Hauptstraße 12",
-        "cityLabel": "Stadt",
-        "cityPlaceholder": "z. B. Berlin",
-        "zipLabel": "Postleitzahl",
-        "zipPlaceholder": "z. B. 10115",
-        "regionLabel": "Bundesland / Region",
-        "regionPlaceholder": "z. B. Berlin"
-      }
+    "GlobalErrors": {
+      "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
     }
   },
   "Dashboard": {

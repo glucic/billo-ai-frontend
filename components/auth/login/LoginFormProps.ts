@@ -1,9 +1,7 @@
-type LoginFormProps = {
-    onSubmit: (credentials: { email: string; password: string }) => void
+type LoginFields = 'email' | 'password'
+
+export type LoginFormProps = {
+    onSubmit: (credentials: Record<LoginFields, string>) => void
     loading?: boolean
-    errors?: {
-        email?: string[]
-        password?: string[]
-        general?: string[]
-    }
+    errors?: FormErrors<LoginFields>
 }

@@ -1,18 +1,12 @@
+type RegisterFields =
+    | 'first_name'
+    | 'last_name'
+    | 'email'
+    | 'password'
+    | 'password_confirmation'
+
 type RegisterFormProps = {
-    onSubmit: (credentials: {
-        first_name: string
-        last_name: string
-        email: string
-        password: string
-        password_confirmation: string
-    }) => void
+    onSubmit: (credentials: Record<RegisterFields, string>) => void
     loading?: boolean
-    errors?: {
-        first_name?: string[]
-        last_name?: string[]
-        email?: string[]
-        password?: string[]
-        password_confirmation?: string[]
-        general?: string[]
-    }
+    errors?: FormErrors<RegisterFields>
 }

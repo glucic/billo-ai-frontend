@@ -1,22 +1,21 @@
 @import 'tailwindcss';
 
 @theme inline {
-    --shadow-input:
-        0px 2px 3px -1px rgba(0, 0, 0, 0.1),
-        0px 1px 0px 0px rgba(25, 28, 33, 0.02),
-        0px 0px 0px 1px rgba(25, 28, 33, 0.08);
+    --shadow-input: 0px 2px 3px -1px rgba(0, 0, 0, 0.1),
+    0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+    0px 0px 0px 1px rgba(25, 28, 33, 0.08);
 }
 
 :root {
-    --background: #141414;
-    --foreground: #ededed;
-    --secondary-background: #232324;
+    --background: #0d0d0f;
+    --foreground: #f4f4f5;
+    --secondary-background: #1b1c1e;
 
-    --accent: #2563eb;
+    --accent: #3b82f6;
     --accent-light: #60a5fa;
-    --accent-glow: rgba(37, 99, 235, 0.15);
+    --accent-glow: rgba(59, 130, 246, 0.2);
 
-    --gradient-border: linear-gradient(to right, #111827, #2563eb);
+    --gradient-border: linear-gradient(to right, #111827, #3b82f6);
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -35,36 +34,67 @@
 
     --input-height: 40px;
     --input-radius: var(--radius-md);
-    --input-border: rgba(255, 255, 255, 0.1);
-    --input-bg: rgba(74, 74, 74, 0.21);
+    --input-border: rgba(255, 255, 255, 0.08);
+    --input-bg: rgba(40, 40, 45, 0.6);
     --input-blur: 15px;
     --input-padding-x: 12px;
     --input-padding-y: 8px;
     --input-text: var(--foreground);
-    --input-placeholder: rgba(255, 255, 255, 0.4);
+    --input-placeholder: rgba(255, 255, 255, 0.45);
     --input-shadow: var(--shadow-input);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-light: rgba(0, 0, 0, 0.05);
+    --divider: rgba(255, 255, 255, 0.08);
+
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --text-heading: var(--foreground);
+    --text-accent: var(--accent);
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+
+    --gradient-accent: linear-gradient(135deg, var(--accent), var(--accent-light));
+    --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.05));
+
+    --transition-fast: 0.15s ease;
+    --transition-medium: 0.25s ease;
+    --transition-slow: 0.4s ease;
+
+    --z-tooltip: 1050;
+    --z-navbar: 1100;
+    --z-overlay: 1200;
+
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme='light'] {
-    --background: #f9fafb;
-    --foreground: #1f2937;
+    --background: #fafafa;
+    --foreground: #111827;
     --secondary-background: #ffffff;
 
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --accent-glow: rgba(59, 130, 246, 0.15);
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --accent-glow: rgba(37, 99, 235, 0.15);
 
-    --gradient-border: linear-gradient(to right, #e5e7eb, #3b82f6);
+    --gradient-border: linear-gradient(to right, #dbeafe, #2563eb);
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-accent: var(--accent);
     --color-accent-light: var(--accent-light);
 
-    --input-border: rgba(0, 0, 0, 0.1);
-    --input-bg: rgba(249, 250, 251, 0.8);
+    --input-border: rgba(0, 0, 0, 0.08);
+    --input-bg: rgba(255, 255, 255, 0.9);
     --input-text: #1f2937;
-    --input-placeholder: rgba(31, 41, 55, 0.4);
+    --input-placeholder: rgba(55, 65, 81, 0.4);
 }
 
 html {
@@ -92,12 +122,11 @@ body {
 }
 
 * {
-    transition:
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        color 0.25s ease,
-        fill 0.25s ease,
-        stroke 0.25s ease;
+    transition: background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    fill 0.25s ease,
+    stroke 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,13 +154,16 @@ p {
     width: 8px;
     height: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
     background: var(--accent-glow);
     border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-light);
 }
+
 ::-webkit-scrollbar-track {
     background: transparent;
 }
@@ -142,10 +174,9 @@ p {
     box-shadow: var(--shadow-input);
     padding: 1rem;
     margin: 1rem;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
+    transition: transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .card:hover {

@@ -1,11 +1,14 @@
+'use client'
+
 import { useRouter, useParams } from 'next/navigation'
 import apiClient from '@/lib/apiClient'
 import React from 'react'
-
-type Errors = Record<string, string[]>
+import { useAuthContext } from '@/context/AuthProvider'
+import { useTranslations } from 'next-intl'
+import { parseBackendErrors, BackendErrors } from '@/lib/errorUtils'
 
 type AuthCallbacks = {
-    setErrors: (errors: Errors) => void
+    setErrors: (errors: BackendErrors) => void
     setStatus?: (status: string | null) => void
 }
 
@@ -46,10 +49,8 @@ type CreateOrganisationProps = {
     city?: string
     zip?: string
     region?: string
-    setErrors: (errors: Errors) => void
+    setErrors: (errors: BackendErrors) => void
 }
-
-import { useAuthContext } from '@/context/AuthProvider'
 
 export const useAuth = ({
     middleware,
@@ -60,88 +61,82 @@ export const useAuth = ({
 } = {}) => {
     const router = useRouter()
     const params = useParams()
-
     const { user, loading, mutateUser } = useAuthContext()
+    const t = useTranslations('Auth') // top-level Auth namespace
 
-    const csrf = () => apiClient.get('/sanctum/csrf-cookie')
-
-    const register = async ({ setErrors, ...props }: RegisterProps) => {
-        await csrf()
-        setErrors({})
-        try {
-            await apiClient.post('/register', props)
-            await mutateUser()
-        } catch (error: any) {
-            if (error.response?.status === 422) {
-                setErrors(error.response.data.errors)
-            } else {
-                throw error
-            }
+    const csrfPromise = React.useRef<Promise<any> | null>(null)
+    const csrf = () => {
+        if (!csrfPromise.current) {
+            csrfPromise.current = apiClient.get('/sanctum/csrf-cookie')
         }
+        return csrfPromise.current
     }
 
-    const login = async ({
-        setErrors,
-        setStatus,
-        ...props
-    }: LoginProps & { setStatus?: (status: string | null) => void }) => {
-        await csrf()
+    const handleAuthRequest = async (
+        requestFn: () => Promise<any>,
+        setErrors: (errors: BackendErrors) => void,
+        setStatus?: (status: string | null) => void,
+        namespace = 'GlobalErrors',
+    ) => {
         setErrors({})
         setStatus?.(null)
         try {
-            await apiClient.post('/login', props)
-            await mutateUser()
+            await csrf()
+            return await requestFn()
         } catch (error: any) {
-            if (error.response?.status === 422) {
-                setErrors(error.response.data.errors)
-            } else {
-                throw error
-            }
+            setErrors(parseBackendErrors(error, t, namespace))
+            throw error
         }
     }
 
-    const forgotPassword = async ({
-        setErrors,
-        setStatus,
-        email,
-    }: ForgotPasswordProps) => {
-        await csrf()
-        setErrors({})
-        setStatus?.(null)
-        try {
-            const response = await apiClient.post('/forgot-password', { email })
-            setStatus?.(response.data.status)
-        } catch (error: any) {
-            if (error.response?.status === 422) {
-                setErrors(error.response.data.errors)
-            } else {
-                throw error
-            }
-        }
-    }
+    const register = async (props: RegisterProps) =>
+        handleAuthRequest(
+            async () => {
+                await apiClient.post('/register', props)
+                await mutateUser()
+            },
+            props.setErrors,
+            props.setStatus,
+            'Register',
+        )
 
-    const resetPassword = async ({
-        setErrors,
-        setStatus,
-        ...props
-    }: ResetPasswordProps & AuthCallbacks) => {
-        await csrf()
-        setErrors({})
-        setStatus?.(null)
-        try {
-            const response = await apiClient.post('/reset-password', {
-                token: params.token,
-                ...props,
-            })
-            router.push('/login?reset=' + btoa(response.data.status))
-        } catch (error: any) {
-            if (error.response?.status === 422) {
-                setErrors(error.response.data.errors)
-            } else {
-                throw error
-            }
-        }
-    }
+    const login = async (props: LoginProps) =>
+        handleAuthRequest(
+            async () => {
+                await apiClient.post('/login', props)
+                await mutateUser()
+            },
+            props.setErrors,
+            props.setStatus,
+            'Login',
+        )
+
+    const forgotPassword = async (props: ForgotPasswordProps) =>
+        handleAuthRequest(
+            async () => {
+                const response = await apiClient.post('/forgot-password', {
+                    email: props.email,
+                })
+                props.setStatus?.(response.data.status)
+            },
+            props.setErrors,
+            props.setStatus,
+            'ForgotPassword',
+        )
+
+    const resetPassword = async (props: ResetPasswordProps) =>
+        handleAuthRequest(
+            async () => {
+                const response = await apiClient.post('/reset-password', {
+                    token: params.token,
+                    ...props,
+                })
+                router.push('/login?reset=' + btoa(response.data.status))
+            },
+            props.setErrors,
+            props.setStatus,
+            'ResetPassword',
+        )
 
     const resendEmailVerification = async ({
         setStatus,
@@ -152,45 +147,43 @@ export const useAuth = ({
         setStatus(response.data.status)
     }
 
-    const logout = async () => {
+    const logout = React.useCallback(async () => {
         await csrf()
         await apiClient.post('/logout')
         await mutateUser(null, false)
         router.push('/login')
-    }
+    }, [router, mutateUser])
 
-    const createOrganisation = async ({
-        setErrors,
-        ...props
-    }: CreateOrganisationProps) => {
-        await csrf()
-        setErrors({})
-
-        try {
-            const response = await apiClient.post('/api/organisations', props)
-            return response.data
-        } catch (error: any) {
-            if (error.response?.data?.errors) {
-                setErrors(error.response.data.errors)
-            }
-            throw error
-        }
-    }
+    const createOrganisation = async (props: CreateOrganisationProps) =>
+        handleAuthRequest(
+            async () => {
+                const response = await apiClient.post(
+                    '/api/organisations',
+                    props,
+                )
+                return response.data
+            },
+            props.setErrors,
+            undefined,
+            'Organisation',
+        )
 
     React.useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user) {
             router.push(redirectIfAuthenticated)
         }
+
         if (
             window.location.pathname === '/verify-email' &&
             user?.email_verified_at
         ) {
             router.push(redirectIfAuthenticated ?? '/')
         }
+
         if (middleware === 'auth' && !user && !loading) {
             logout()
         }
-    }, [user, loading])
+    }, [user, loading, middleware, redirectIfAuthenticated, router, logout])
 
     return {
         user,

@@ -10,9 +10,7 @@ import {
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { InputError } from '@/components/ui/InputError'
-
-const EMAIL_ID = 'email'
-const PASSWORD_ID = 'password'
+import { LoginFormProps } from '@/components/auth/login/LoginFormProps'
 
 export function LoginForm({
     onSubmit,
@@ -20,16 +18,13 @@ export function LoginForm({
     errors = {},
 }: LoginFormProps) {
     const t = useTranslations('Auth.Login')
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    const isFormValid = email.trim() !== '' && password.trim() !== ''
+    const isFormValid = email.trim() && password.trim()
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (!isFormValid) return
-
         onSubmit({ email, password })
     }
 
@@ -39,47 +34,43 @@ export function LoginForm({
             onSubmit={handleSubmit}
             noValidate>
             <InputError message={errors.general?.[0]} />
+
             <LabelInputContainer>
-                <Label htmlFor={EMAIL_ID}>{t('email')}</Label>
+                <Label htmlFor="email">{t('email')}</Label>
                 <InputField
-                    id={EMAIL_ID}
+                    id="email"
                     type="email"
                     placeholder={t('email')}
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
+                    error={Boolean(errors.email)}
                     autoComplete="email"
-                    aria-label={t('email')}
-                    aria-describedby={
-                        errors.email ? `${EMAIL_ID}-error` : undefined
-                    }
+                    aria-describedby={errors.email ? 'email-error' : undefined}
                     disabled={loading}
                 />
-                <InputError
-                    message={errors.email?.[0]}
-                    id={`${EMAIL_ID}-error`}
-                />
+                <InputError message={errors.email?.[0]} id="email-error" />
             </LabelInputContainer>
 
             <LabelInputContainer>
-                <Label htmlFor={PASSWORD_ID}>{t('password')}</Label>
+                <Label htmlFor="password">{t('password')}</Label>
                 <InputField
-                    id={PASSWORD_ID}
+                    id="password"
                     type="password"
                     placeholder={t('password')}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
+                    error={Boolean(errors.password)}
                     autoComplete="current-password"
-                    aria-label={t('password')}
                     aria-describedby={
-                        errors.password ? `${PASSWORD_ID}-error` : undefined
+                        errors.password ? 'password-error' : undefined
                     }
                     disabled={loading}
                 />
                 <InputError
                     message={errors.password?.[0]}
-                    id={`${PASSWORD_ID}-error`}
+                    id="password-error"
                 />
             </LabelInputContainer>
 
