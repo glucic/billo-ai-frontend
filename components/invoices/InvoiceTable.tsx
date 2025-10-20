@@ -3,6 +3,9 @@
 import React from 'react'
 import { Invoice } from '@/types/Invoice'
 import { IoChevronUp, IoChevronDown } from 'react-icons/io5'
+import { FaEdit } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 type SortField =
     | 'invoice_number'
@@ -28,6 +31,10 @@ export default function InvoiceTable({
     onSort,
     onSelect,
 }: InvoiceTableProps) {
+    const invoicesT = useTranslations('Invoices')
+    const clientsT = useTranslations('Clients')
+    const router = useRouter()
+
     const getSortIndicator = (field: string) => {
         if (sortBy !== field) return null
         return sortOrder === 'asc' ? <IoChevronUp /> : <IoChevronDown />
@@ -42,29 +49,36 @@ export default function InvoiceTable({
                             className="px-6 py-4 cursor-pointer"
                             onClick={() => onSort('invoice_number')}>
                             <div className="flex items-center gap-1">
-                                Number {getSortIndicator('invoice_number')}
+                                {invoicesT('InvoiceDetails.invoiceNumber')}{' '}
+                                {getSortIndicator('invoice_number')}
                             </div>
                         </th>
                         <th
                             className="px-6 py-4 cursor-pointer"
                             onClick={() => onSort('invoice_date')}>
                             <div className="flex items-center gap-1">
-                                Date {getSortIndicator('invoice_date')}
+                                {invoicesT('InvoiceDetails.invoiceDate')}{' '}
+                                {getSortIndicator('invoice_date')}
                             </div>
                         </th>
                         <th
                             className="px-6 py-4 cursor-pointer"
                             onClick={() => onSort('client_name')}>
                             <div className="flex items-center gap-1">
-                                Client {getSortIndicator('client_name')}
+                                {clientsT('title')}{' '}
+                                {getSortIndicator('client_name')}
                             </div>
                         </th>
                         <th
                             className="px-6 py-4 cursor-pointer text-right"
                             onClick={() => onSort('total')}>
                             <div className="flex items-center justify-end gap-1">
-                                Total {getSortIndicator('total')}
+                                {invoicesT('Totals.amountDue')}{' '}
+                                {getSortIndicator('total')}
                             </div>
+                        </th>
+                        <th className="px-6 py-4 text-right">
+                            {invoicesT('actions')}
                         </th>
                     </tr>
                 </thead>
@@ -72,30 +86,40 @@ export default function InvoiceTable({
                     {loading && (
                         <tr>
                             <td
-                                colSpan={4}
+                                colSpan={5}
                                 className="text-center py-12 text-gray-400">
-                                Loading...
+                                {invoicesT('loading')}
                             </td>
                         </tr>
                     )}
                     {!loading && invoices.length === 0 && (
                         <tr>
                             <td
-                                colSpan={4}
+                                colSpan={5}
                                 className="text-center py-12 text-gray-500">
-                                No invoices found
+                                {invoicesT('noInvoices')}
                             </td>
                         </tr>
                     )}
                     {!loading &&
                         invoices.map((invoice, idx) => {
-                            const total = invoice.items.reduce(
-                                (sum, item) => sum + item.rate * item.quantity,
-                                0,
-                            )
+                            const total =
+                                invoice.totals?.amountDue ??
+                                invoice.items.reduce(
+                                    (sum, item) =>
+                                        sum + item.rate * item.quantity,
+                                    0,
+                                )
+
+                            const handleEdit = (e: React.MouseEvent) => {
+                                e.stopPropagation()
+                                const id = invoice.invoiceDetails.id
+                                if (id) router.push(`/invoices/${id}`)
+                            }
+
                             return (
                                 <tr
-                                    key={idx}
+                                    key={invoice.invoiceDetails.id || idx}
                                     className={`h-16 cursor-pointer transition-colors ${
                                         idx % 2 === 0
                                             ? 'bg-[#232323]'
@@ -115,6 +139,14 @@ export default function InvoiceTable({
                                     </td>
                                     <td className="px-6 py-4 text-right font-semibold">
                                         €{total.toFixed(2)}
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <button
+                                            onClick={handleEdit}
+                                            className="p-2 rounded-md hover:bg-[var(--accent-glow)] transition-colors"
+                                            aria-label="Edit invoice">
+                                            <FaEdit className="text-[var(--color-accent)] hover:text-[var(--color-accent-light)]" />
+                                        </button>
                                     </td>
                                 </tr>
                             )

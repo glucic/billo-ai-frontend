@@ -33,7 +33,7 @@ export default function ItemsSection({
     onAddItem,
     onRemoveItem,
 }: ItemsSectionProps) {
-    const t = useTranslations('Invoices.Create.Items')
+    const t = useTranslations('Invoices.Items')
     const [open, setOpen] = React.useState(true)
 
     return (

@@ -8,7 +8,7 @@ import {
     CurrencyInput,
     LabelInputContainer,
 } from '@/components/ui'
-import { calculateTotals } from '@/lib/invoiceCalculations'
+import { CalculatedTotals, calculateTotals } from '@/lib/invoiceCalculations'
 import { ChevronDownIcon } from 'lucide-react'
 import { InvoiceItem, InvoiceTotals } from '@/types/Invoice'
 
@@ -33,9 +33,15 @@ export default function TotalsSection({
     totals,
     setTotalsField,
 }: TotalsSectionProps) {
-    const t = useTranslations('Invoices.Create.Totals')
+    const t = useTranslations('Invoices.Totals')
     const [open, setOpen] = useState(true)
-    const [computed, setComputed] = useState<any>({})
+    const [computed, setComputed] = useState<CalculatedTotals>({
+        subtotal: 0,
+        discountAmount: 0,
+        tax: 0,
+        total: 0,
+        amountDue: 0,
+    })
 
     useEffect(() => {
         const calc = calculateTotals({
@@ -75,7 +81,7 @@ export default function TotalsSection({
             <Button
                 variant="ghost"
                 animated={false}
-                className="flex items-center w-full justify-between focus:outline-none hover:bg-transparent"
+                className="flex items-center w-full justify-between focus:outline-none hover:bg-transparent hover:cursor-pointer"
                 aria-expanded={open}
                 aria-controls="items-fields"
                 onClick={() => setOpen(v => !v)}>
@@ -224,7 +230,9 @@ export default function TotalsSection({
                             <hr className="my-2 border-[var(--border)]" />
 
                             <div className="flex justify-between text-xl font-bold">
-                                <span>{t('amountDue')}</span>
+                                <span className="text-[var(--accent)]">
+                                    {t('amountDue')}
+                                </span>
                                 <span>
                                     {computed.amountDue?.toFixed(2)} {symbol}
                                 </span>

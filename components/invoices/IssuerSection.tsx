@@ -28,7 +28,7 @@ export default function IssuerSection({
     issuer,
     setIssuerField,
 }: IssuerSectionProps) {
-    const t = useTranslations('Invoices.Create.IssuerDetails')
+    const t = useTranslations('Invoices.IssuerDetails')
     const orgT = useTranslations('Organisation.fields')
     const [open, setOpen] = React.useState<boolean>(true)
 
@@ -50,6 +50,7 @@ export default function IssuerSection({
 
             {open && (
                 <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4">
+                    {/* Organisation selection */}
                     <LabelInputContainer>
                         <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
                         <SelectField
@@ -69,24 +70,39 @@ export default function IssuerSection({
                         />
                     </LabelInputContainer>
 
+                    {/* Contact Information */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {[
-                            'name',
-                            'email',
-                            'phone',
-                            'street',
-                            'city',
-                            'region',
-                            'zip',
-                        ].map(field => (
+                        {['name', 'email', 'phone'].map(field => (
                             <LabelInputContainer key={field}>
                                 <Label htmlFor={`issuer-${field}`}>
                                     {orgT(field)}
                                 </Label>
                                 <InputField
-                                    required={
-                                        field !== 'phone' && field !== 'email'
+                                    required={field === 'name'}
+                                    id={`issuer-${field}`}
+                                    placeholder={orgT(field)}
+                                    value={issuer[field as keyof Issuer] ?? ''}
+                                    onChange={e =>
+                                        setIssuerField(
+                                            field as keyof Issuer,
+                                            e.target.value,
+                                        )
                                     }
+                                    aria-label={orgT(field)}
+                                />
+                            </LabelInputContainer>
+                        ))}
+                    </div>
+
+                    {/* Address Information */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {['street', 'zip', 'city', 'region'].map(field => (
+                            <LabelInputContainer key={field}>
+                                <Label htmlFor={`issuer-${field}`}>
+                                    {orgT(field)}
+                                </Label>
+                                <InputField
+                                    required={field !== 'region'}
                                     id={`issuer-${field}`}
                                     placeholder={orgT(field)}
                                     value={issuer[field as keyof Issuer] ?? ''}

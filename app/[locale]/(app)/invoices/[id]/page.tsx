@@ -1,5 +1,6 @@
 'use client'
 
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Button } from '@/components/ui'
 import { useTranslations } from 'next-intl'
@@ -13,8 +14,12 @@ import {
     TotalsSection,
 } from '@/components/invoices'
 
-export default function CreateInvoicePage() {
+export default function EditInvoicePage() {
     const t = useTranslations('Invoices')
+    const router = useRouter()
+    const { id } = useParams()
+    const invoiceId = Number(id)
+
     const [success, setSuccess] = useState(false)
     const [showPreview] = useState(true)
 
@@ -38,8 +43,9 @@ export default function CreateInvoicePage() {
         saveInvoice,
         organisations,
         saving,
+        loading,
         error,
-    } = useInvoiceForm()
+    } = useInvoiceForm(invoiceId)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -47,7 +53,16 @@ export default function CreateInvoicePage() {
         try {
             await saveInvoice()
             setSuccess(true)
+            setTimeout(() => router.push('/invoices'), 1200)
         } catch {}
+    }
+
+    if (loading) {
+        return (
+            <main className="flex h-screen items-center justify-center">
+                <p className="text-gray-400">{t('loading')}</p>
+            </main>
+        )
     }
 
     const invoice = { invoiceDetails, issuer, client, items, totals }
@@ -59,7 +74,8 @@ export default function CreateInvoicePage() {
                     onSubmit={handleSubmit}
                     className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
                         showPreview ? 'flex-1' : 'flex-[1_1_100%]'
-                    }`}>
+                    }`}
+                >
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
                         setInvoiceDetailsField={setInvoiceDetailsField}
@@ -98,7 +114,7 @@ export default function CreateInvoicePage() {
                     {error && <div className="text-red-500 mb-2">{error}</div>}
                     {success && (
                         <div className="text-green-500 mb-2">
-                            {t('saveSuccess') || 'Invoice saved successfully!'}
+                            {t('updateSuccess') || 'Invoice updated successfully!'}
                         </div>
                     )}
 
@@ -106,11 +122,8 @@ export default function CreateInvoicePage() {
                         <Button variant="ghost" href="/invoices">
                             {t('cancel')}
                         </Button>
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            disabled={saving}>
-                            {saving ? 'Saving...' : t('save')}
+                        <Button type="submit" variant="primary" disabled={saving}>
+                            {saving ? 'Saving...' : t('update')}
                         </Button>
                     </section>
                 </form>

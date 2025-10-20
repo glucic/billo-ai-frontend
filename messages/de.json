@@ -224,49 +224,47 @@
       "payments": "Zahlungen",
       "amountDue": "Offener Betrag"
     },
-    "Create": {
-      "saveSuccess": "Rechnung erfolgreich gespeichert!",
-      "InvoiceDetails": {
-        "title": "Rechnungsdetails",
-        "invoiceNumber": "Rechnungsnummer",
-        "invoiceDate": "Rechnungsdatum",
-        "dueDate": "Fälligkeitsdatum",
-        "reference": "Referenz / Bestellnummer"
-      },
-      "IssuerDetails": {
-        "title": "Absenderdetails",
-        "selectIssuer": "Absender auswählen"
-      },
-      "ClientDetails": {
-        "title": "Kundendetails",
-        "selectClient": "Kunde auswählen"
-      },
-      "Items": {
-        "title": "Positionen",
-        "addItem": "Position hinzufügen",
-        "removeItem": "Position entfernen",
-        "name": "Bezeichnung",
-        "description": "Beschreibung",
-        "rate": "Preis",
-        "quantity": "Menge"
-      },
-      "Totals": {
-        "title": "Gesamtübersicht",
-        "currency": "Währung",
-        "sum": "Summe",
-        "totalNet": "Gesamtbetrag (Netto)",
-        "totalGross": "Gesamtbetrag (Brutto)",
-        "mwst": "MwSt",
-        "discount": "Rabatt (%)",
-        "discountAmount": "Rabattbetrag",
-        "shipping": "Versandkosten",
-        "deposit": "Anzahlung",
-        "payments": "Zahlungen",
-        "amountDue": "Offener Betrag"
-      },
-      "save": "Rechnung speichern",
-      "cancel": "Abbrechen"
-    }
+    "saveSuccess": "Rechnung erfolgreich gespeichert!",
+    "InvoiceDetails": {
+      "title": "Rechnungsdetails",
+      "invoiceNumber": "Rechnungsnummer",
+      "invoiceDate": "Rechnungsdatum",
+      "dueDate": "Fälligkeitsdatum",
+      "reference": "Referenz / Bestellnummer"
+    },
+    "IssuerDetails": {
+      "title": "Absenderdetails",
+      "selectIssuer": "Absender auswählen"
+    },
+    "ClientDetails": {
+      "title": "Kundendetails",
+      "selectClient": "Kunde auswählen"
+    },
+    "Items": {
+      "title": "Positionen",
+      "addItem": "Position hinzufügen",
+      "removeItem": "Position entfernen",
+      "name": "Bezeichnung",
+      "description": "Beschreibung",
+      "rate": "Preis",
+      "quantity": "Menge"
+    },
+    "Totals": {
+      "title": "Gesamtübersicht",
+      "currency": "Währung",
+      "sum": "Summe",
+      "totalNet": "Gesamtbetrag (Netto)",
+      "totalGross": "Gesamtbetrag (Brutto)",
+      "mwst": "MwSt",
+      "discount": "Rabatt (%)",
+      "discountAmount": "Rabattbetrag",
+      "shipping": "Versandkosten",
+      "deposit": "Anzahlung",
+      "payments": "Zahlungen",
+      "amountDue": "Offener Betrag"
+    },
+    "save": "Rechnung speichern",
+    "cancel": "Abbrechen"
   },
   "Clients": {
     "title": "Kunden",

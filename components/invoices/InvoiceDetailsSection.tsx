@@ -6,6 +6,7 @@ import {
     LabelInputContainer,
     InputField,
     ChevronDownIcon,
+    DatePicker,
     Button,
 } from '@/components/ui'
 import React from 'react'
@@ -22,7 +23,7 @@ export default function InvoiceDetailsSection({
     setInvoiceDetailsField,
     error,
 }: InvoiceDetailsSectionProps) {
-    const t = useTranslations('Invoices.Create.InvoiceDetails')
+    const t = useTranslations('Invoices.InvoiceDetails')
     const [open, setOpen] = React.useState(true)
 
     return (
@@ -70,49 +71,6 @@ export default function InvoiceDetailsSection({
                     </LabelInputContainer>
 
                     <LabelInputContainer>
-                        <Label htmlFor="invoice-date">{t('invoiceDate')}</Label>
-                        <InputField
-                            id="invoice-date"
-                            type="date"
-                            required
-                            value={invoiceDetails.invoiceDate}
-                            onChange={e =>
-                                setInvoiceDetailsField(
-                                    'invoiceDate',
-                                    e.target.value,
-                                )
-                            }
-                            aria-label={t('invoiceDate')}
-                        />
-                        {error?.invoiceDate && (
-                            <span className="text-sm text-red-500">
-                                {error.invoiceDate}
-                            </span>
-                        )}
-                    </LabelInputContainer>
-
-                    <LabelInputContainer>
-                        <Label htmlFor="due-date">{t('dueDate')}</Label>
-                        <InputField
-                            id="due-date"
-                            type="date"
-                            value={invoiceDetails.dueDate}
-                            onChange={e =>
-                                setInvoiceDetailsField(
-                                    'dueDate',
-                                    e.target.value,
-                                )
-                            }
-                            aria-label={t('dueDate')}
-                        />
-                        {error?.dueDate && (
-                            <span className="text-sm text-red-500">
-                                {error.dueDate}
-                            </span>
-                        )}
-                    </LabelInputContainer>
-
-                    <LabelInputContainer>
                         <Label htmlFor="reference">{t('reference')}</Label>
                         <InputField
                             id="reference"
@@ -129,6 +87,43 @@ export default function InvoiceDetailsSection({
                         {error?.reference && (
                             <span className="text-sm text-red-500">
                                 {error.reference}
+                            </span>
+                        )}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                        <Label htmlFor="invoice-date">{t('invoiceDate')}</Label>
+                        <DatePicker
+                            id="invoice-date"
+                            value={invoiceDetails.invoiceDate}
+                            onChange={val =>
+                                setInvoiceDetailsField('invoiceDate', val)
+                            }
+                            ariaLabel={t('invoiceDate')}
+                            placeholder="dd/mm/yyyy"
+                        />
+                        {error?.invoiceDate && (
+                            <span className="text-sm text-red-500">
+                                {error.invoiceDate}
+                            </span>
+                        )}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                        <Label htmlFor="due-date">{t('dueDate')}</Label>
+                        <DatePicker
+                            id="due-date"
+                            value={invoiceDetails.dueDate}
+                            onChange={val =>
+                                setInvoiceDetailsField('dueDate', val)
+                            }
+                            aria-label={t('dueDate')}
+                            placeholder="dd/mm/yyyy"
+                            defaultToday={false}
+                        />
+                        {error?.dueDate && (
+                            <span className="text-sm text-red-500">
+                                {error.dueDate}
                             </span>
                         )}
                     </LabelInputContainer>

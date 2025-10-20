@@ -19,13 +19,13 @@ interface PDFInvoiceDocumentProps {
 }
 
 export default function PDFInvoiceDocument({
-                                               invoiceDetails,
-                                               issuer,
-                                               client,
-                                               items,
-                                               totals,
-                                               t,
-                                           }: PDFInvoiceDocumentProps) {
+    invoiceDetails,
+    issuer,
+    client,
+    items,
+    totals,
+    t,
+}: PDFInvoiceDocumentProps) {
     const symbol = totals.currency === 'EUR' ? '€' : totals.currency
     const formatValue = (v: number) =>
         `${v.toFixed(2).replace('.', ',')} ${symbol}`
@@ -155,8 +155,8 @@ export default function PDFInvoiceDocument({
                             +
                             {formatValue(
                                 totals.totalGross -
-                                totals.totalNet -
-                                totals.shipping,
+                                    totals.totalNet -
+                                    totals.shipping,
                             )}
                         </Text>
                     </View>

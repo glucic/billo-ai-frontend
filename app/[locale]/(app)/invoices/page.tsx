@@ -9,6 +9,7 @@ import {
     InvoicePagination,
     PDFInvoicePreview,
 } from '@/components/invoices'
+import { Button } from '@/components/ui'
 
 export default function InvoicesPage() {
     const t = useTranslations('Invoices')
@@ -30,6 +31,10 @@ export default function InvoicesPage() {
     return (
         <main className="flex h-screen text-[var(--color-foreground)] p-6 gap-4 overflow-hidden">
             <div className="flex-1 overflow-x-auto rounded-xl bg-[var(--secondary-background)] shadow-md p-4">
+                <Button variant="primary" href="/invoices/create">
+                    {t('create')}
+                </Button>
+
                 <InvoiceTable
                     invoices={sortedInvoices}
                     loading={loading}

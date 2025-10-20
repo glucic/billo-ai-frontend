@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 import PDFInvoiceDocument from './PDFInvoiceDocument'
 import { Invoice } from '@/types/Invoice'
 import { useTranslations } from 'next-intl'
@@ -16,6 +17,9 @@ interface PDFInvoicePreviewProps {
 
 export default function PDFInvoicePreview({ invoice }: PDFInvoicePreviewProps) {
     const t = useTranslations('Invoices.PDF')
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => setMounted(true), [])
+    if (!mounted) return null
 
     const labels = {
         title: t('title'),
@@ -45,6 +49,7 @@ export default function PDFInvoicePreview({ invoice }: PDFInvoicePreviewProps) {
     return (
         <div className="relative flex flex-col w-full h-full rounded-xl overflow-hidden bg-[var(--background)] text-[var(--foreground)] shadow-sm transition-all duration-300">
             <PDFViewer
+                key={invoice.invoiceDetails.invoiceNumber}
                 width="100%"
                 height="100%"
                 showToolbar={false}

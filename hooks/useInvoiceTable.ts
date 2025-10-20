@@ -40,16 +40,21 @@ export function useInvoiceTable() {
                     bValue = b.client.name
                     break
                 case 'total':
-                    const sumA = a.items.reduce(
-                        (sum, item) => sum + item.rate * item.quantity,
-                        0,
-                    )
-                    const sumB = b.items.reduce(
-                        (sum, item) => sum + item.rate * item.quantity,
-                        0,
-                    )
-                    aValue = sumA
-                    bValue = sumB
+                    // ✅ Prefer backend totals, fallback to computed sum
+                    const totalA =
+                        a.totals?.amountDue ??
+                        a.items.reduce(
+                            (sum, item) => sum + item.rate * item.quantity,
+                            0,
+                        )
+                    const totalB =
+                        b.totals?.amountDue ??
+                        b.items.reduce(
+                            (sum, item) => sum + item.rate * item.quantity,
+                            0,
+                        )
+                    aValue = totalA
+                    bValue = totalB
                     break
             }
 

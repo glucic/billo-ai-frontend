@@ -1,3 +1,13 @@
+import { InvoiceItem } from '@/types/Invoice'
+
+export interface CalculatedTotals {
+    subtotal: number
+    discountAmount: number
+    tax: number
+    total: number
+    amountDue: number
+}
+
 export function calculateTotals({
     items = [],
     taxRate = 0,
@@ -5,10 +15,16 @@ export function calculateTotals({
     shipping = 0,
     deposit = 0,
     payments = 0,
-}: any) {
+}: {
+    items: InvoiceItem[]
+    taxRate?: number
+    discount?: number
+    shipping?: number
+    deposit?: number
+    payments?: number
+}): CalculatedTotals {
     const subtotal = items.reduce(
-        (acc: number, item: any) =>
-            acc + (item.rate || 0) * (item.quantity || 0),
+        (acc, item) => acc + (item.rate || 0) * (item.quantity || 0),
         0,
     )
 

@@ -15,12 +15,11 @@ import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
 
 /* ──────────────────────────────────────────────
- * useInvoiceForm – handles invoice create/edit
+ * useInvoiceForm – create & edit logic
  * ────────────────────────────────────────────── */
 export function useInvoiceForm(initialInvoiceId?: number) {
     const { organisations, fetchOrganisations } = useOrganisations()
 
-    // ─── Invoice Details ──────────────────────────────
     const [invoiceDetails, setInvoiceDetails] = useState<InvoiceDetails>({
         id: initialInvoiceId ?? 0,
         invoiceNumber: 'INV-' + Date.now(),
@@ -29,7 +28,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         reference: '',
     })
 
-    // ─── Issuer & Client ──────────────────────────────
     const [issuerId, setIssuerId] = useState<number | null>(null)
     const [issuer, setIssuer] = useState<Issuer>({
         name: '',
@@ -52,12 +50,10 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         email: '',
     })
 
-    // ─── Items ──────────────────────────────
     const [items, setItems] = useState<InvoiceItem[]>([
         { name: '', description: '', rate: 0, quantity: 1 },
     ])
 
-    // ─── Totals ──────────────────────────────
     const [totals, setTotals] = useState<InvoiceTotals>({
         currency: 'EUR',
         taxRate: 19,
@@ -71,58 +67,31 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         amountDue: 0,
     })
 
-    // ─── Loading / Error ──────────────────────────────
     const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    // ─── Fetch Organisations ──────────────────────────────
+    // Load organisations once
     useEffect(() => {
-        const load = async () => {
-            setLoading(true)
-            try {
-                await fetchOrganisations()
-            } catch (err) {
-                console.error('Failed to load organisations:', err)
-            } finally {
-                setLoading(false)
-            }
-        }
-        load()
+        fetchOrganisations().catch(err =>
+            console.error('Failed to load organisations:', err),
+        )
     }, [fetchOrganisations])
 
-    // ─── Auto-fill Issuer / Client from orgs ──────────────────────────────
+    // Auto-fill issuer / client
     useEffect(() => {
+        if (!issuerId) return
         const org = organisations.find(o => o.id === issuerId)
-        if (org) {
-            setIssuer({
-                name: org.name,
-                street: org.street,
-                city: org.city,
-                region: org.region,
-                zip: org.zip,
-                phone: org.phone,
-                email: org.email,
-            })
-        }
+        if (org) setIssuer(org)
     }, [issuerId, organisations])
 
     useEffect(() => {
+        if (!clientId) return
         const org = organisations.find(o => o.id === clientId)
-        if (org) {
-            setClient({
-                name: org.name,
-                street: org.street,
-                city: org.city,
-                region: org.region,
-                zip: org.zip,
-                phone: org.phone,
-                email: org.email,
-            })
-        }
+        if (org) setClient(org)
     }, [clientId, organisations])
 
-    // ─── Field Setters ──────────────────────────────
+    // Field setters
     const setInvoiceDetailsField = useCallback(
         (field: keyof InvoiceDetails, value: string) => {
             setInvoiceDetails(prev => ({ ...prev, [field]: value }))
@@ -145,14 +114,12 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         [],
     )
 
-    // ─── Items Handling ──────────────────────────────
-    const addItem = () => {
+    // Items
+    const addItem = () =>
         setItems(prev => [
             ...prev,
             { name: '', description: '', rate: 0, quantity: 1 },
         ])
-    }
-
     const updateItem = useCallback(
         (index: number, field: keyof InvoiceItem, value: string | number) => {
             setItems(prev =>
@@ -163,12 +130,10 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         },
         [],
     )
-
-    const removeItem = (index: number) => {
+    const removeItem = (index: number) =>
         setItems(prev => prev.filter((_, i) => i !== index))
-    }
 
-    // ─── Auto-update Totals ──────────────────────────────
+    // Auto totals
     useEffect(() => {
         const calc = calculateTotals({
             items,
@@ -178,7 +143,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             deposit: totals.deposit,
             payments: totals.payments,
         })
-
         setTotals(prev => ({
             ...prev,
             sum: calc.subtotal ?? 0,
@@ -195,12 +159,50 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         totals.payments,
     ])
 
-    // ─── Save Invoice ──────────────────────────────
+    // Load invoice for edit
+    useEffect(() => {
+        if (!initialInvoiceId) return
+        const loadInvoice = async () => {
+            setLoading(true)
+            try {
+                const res = await apiClient.get(
+                    `/api/invoices/${initialInvoiceId}`,
+                )
+                const inv = res.data?.data
+                if (!inv) throw new Error('Invoice not found')
+
+                setInvoiceDetails({
+                    id: inv.id,
+                    invoiceNumber: inv.invoice_number,
+                    invoiceDate: inv.invoice_date?.split('T')[0] || '',
+                    dueDate: inv.due_date?.split('T')[0] || '',
+                    reference: inv.reference ?? '',
+                })
+                setIssuer(inv.issuer ?? {})
+                setClient(inv.client ?? {})
+                setItems(
+                    inv.items?.map((item: any) => ({
+                        name: item.name,
+                        description: item.description ?? '',
+                        rate: Number(item.rate),
+                        quantity: Number(item.quantity),
+                    })) ?? [],
+                )
+                setTotals(inv.totals ?? totals)
+            } catch (err) {
+                console.error('Failed to load invoice:', err)
+                setError('Unable to load invoice data.')
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadInvoice()
+    }, [initialInvoiceId])
+
+    // Save / update
     const saveInvoice = async () => {
         setSaving(true)
         setError(null)
-
-        // recalculate totals before saving
         const calc = calculateTotals({
             items,
             taxRate: totals.taxRate,
@@ -209,7 +211,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             deposit: totals.deposit,
             payments: totals.payments,
         })
-
         const payload: Invoice = {
             invoiceDetails,
             issuer,
@@ -223,15 +224,16 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 amountDue: calc.amountDue ?? 0,
             },
         }
-
         try {
-            const res = await apiClient.post('/api/invoices', payload)
+            const url = initialInvoiceId
+                ? `/api/invoices/${initialInvoiceId}`
+                : '/api/invoices'
+            const method = initialInvoiceId ? 'put' : 'post'
+            const res = await apiClient[method](url, payload)
             return res.data
-        } catch (err: unknown) {
+        } catch (err) {
             console.error(err)
-            const message =
-                err instanceof Error ? err.message : 'Failed to save invoice'
-            setError(message)
+            setError('Failed to save invoice.')
             throw err
         } finally {
             setSaving(false)
@@ -264,24 +266,20 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 }
 
 /* ──────────────────────────────────────────────
- * listInvoices – fetch & manage paginated list
+ * listInvoices – list, pagination, sort, search
  * ────────────────────────────────────────────── */
-interface PaginationMeta {
-    current_page: number
-    last_page: number
-    per_page: number
-    total: number
-}
-
 export function listInvoices() {
     const [invoices, setInvoices] = useState<Invoice[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
     const [page, setPage] = useState(1)
-    const [pagination, setPagination] = useState<PaginationMeta | null>(null)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-
+    const [pagination, setPagination] = useState<{
+        current_page: number
+        last_page: number
+        per_page: number
+        total: number
+    } | null>(null)
     const [sortBy, setSortBy] = useState<
         | 'invoice_number'
         | 'invoice_date'
@@ -290,47 +288,26 @@ export function listInvoices() {
         | 'total'
     >('created_at')
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-
     const [searchTerm, setSearchTerm] = useState('')
 
-    const mapApiInvoice = (apiInvoice: any): Invoice => {
-        const invoiceDetails: InvoiceDetails = {
+    const mapApiInvoice = (apiInvoice: any): Invoice => ({
+        invoiceDetails: {
             id: apiInvoice.id,
             invoiceNumber: apiInvoice.invoice_number,
             invoiceDate: apiInvoice.invoice_date,
             dueDate: apiInvoice.due_date ?? '',
             reference: apiInvoice.reference ?? '',
-        }
-
-        const issuer: Issuer = apiInvoice.issuer ?? {
-            name: '',
-            street: '',
-            city: '',
-            region: '',
-            zip: '',
-            phone: '',
-            email: '',
-        }
-
-        const client: Client = apiInvoice.client ?? {
-            name: '',
-            street: '',
-            city: '',
-            region: '',
-            zip: '',
-            phone: '',
-            email: '',
-        }
-
-        const items: InvoiceItem[] =
+        },
+        issuer: apiInvoice.issuer ?? {},
+        client: apiInvoice.client ?? {},
+        items:
             apiInvoice.items?.map((item: any) => ({
                 name: item.name,
                 description: item.description ?? '',
                 rate: Number(item.rate),
                 quantity: Number(item.quantity),
-            })) ?? []
-
-        const totals: InvoiceTotals = apiInvoice.totals ?? {
+            })) ?? [],
+        totals: apiInvoice.totals ?? {
             currency: 'EUR',
             taxRate: 19,
             discount: 0,
@@ -341,10 +318,8 @@ export function listInvoices() {
             totalNet: 0,
             totalGross: 0,
             amountDue: 0,
-        }
-
-        return { invoiceDetails, issuer, client, items, totals }
-    }
+        },
+    })
 
     const fetchInvoices = useCallback(async () => {
         setLoading(true)
@@ -359,22 +334,19 @@ export function listInvoices() {
                     search: searchTerm,
                 },
             })
-
-            const data = res.data.data
-            const mappedInvoices = (data.data || []).map((inv: any) =>
-                mapApiInvoice(inv),
-            )
-
-            setInvoices(mappedInvoices)
+            const data = res.data?.data
+            if (!data) throw new Error('Invalid API response')
+            const mapped = (data.data || []).map(mapApiInvoice)
+            setInvoices(mapped)
             setPagination({
                 current_page: data.current_page,
                 last_page: data.last_page,
                 per_page: data.per_page,
                 total: data.total,
             })
-        } catch (err: any) {
+        } catch (err) {
             console.error(err)
-            setError(err.response?.data?.message || 'Failed to load invoices.')
+            setError('Failed to load invoices.')
         } finally {
             setLoading(false)
         }
