@@ -5,19 +5,20 @@ import { WizardStepTransition } from './WizardStepTransition'
 import { Label, InputError } from '@/components/ui'
 import { TextAreaField } from '@/components/ui/TextArea'
 import { useTranslations } from 'next-intl'
+import type { BackendErrors } from '@/lib/errorUtils'
 
 export function StepCompanyAbout({
     value,
     onChange,
     step,
-    error,
+    errors,
 }: {
     value: string
     onChange: (val: string) => void
     step: number
-    error?: string[]
+    errors?: BackendErrors
 }) {
-    const t = useTranslations('Auth.GettingStarted.StepCompanyAbout')
+    const t = useTranslations('Organisation.GettingStarted.StepCompanyAbout')
 
     return (
         <WizardStepTransition step={step}>
@@ -33,7 +34,9 @@ export function StepCompanyAbout({
                 placeholder={t('placeholder')}
                 className="w-120 h-32 resize-none"
             />
-            {error && <InputError messages={error} className="mt-2" />}
+            {errors?.description && (
+                <InputError messages={errors.description} className="mt-2" />
+            )}
         </WizardStepTransition>
     )
 }

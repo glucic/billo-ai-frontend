@@ -9,19 +9,20 @@ import {
 } from '@/components/ui'
 import { WizardStepTransition } from './WizardStepTransition'
 import { useTranslations } from 'next-intl'
+import type { BackendErrors } from '@/lib/errorUtils'
 
 export function StepCompanyName({
     value,
     onChange,
     step,
-    error,
+    errors,
 }: {
     value: string
     onChange: (val: string) => void
     step: number
-    error?: string[]
+    errors?: BackendErrors
 }) {
-    const t = useTranslations('Auth.GettingStarted.StepCompanyName')
+    const t = useTranslations('Organisation.GettingStarted.StepCompanyName')
 
     return (
         <WizardStepTransition step={step}>
@@ -38,7 +39,7 @@ export function StepCompanyName({
                     placeholder={t('placeholder')}
                     className="text-lg p-5 w-full"
                 />
-                {error && <InputError messages={error} />}
+                {errors?.name && <InputError messages={errors.name} />}
             </LabelInputContainer>
         </WizardStepTransition>
     )

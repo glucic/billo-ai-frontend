@@ -8,7 +8,10 @@ import {
     StepCompanyDetails,
 } from '@/components/getting-started'
 import { StatefulButton } from '@/components/ui'
-import { OrganisationWizardProvider, useOrganisationWizard } from '@/context/GettingStartedWizardContext'
+import {
+    OrganisationWizardProvider,
+    useOrganisationWizard,
+} from '@/context/GettingStartedWizardContext'
 
 function GettingStartedContent() {
     const {
@@ -23,7 +26,7 @@ function GettingStartedContent() {
         setCompanyDetails,
         errors,
         isLoading,
-        handleSubmit
+        handleSubmit,
     } = useOrganisationWizard()
 
     return (
@@ -37,7 +40,7 @@ function GettingStartedContent() {
                             value={companyName}
                             onChange={setCompanyName}
                             step={step}
-                            error={errors.name}
+                            errors={{ name: errors.name }}
                         />
                     )}
                     {step === 1 && (
@@ -45,7 +48,7 @@ function GettingStartedContent() {
                             value={companyDescription}
                             onChange={setCompanyDescription}
                             step={step}
-                            error={errors.description}
+                            errors={{ description: errors.description }}
                         />
                     )}
                     {step === 2 && (
@@ -58,7 +61,10 @@ function GettingStartedContent() {
                             zip={companyDetails.zip}
                             region={companyDetails.region}
                             onChange={(field, value) => {
-                                const mapping: Record<string, string> = {
+                                const mapping: Record<
+                                    string,
+                                    keyof typeof companyDetails
+                                > = {
                                     company_email: 'email',
                                     company_phone: 'phone',
                                     workers: 'employeeCount',
@@ -67,7 +73,11 @@ function GettingStartedContent() {
                                     zip: 'zip',
                                     region: 'region',
                                 }
-                                setCompanyDetails(mapping[field] || field, value)
+
+                                const mappedField =
+                                    mapping[field] ||
+                                    (field as keyof typeof companyDetails)
+                                setCompanyDetails(mappedField, value)
                             }}
                             step={step}
                             errors={errors}
@@ -77,7 +87,9 @@ function GettingStartedContent() {
 
                 <div className="flex space-x-4 mt-8">
                     {step > 0 && (
-                        <StatefulButton onClick={previousStep} loading={isLoading}>
+                        <StatefulButton
+                            onClick={previousStep}
+                            loading={isLoading}>
                             Back
                         </StatefulButton>
                     )}
@@ -87,7 +99,9 @@ function GettingStartedContent() {
                         </StatefulButton>
                     )}
                     {step === 2 && (
-                        <StatefulButton onClick={handleSubmit} loading={isLoading}>
+                        <StatefulButton
+                            onClick={handleSubmit}
+                            loading={isLoading}>
                             Finish
                         </StatefulButton>
                     )}

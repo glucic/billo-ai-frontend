@@ -39,19 +39,6 @@ type ResendEmailVerificationProps = {
     setStatus: (status: string | null) => void
 }
 
-type CreateOrganisationProps = {
-    name: string
-    description: string
-    email: string
-    phone: string
-    employee_count: number
-    street?: string
-    city?: string
-    zip?: string
-    region?: string
-    setErrors: (errors: BackendErrors) => void
-}
-
 export const useAuth = ({
     middleware,
     redirectIfAuthenticated,
@@ -154,20 +141,6 @@ export const useAuth = ({
         router.push('/login')
     }, [router, mutateUser])
 
-    const createOrganisation = async (props: CreateOrganisationProps) =>
-        handleAuthRequest(
-            async () => {
-                const response = await apiClient.post(
-                    '/api/organisations',
-                    props,
-                )
-                return response.data
-            },
-            props.setErrors,
-            undefined,
-            'Organisation',
-        )
-
     React.useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user) {
             router.push(redirectIfAuthenticated)
@@ -194,6 +167,5 @@ export const useAuth = ({
         resetPassword,
         resendEmailVerification,
         logout,
-        createOrganisation,
     }
 }

@@ -1,6 +1,19 @@
+'use client'
+
 import React, { createContext, useContext, useState } from 'react'
-import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/navigation'
+import { useOrganisations } from '@/hooks/useOrganisations'
+import type { BackendErrors } from '@/lib/errorUtils'
+
+const defaultCompanyDetails = {
+    email: '',
+    phone: '',
+    employeeCount: 1,
+    street: '',
+    city: '',
+    zip: '',
+    region: '',
+}
 
 type OrganisationWizardContextType = {
     step: number
@@ -10,17 +23,12 @@ type OrganisationWizardContextType = {
     setCompanyName: (name: string) => void
     companyDescription: string
     setCompanyDescription: (description: string) => void
-    companyDetails: {
-        email: string
-        phone: string
-        employeeCount: number
-        street: string
-        city: string
-        zip: string
-        region: string
-    }
-    setCompanyDetails: (field: string, value: string | number) => void
-    errors: Record<string, string[]>
+    companyDetails: typeof defaultCompanyDetails
+    setCompanyDetails: (
+        field: keyof typeof defaultCompanyDetails,
+        value: string | number,
+    ) => void
+    errors: BackendErrors
     isLoading: boolean
     handleSubmit: () => Promise<void>
 }
@@ -37,35 +45,24 @@ export function OrganisationWizardProvider({
     const [step, setStep] = useState(0)
     const [companyName, setCompanyName] = useState('')
     const [companyDescription, setCompanyDescription] = useState('')
-    const [companyDetails, setCompanyDetails] = useState({
-        email: '',
-        phone: '',
-        employeeCount: 1,
-        street: '',
-        city: '',
-        zip: '',
-        region: '',
-    })
-    const [errors, setErrors] = useState<Record<string, string[]>>({})
-    const [isLoading, setIsLoading] = useState(false)
+    const [companyDetails, setCompanyDetails] = useState(defaultCompanyDetails)
 
-    const { createOrganisation } = useAuth()
+    const { handleCreate, fieldErrors, loading } = useOrganisations()
     const router = useRouter()
 
     const nextStep = () => setStep(prev => prev + 1)
-    const previousStep = () => setStep(prev => prev - 1)
+    const previousStep = () => setStep(prev => Math.max(prev - 1, 0))
 
-    const handleDetailsChange = (field: string, value: string | number) => {
-        setCompanyDetails(prev => ({
-            ...prev,
-            [field]: value,
-        }))
+    const handleDetailsChange = (
+        field: keyof typeof defaultCompanyDetails,
+        value: string | number,
+    ) => {
+        setCompanyDetails(prev => ({ ...prev, [field]: value }))
     }
 
     const handleSubmit = async () => {
-        setIsLoading(true)
         try {
-            await createOrganisation({
+            await handleCreate({
                 name: companyName,
                 description: companyDescription,
                 email: companyDetails.email,
@@ -75,17 +72,14 @@ export function OrganisationWizardProvider({
                 city: companyDetails.city,
                 zip: companyDetails.zip,
                 region: companyDetails.region,
-                setErrors,
             })
             router.push('/dashboard')
         } catch (error) {
             console.error('Failed to create organisation:', error)
-        } finally {
-            setIsLoading(false)
         }
     }
 
-    const value = {
+    const value: OrganisationWizardContextType = {
         step,
         nextStep,
         previousStep,
@@ -95,8 +89,8 @@ export function OrganisationWizardProvider({
         setCompanyDescription,
         companyDetails,
         setCompanyDetails: handleDetailsChange,
-        errors,
-        isLoading,
+        errors: fieldErrors,
+        isLoading: loading,
         handleSubmit,
     }
 

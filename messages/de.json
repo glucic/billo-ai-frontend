@@ -63,14 +63,58 @@
       "members": "Mitglieder"
     },
     "errors": {
-      "loadFailed": "Fehler beim Laden der Organisationen",
-      "saveFailed": "Fehler beim Speichern der Änderungen",
-      "deleteFailed": "Fehler beim Löschen der Organisation",
-      "leaveFailed": "Fehler beim Verlassen der Organisation",
-      "joinFailed": "Fehler beim Beitreten zur Organisation"
+      "loadFailed": "Fehler beim Laden der Organisationen.",
+      "saveFailed": "Fehler beim Speichern der Änderungen.",
+      "deleteFailed": "Fehler beim Löschen der Organisation.",
+      "leaveFailed": "Fehler beim Verlassen der Organisation.",
+      "joinFailed": "Fehler beim Beitreten zur Organisation.",
+      "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      "nameRequired": "Der Name ist erforderlich.",
+      "nameTooLong": "Der Name darf maximal 255 Zeichen lang sein.",
+      "addressTooLong": "Die Adresse darf maximal 255 Zeichen lang sein.",
+      "streetTooLong": "Die Straße darf maximal 255 Zeichen lang sein.",
+      "cityTooLong": "Die Stadt darf maximal 255 Zeichen lang sein.",
+      "zipTooLong": "Die Postleitzahl darf maximal 20 Zeichen lang sein.",
+      "regionTooLong": "Das Bundesland darf maximal 255 Zeichen lang sein.",
+      "phoneTooLong": "Die Telefonnummer darf maximal 20 Zeichen lang sein.",
+      "phoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein.",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "emailTooLong": "Die E-Mail darf maximal 255 Zeichen lang sein.",
+      "descriptionTooLong": "Die Beschreibung darf maximal 1000 Zeichen lang sein.",
+      "employee_countInvalid": "Die Mitarbeiteranzahl muss eine gültige Zahl sein.",
+      "employee_countTooShort": "Die Mitarbeiteranzahl muss mindestens 1 betragen.",
+      "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
     },
     "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?",
-    "notFound": "Keine Organisationen vorhanden."
+    "notFound": "Keine Organisationen vorhanden.",
+    "GettingStarted": {
+      "StepCompanyName": {
+        "label": "Wie lautet der Name Ihres Unternehmens?",
+        "placeholder": "Geben Sie den Firmennamen ein"
+      },
+      "StepCompanyAbout": {
+        "label": "Beschreiben Sie kurz Ihr Unternehmen",
+        "placeholder": "Beschreiben Sie Ihr Unternehmen in ein bis zwei Sätzen"
+      },
+      "StepCompanyDetails": {
+        "title": "Unternehmensdetails",
+        "emailLabel": "E-Mail-Adresse",
+        "emailPlaceholder": "z. B. kontakt@unternehmen.de",
+        "phoneLabel": "Telefonnummer",
+        "phonePlaceholder": "z. B. +49 123 456789",
+        "addressSection": "Adresse",
+        "streetLabel": "Straße",
+        "streetPlaceholder": "z. B. Musterstraße 1",
+        "zipLabel": "Postleitzahl",
+        "zipPlaceholder": "z. B. 12345",
+        "cityLabel": "Stadt",
+        "cityPlaceholder": "z. B. Berlin",
+        "regionLabel": "Bundesland / Region",
+        "regionPlaceholder": "z. B. Bayern",
+        "workersLabel": "Anzahl der Mitarbeiter",
+        "workersPlaceholder": "z. B. 25"
+      }
+    }
   },
   "Auth": {
     "Login": {

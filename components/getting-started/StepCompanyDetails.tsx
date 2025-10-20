@@ -9,6 +9,7 @@ import {
     InputError,
 } from '@/components/ui'
 import { useTranslations } from 'next-intl'
+import type { BackendErrors } from '@/lib/errorUtils'
 
 export function StepCompanyDetails({
     company_email,
@@ -31,9 +32,74 @@ export function StepCompanyDetails({
     region: string
     onChange: (field: string, value: string) => void
     step: number
-    errors?: Record<string, string[]>
+    errors?: BackendErrors
 }) {
-    const t = useTranslations('Auth.GettingStarted.StepCompanyDetails')
+    const t = useTranslations('Organisation.GettingStarted.StepCompanyDetails')
+
+    const fields: {
+        id: string
+        labelKey: string
+        placeholderKey: string
+        type?: string
+        colSpan?: string
+    }[] = [
+        {
+            id: 'company_email',
+            labelKey: 'emailLabel',
+            placeholderKey: 'emailPlaceholder',
+            type: 'email',
+        },
+        {
+            id: 'company_phone',
+            labelKey: 'phoneLabel',
+            placeholderKey: 'phonePlaceholder',
+        },
+        {
+            id: 'street',
+            labelKey: 'streetLabel',
+            placeholderKey: 'streetPlaceholder',
+            colSpan: 'sm:col-span-2',
+        },
+        {
+            id: 'zip',
+            labelKey: 'zipLabel',
+            placeholderKey: 'zipPlaceholder',
+        },
+        {
+            id: 'city',
+            labelKey: 'cityLabel',
+            placeholderKey: 'cityPlaceholder',
+        },
+        {
+            id: 'region',
+            labelKey: 'regionLabel',
+            placeholderKey: 'regionPlaceholder',
+            colSpan: 'sm:col-span-2',
+        },
+        {
+            id: 'workers',
+            labelKey: 'workersLabel',
+            placeholderKey: 'workersPlaceholder',
+            type: 'number',
+            colSpan: 'sm:col-span-2',
+        },
+    ]
+
+    const values: Record<string, string | number> = {
+        company_email,
+        company_phone,
+        street,
+        city,
+        zip,
+        region,
+        workers,
+    }
+
+    const errorMap: Record<string, keyof BackendErrors> = {
+        company_email: 'email',
+        company_phone: 'phone',
+        workers: 'employee_count',
+    }
 
     return (
         <WizardStepTransition step={step}>
@@ -42,94 +108,34 @@ export function StepCompanyDetails({
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl mx-auto">
-                <LabelInputContainer className="sm:col-span-1">
-                    <Label htmlFor="company_email">{t('emailLabel')}</Label>
-                    <InputField
-                        id="company_email"
-                        type="email"
-                        value={company_email}
-                        onChange={e =>
-                            onChange('company_email', e.target.value)
-                        }
-                        placeholder={t('emailPlaceholder')}
-                    />
-                    {errors?.email && <InputError messages={errors.email} />}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="sm:col-span-1">
-                    <Label htmlFor="company_phone">{t('phoneLabel')}</Label>
-                    <InputField
-                        id="company_phone"
-                        value={company_phone}
-                        onChange={e =>
-                            onChange('company_phone', e.target.value)
-                        }
-                        placeholder={t('phonePlaceholder')}
-                    />
-                    {errors?.phone && <InputError messages={errors.phone} />}
-                </LabelInputContainer>
-
-                <h2 className="text-lg font-semibold mt-4 col-span-2">
-                    {t('addressSection')}
-                </h2>
-
-                <LabelInputContainer className="sm:col-span-2">
-                    <Label htmlFor="street">{t('streetLabel')}</Label>
-                    <InputField
-                        id="street"
-                        value={street}
-                        onChange={e => onChange('street', e.target.value)}
-                        placeholder={t('streetPlaceholder')}
-                    />
-                    {errors?.street && <InputError messages={errors.street} />}
-                </LabelInputContainer>
-
-                <LabelInputContainer>
-                    <Label htmlFor="zip">{t('zipLabel')}</Label>
-                    <InputField
-                        id="zip"
-                        value={zip}
-                        onChange={e => onChange('zip', e.target.value)}
-                        placeholder={t('zipPlaceholder')}
-                    />
-                    {errors?.zip && <InputError messages={errors.zip} />}
-                </LabelInputContainer>
-
-                <LabelInputContainer>
-                    <Label htmlFor="city">{t('cityLabel')}</Label>
-                    <InputField
-                        id="city"
-                        value={city}
-                        onChange={e => onChange('city', e.target.value)}
-                        placeholder={t('cityPlaceholder')}
-                    />
-                    {errors?.city && <InputError messages={errors.city} />}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="sm:col-span-2">
-                    <Label htmlFor="region">{t('regionLabel')}</Label>
-                    <InputField
-                        id="region"
-                        value={region}
-                        onChange={e => onChange('region', e.target.value)}
-                        placeholder={t('regionPlaceholder')}
-                    />
-                    {errors?.region && <InputError messages={errors.region} />}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="sm:col-span-2">
-                    <Label htmlFor="workers">{t('workersLabel')}</Label>
-                    <InputField
-                        id="workers"
-                        type="number"
-                        value={workers}
-                        onChange={e => onChange('workers', e.target.value)}
-                        placeholder={t('workersPlaceholder')}
-                    />
-                    {errors?.employee_count && (
-                        <InputError messages={errors.employee_count} />
-                    )}
-                </LabelInputContainer>
+                {fields.map(
+                    ({ id, labelKey, placeholderKey, type, colSpan }) => (
+                        <LabelInputContainer
+                            key={id}
+                            className={colSpan ? colSpan : 'sm:col-span-1'}>
+                            <Label htmlFor={id}>{t(labelKey)}</Label>
+                            <InputField
+                                id={id}
+                                type={type || 'text'}
+                                value={values[id]?.toString() ?? ''}
+                                onChange={e => onChange(id, e.target.value)}
+                                placeholder={t(placeholderKey)}
+                            />
+                            {errors?.[
+                                errorMap[id] || (id as keyof BackendErrors)
+                            ] && (
+                                <InputError
+                                    messages={
+                                        errors[
+                                            errorMap[id] ||
+                                                (id as keyof BackendErrors)
+                                        ]
+                                    }
+                                />
+                            )}
+                        </LabelInputContainer>
+                    ),
+                )}
             </div>
         </WizardStepTransition>
     )
