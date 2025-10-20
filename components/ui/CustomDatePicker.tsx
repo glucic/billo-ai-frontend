@@ -7,11 +7,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 interface StyledDatePickerProps {
     id: string
-    value?: string
+    value?: string | number
     onChange: (val: string) => void
     ariaLabel?: string
     placeholder?: string
     defaultToday?: boolean
+    error?: boolean
 }
 
 export function CustomDatePicker({
@@ -21,6 +22,7 @@ export function CustomDatePicker({
     ariaLabel,
     placeholder,
     defaultToday = false,
+    error = false,
 }: StyledDatePickerProps) {
     const radius = 0
     const [visible, setVisible] = React.useState(false)
@@ -37,10 +39,9 @@ export function CustomDatePicker({
         mouseY.set(clientY - top)
     }
 
-    const formatInputValue = (input: string) => {
-        // Remove non-digits
+    const formatInputValue = (input?: string) => {
+        if (!input) return ''
         const digits = input.replace(/\D/g, '')
-
         if (digits.length <= 2) return digits
         if (digits.length <= 4)
             return `${digits.slice(0, 2)}/${digits.slice(2)}`
@@ -50,7 +51,7 @@ export function CustomDatePicker({
     }
 
     const selectedDate =
-        value && !isNaN(Date.parse(value))
+        value && !isNaN(Date.parse(String(value)))
             ? new Date(value)
             : defaultToday
               ? new Date()
@@ -60,12 +61,12 @@ export function CustomDatePicker({
         <motion.div
             style={{
                 background: useMotionTemplate`
-          radial-gradient(
-            ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-            var(--color-accent-light),
-            transparent 90%
-          )
-        `,
+                    radial-gradient(
+                      ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
+                      var(--color-accent-light),
+                      transparent 90%
+                    )
+                `,
             }}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setVisible(true)}
@@ -75,11 +76,18 @@ export function CustomDatePicker({
                 <DatePicker
                     id={id}
                     selected={selectedDate}
-                    onChange={date => onChange(date ? date.toISOString() : '')}
+                    onChange={date => {
+                        if (date instanceof Date && !isNaN(date.getTime())) {
+                            onChange(date.toISOString())
+                        } else {
+                            onChange('')
+                        }
+                    }}
                     onChangeRaw={e => {
-                        const target = e?.target as HTMLInputElement
-                        const formatted = formatInputValue(target.value)
-                        target.value = formatted
+                        const target = e?.target as HTMLInputElement | undefined
+                        const rawValue = target?.value || ''
+                        const formatted = formatInputValue(rawValue)
+                        if (target) target.value = formatted
                         const [day, month, year] = formatted.split('/')
                         if (day && month && year?.length === 4) {
                             const parsed = new Date(
@@ -96,9 +104,9 @@ export function CustomDatePicker({
                     yearDropdownItemNumber={70}
                     todayButton="Today"
                     placeholderText={placeholder || 'dd/mm/yyyy'}
-                    className="flex h-[var(--input-height)] w-full
+                    className={`flex h-[var(--input-height)] w-full
                         rounded-[var(--input-radius)]
-                        border border-[var(--input-border)]
+                        border
                         bg-[var(--input-bg)]/70
                         backdrop-blur-[var(--input-blur)]
                         px-[var(--input-padding-x)] py-[var(--input-padding-y)]
@@ -107,10 +115,17 @@ export function CustomDatePicker({
                         shadow-[var(--input-shadow)]
                         transition-all duration-300
                         hover:bg-[var(--accent-glow)]
-                        focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]
-                        focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-background)]
+                        focus-visible:ring-2
+                        focus-visible:ring-[var(--color-accent)]
+                        focus-visible:ring-offset-1
+                        focus-visible:ring-offset-[var(--color-background)]
                         focus-visible:outline-none
-                        disabled:cursor-not-allowed disabled:opacity-50"
+                        disabled:cursor-not-allowed disabled:opacity-50
+                        ${
+                            error
+                                ? 'border-[var(--error)] focus-visible:ring-[var(--error)] hover:bg-[var(--error)]/10'
+                                : 'border-[var(--input-border)]'
+                        }`}
                     popperClassName="z-[var(--z-dropdown)]"
                     calendarClassName="glass-calendar"
                     dayClassName={(date: Date) =>
@@ -121,6 +136,7 @@ export function CustomDatePicker({
                     popperPlacement="bottom-start"
                     portalId="datepicker-portal"
                     aria-label={ariaLabel}
+                    aria-invalid={error}
                 />
             </div>
         </motion.div>

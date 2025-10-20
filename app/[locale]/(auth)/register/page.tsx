@@ -5,23 +5,14 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { IconBrandGoogle } from '@tabler/icons-react'
-
 import { useAuth } from '@/hooks/auth'
 import { RegisterForm } from '@/components/auth/register/RegisterFormComponent'
 import { RegisterHeader } from '@/components/auth/register/RegisterHeaderComponent'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
-
-type Errors = {
-    first_name?: string[]
-    last_name?: string[]
-    email?: string[]
-    password?: string[]
-    confirmPassword?: string[]
-    general?: string[]
-}
+import type { BackendErrors } from '@/lib/errorUtils'
 
 export default function RegisterPage() {
-    const router = useRouter()
+    useRouter()
     const t = useTranslations('Auth.Register')
 
     const { register: registerUser } = useAuth({
@@ -30,7 +21,7 @@ export default function RegisterPage() {
     })
 
     const [loading, setLoading] = useState(false)
-    const [errors, setErrors] = useState<Errors>({})
+    const [errors, setErrors] = useState<BackendErrors>({})
     const [status, setStatus] = useState<string | null>(null)
 
     const handleRegister = async ({
@@ -68,7 +59,7 @@ export default function RegisterPage() {
     return (
         <main
             id="register"
-            className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4">
+            className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4 text-[var(--color-foreground)]">
             <RegisterHeader />
 
             <RegisterForm
@@ -77,28 +68,34 @@ export default function RegisterPage() {
                 errors={errors}
             />
 
-            {status && <p className="text-green-600 mt-2">{status}</p>}
+            {status && (
+                <p className="text-[var(--color-success)] mt-3">{status}</p>
+            )}
 
             <div className="flex items-center my-6 max-w-md w-full">
-                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />
-                <span className="mx-4 text-gray-400 text-sm">{t('or')}</span>
-                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />
+                <div className="flex-grow h-px bg-[var(--divider-light)]" />
+                <span className="mx-4 text-[var(--text-muted)] text-sm">
+                    {t('or')}
+                </span>
+                <div className="flex-grow h-px bg-[var(--divider-light)]" />
             </div>
 
             <div className="space-y-3 max-w-md w-full">
                 <SocialLoginButton
-                    icon={<IconBrandGoogle className="h-5 w-5 text-red-500" />}
+                    icon={
+                        <IconBrandGoogle className="h-5 w-5 text-[var(--error)]" />
+                    }
                     label={t('signUpGoogle')}
                     onClick={() => alert('Google sign-up not implemented')}
                     disabled={loading}
                 />
             </div>
 
-            <div className="text-center mt-6 text-sm text-[var(--color-foreground)] max-w-md">
+            <div className="text-center mt-6 text-sm text-[var(--text-muted)] max-w-md">
                 {t('haveAccount')}{' '}
                 <Link
                     href="/login"
-                    className="text-[var(--color-accent)] hover:underline font-semibold">
+                    className="text-[var(--color-accent)] hover:underline font-semibold transition-colors">
                     {t('login')}
                 </Link>
             </div>

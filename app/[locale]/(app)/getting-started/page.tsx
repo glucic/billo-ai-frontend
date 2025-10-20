@@ -12,6 +12,7 @@ import {
     OrganisationWizardProvider,
     useOrganisationWizard,
 } from '@/context/GettingStartedWizardContext'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 function GettingStartedContent() {
     const {
@@ -90,12 +91,12 @@ function GettingStartedContent() {
                         <StatefulButton
                             onClick={previousStep}
                             loading={isLoading}>
-                            Back
+                            <ArrowLeft />
                         </StatefulButton>
                     )}
                     {step < 2 && (
                         <StatefulButton onClick={nextStep} loading={isLoading}>
-                            Next
+                            <ArrowRight />
                         </StatefulButton>
                     )}
                     {step === 2 && (

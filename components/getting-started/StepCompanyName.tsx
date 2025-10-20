@@ -38,6 +38,7 @@ export function StepCompanyName({
                     onChange={e => onChange(e.target.value)}
                     placeholder={t('placeholder')}
                     className="text-lg p-5 w-full"
+                    error={Boolean(errors?.name)}
                 />
                 {errors?.name && <InputError messages={errors.name} />}
             </LabelInputContainer>

@@ -70,6 +70,9 @@
       "joinFailed": "Fehler beim Beitreten zur Organisation.",
       "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
       "nameRequired": "Der Name ist erforderlich.",
+      "streetRequired": "Die Straße eingabe ist erforderlich.",
+      "zipRequired": "Die Postleitzahl eingabe ist erforderlich.",
+      "cityRequired": "Die Stadt eingabe ist erforderlich.",
       "nameTooLong": "Der Name darf maximal 255 Zeichen lang sein.",
       "addressTooLong": "Die Adresse darf maximal 255 Zeichen lang sein.",
       "streetTooLong": "Die Straße darf maximal 255 Zeichen lang sein.",
@@ -195,33 +198,31 @@
     }
   },
   "Invoices": {
-    "searchPlaceholder": "Rechnungen durchsuchen...",
-    "selectIssuer": "Aussteller auswählen",
+    "actions": "Aktionen",
+    "cancel": "Abbrechen",
     "create": "Rechnung erstellen",
+    "editMode": "Bearbeitungsmodus",
+    "hideToolbar": "Symbolleiste ausblenden",
     "loading": "Rechnungen werden geladen...",
     "noInvoices": "Keine Rechnungen gefunden",
-    "rowsPerPage": "Zeilen pro Seite",
     "of": "von",
     "page": "Seite",
+    "previewMode": "Vorschaumodus",
+    "rowsPerPage": "Zeilen pro Seite",
+    "save": "Rechnung speichern",
+    "update": "Rechnung bearbeiten",
+    "saveSuccess": "Rechnung erfolgreich gespeichert!",
+    "searchPlaceholder": "Rechnungen durchsuchen...",
+    "selectIssuer": "Aussteller auswählen",
+    "showToolbar": "Symbolleiste anzeigen",
     "sort": {
-      "created": "Erstellungsdatum",
-      "number": "Rechnungsnummer",
-      "date": "Rechnungsdatum",
       "asc": "Aufsteigend",
-      "desc": "Absteigend"
-    },
-    "columns": {
-      "number": "Nummer",
-      "date": "Datum",
-      "client": "Kunde",
-      "total": "Gesamtbetrag",
-      "actions": "Aktionen"
+      "created": "Erstellungsdatum",
+      "date": "Rechnungsdatum",
+      "desc": "Absteigend",
+      "number": "Rechnungsnummer"
     },
     "title": "Rechnungen",
-    "editMode": "Bearbeitungsmodus",
-    "previewMode": "Vorschaumodus",
-    "showToolbar": "Symbolleiste anzeigen",
-    "hideToolbar": "Symbolleiste ausblenden",
     "PDF": {
       "title": "Rechnung",
       "invoiceNumber": "Rechnungsnummer",
@@ -246,7 +247,6 @@
       "payments": "Zahlungen",
       "amountDue": "Offener Betrag"
     },
-    "saveSuccess": "Rechnung erfolgreich gespeichert!",
     "InvoiceDetails": {
       "title": "Rechnungsdetails",
       "invoiceNumber": "Rechnungsnummer",
@@ -285,8 +285,54 @@
       "payments": "Zahlungen",
       "amountDue": "Offener Betrag"
     },
-    "save": "Rechnung speichern",
-    "cancel": "Abbrechen"
+    "errors": {
+      "general": "Es ist ein unerwarteter Fehler aufgetreten.",
+      "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
+      "invalidCredentials": "Die angegebenen Zugangsdaten sind ungültig.",
+      "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
+      "invoiceDetails": {
+        "invoiceNumberRequired": "Die Rechnungsnummer ist erforderlich.",
+        "invoiceNumberInvalid": "Die Rechnungsnummer ist ungültig.",
+        "invoiceDateRequired": "Das Rechnungsdatum ist erforderlich.",
+        "invoiceDateInvalid": "Das Rechnungsdatum ist ungültig.",
+        "dueDateBefore": "Das Fälligkeitsdatum darf nicht vor dem Rechnungsdatum liegen.",
+        "dueDateInvalid": "Das Fälligkeitsdatum ist ungültig.",
+        "referenceInvalid": "Die Referenz ist ungültig."
+      },
+      "issuer": {
+        "nameRequired": "Der Absendername ist erforderlich.",
+        "streetRequired": "Die Straße des Absenders ist erforderlich.",
+        "cityRequired": "Die Stadt des Absenders ist erforderlich.",
+        "zipRequired": "Die Postleitzahl des Absenders ist erforderlich.",
+        "emailRequired": "Die E-Mail-Adresse des Absenders ist erforderlich.",
+        "emailInvalid": "Die E-Mail-Adresse des Absenders ist ungültig.",
+        "phoneInvalid": "Die Telefonnummer des Absenders ist ungültig."
+      },
+      "client": {
+        "nameRequired": "Der Kundenname ist erforderlich.",
+        "emailInvalid": "Die E-Mail-Adresse des Kunden ist ungültig.",
+        "phoneInvalid": "Die Telefonnummer des Kunden ist ungültig."
+      },
+      "items": {
+        "required": "Mindestens eine Position ist erforderlich.",
+        "nameRequired": "Der Name der Position ist erforderlich.",
+        "rateRequired": "Der Preis der Position ist erforderlich.",
+        "rateInvalid": "Der Preis der Position muss eine Zahl sein.",
+        "quantityRequired": "Die Menge ist erforderlich.",
+        "quantityInvalid": "Die Menge muss eine positive Zahl sein."
+      },
+      "totals": {
+        "currencyRequired": "Die Währung ist erforderlich.",
+        "currencyInvalid": "Die Währung ist ungültig.",
+        "taxRateInvalid": "Der Steuersatz muss zwischen 0 und 100 liegen.",
+        "sumInvalid": "Die Summe muss eine positive Zahl sein.",
+        "totalNetInvalid": "Der Nettobetrag muss eine positive Zahl sein.",
+        "totalGrossInvalid": "Der Bruttobetrag muss eine positive Zahl sein.",
+        "amountDueInvalid": "Der offene Betrag muss eine positive Zahl sein."
+      },
+      "saveFailed": "Beim Speichern der Rechnung ist ein Fehler aufgetreten.",
+      "loadFailed": "Die Rechnung konnte nicht geladen werden."
+    }
   },
   "Clients": {
     "title": "Kunden",
@@ -315,5 +361,8 @@
       "status": "Status",
       "date": "Hinzugefügt am"
     }
+  },
+  "GlobalErrors": {
+    "unknownError": "Es ist ein unerwarteter Fehler aufgetreten."
   }
 }

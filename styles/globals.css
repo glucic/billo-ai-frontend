@@ -50,6 +50,8 @@
     --border-color: rgba(255, 255, 255, 0.1);
     --border-light: rgba(0, 0, 0, 0.05);
     --divider: rgba(255, 255, 255, 0.08);
+    --divider-light: #4a5565;
+
 
     --text-muted: rgba(255, 255, 255, 0.6);
     --text-heading: var(--foreground);

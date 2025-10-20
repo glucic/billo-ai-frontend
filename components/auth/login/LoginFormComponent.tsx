@@ -36,7 +36,7 @@ export function LoginForm({
             <InputError message={errors.general?.[0]} />
 
             <LabelInputContainer>
-                <Label htmlFor="email">{t('email')}</Label>
+                <Label required={true} htmlFor="email">{t('email')}</Label>
                 <InputField
                     id="email"
                     type="email"
@@ -53,7 +53,7 @@ export function LoginForm({
             </LabelInputContainer>
 
             <LabelInputContainer>
-                <Label htmlFor="password">{t('password')}</Label>
+                <Label required={true} htmlFor="password">{t('password')}</Label>
                 <InputField
                     id="password"
                     type="password"

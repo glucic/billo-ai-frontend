@@ -36,45 +36,48 @@ export function StepCompanyDetails({
 }) {
     const t = useTranslations('Organisation.GettingStarted.StepCompanyDetails')
 
-    const fields: {
-        id: string
-        labelKey: string
-        placeholderKey: string
-        type?: string
-        colSpan?: string
-    }[] = [
+    const fields = [
         {
             id: 'company_email',
             labelKey: 'emailLabel',
             placeholderKey: 'emailPlaceholder',
             type: 'email',
+            colSpan: 'sm:col-span-1',
         },
         {
             id: 'company_phone',
             labelKey: 'phoneLabel',
             placeholderKey: 'phonePlaceholder',
+            colSpan: 'sm:col-span-1',
+            type: 'text',
         },
         {
             id: 'street',
             labelKey: 'streetLabel',
             placeholderKey: 'streetPlaceholder',
             colSpan: 'sm:col-span-2',
+            type: 'text',
         },
         {
             id: 'zip',
             labelKey: 'zipLabel',
             placeholderKey: 'zipPlaceholder',
+            colSpan: 'sm:col-span-1',
+            type: 'text',
         },
         {
             id: 'city',
             labelKey: 'cityLabel',
             placeholderKey: 'cityPlaceholder',
+            colSpan: 'sm:col-span-1',
+            type: 'text',
         },
         {
             id: 'region',
             labelKey: 'regionLabel',
             placeholderKey: 'regionPlaceholder',
             colSpan: 'sm:col-span-2',
+            type: 'text',
         },
         {
             id: 'workers',
@@ -83,7 +86,7 @@ export function StepCompanyDetails({
             type: 'number',
             colSpan: 'sm:col-span-2',
         },
-    ]
+    ] as const
 
     const values: Record<string, string | number> = {
         company_email,
@@ -109,32 +112,35 @@ export function StepCompanyDetails({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl mx-auto">
                 {fields.map(
-                    ({ id, labelKey, placeholderKey, type, colSpan }) => (
-                        <LabelInputContainer
-                            key={id}
-                            className={colSpan ? colSpan : 'sm:col-span-1'}>
-                            <Label htmlFor={id}>{t(labelKey)}</Label>
-                            <InputField
-                                id={id}
-                                type={type || 'text'}
-                                value={values[id]?.toString() ?? ''}
-                                onChange={e => onChange(id, e.target.value)}
-                                placeholder={t(placeholderKey)}
-                            />
-                            {errors?.[
-                                errorMap[id] || (id as keyof BackendErrors)
-                            ] && (
-                                <InputError
-                                    messages={
-                                        errors[
-                                            errorMap[id] ||
-                                                (id as keyof BackendErrors)
-                                        ]
+                    ({ id, labelKey, placeholderKey, type, colSpan }) => {
+                        const errorKey =
+                            errorMap[id] || (id as keyof BackendErrors)
+                        const fieldError = errors?.[errorKey]
+                        return (
+                            <LabelInputContainer
+                                key={id}
+                                className={colSpan ?? 'sm:col-span-1'}>
+                                <Label htmlFor={id}>{t(labelKey)}</Label>
+                                <InputField
+                                    id={id}
+                                    type={type || 'text'}
+                                    value={values[id]?.toString() ?? ''}
+                                    onChange={e => onChange(id, e.target.value)}
+                                    placeholder={t(placeholderKey)}
+                                    error={Boolean(fieldError)}
+                                    aria-describedby={
+                                        fieldError ? `${id}-error` : undefined
                                     }
                                 />
-                            )}
-                        </LabelInputContainer>
-                    ),
+                                {fieldError && (
+                                    <InputError
+                                        messages={fieldError}
+                                        id={`${id}-error`}
+                                    />
+                                )}
+                            </LabelInputContainer>
+                        )
+                    },
                 )}
             </div>
         </WizardStepTransition>

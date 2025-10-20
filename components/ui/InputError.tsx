@@ -19,7 +19,7 @@ export function InputError({
         <div
             id={id}
             role="alert"
-            className={`text-sm text-red-600 mt-1 ${className || ''}`}>
+            className={`text-sm text-[var(--error)] ${className || ''}`}>
             {message && <p>{message}</p>}
             {messages && messages.map((msg, i) => <p key={i}>{msg}</p>)}
         </div>

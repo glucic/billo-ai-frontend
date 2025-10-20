@@ -4,29 +4,24 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/hooks/auth'
-
 import { LoginForm } from '@/components/auth/login/LoginFormComponent'
 import { LoginHeader } from '@/components/auth/login/LoginHeaderComponent'
 import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
 import { IconBrandGoogle } from '@tabler/icons-react'
 import Link from 'next/link'
 
-type Errors = {
-    username?: string[]
-    password?: string[]
-    general?: string[]
-}
+import type { BackendErrors } from '@/lib/errorUtils'
 
 export default function LoginPage() {
-    const router = useRouter()
+    useRouter()
     const t = useTranslations('Auth.Login')
-    const { login, user } = useAuth({
+    const { login } = useAuth({
         middleware: 'guest',
         redirectIfAuthenticated: '/dashboard',
     })
 
     const [loading, setLoading] = useState(false)
-    const [errors, setErrors] = useState<Errors>({})
+    const [errors, setErrors] = useState<BackendErrors>({})
     const [status, setStatus] = useState<string | null>(null)
 
     const handleLogin = async ({
@@ -42,12 +37,11 @@ export default function LoginPage() {
 
         try {
             await login({
-                email: email,
+                email,
                 password,
                 setErrors,
                 setStatus,
             })
-            setErrors({ general: [t('errors.invalidCredentials')] })
         } finally {
             setLoading(false)
         }
@@ -68,14 +62,18 @@ export default function LoginPage() {
             {status && <p className="text-green-600 mt-2">{status}</p>}
 
             <div className="flex items-center my-6 max-w-md w-full">
-                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />
-                <span className="mx-4 text-gray-400 text-sm">{t('or')}</span>
-                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600" />
+                <div className="flex-grow h-px bg-[var(--divider-light)]" />
+                <span className="mx-4 text-[var(--text-muted)] text-sm">
+                    {t('or')}
+                </span>
+                <div className="flex-grow h-px bg-[var(--divider-light)]" />
             </div>
 
             <div className="space-y-3 w-full max-w-md">
                 <SocialLoginButton
-                    icon={<IconBrandGoogle className="h-5 w-5 text-red-500" />}
+                    icon={
+                        <IconBrandGoogle className="h-5 w-5 text-[var(--error)]" />
+                    }
                     label={t('signInGoogle')}
                     onClick={() => alert('Google sign-in not implemented')}
                     disabled={loading}

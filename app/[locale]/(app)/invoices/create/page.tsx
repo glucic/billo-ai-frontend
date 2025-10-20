@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui'
 import { useTranslations } from 'next-intl'
 import { useInvoiceForm } from '@/hooks/useInvoice'
 import {
@@ -9,9 +8,10 @@ import {
     IssuerSection,
     ClientSection,
     ItemsSection,
-    PDFInvoicePreview,
     TotalsSection,
+    PDFInvoicePreview,
 } from '@/components/invoices'
+import { Button, StatefulButton } from '@/components/ui'
 
 export default function CreateInvoicePage() {
     const t = useTranslations('Invoices')
@@ -38,16 +38,18 @@ export default function CreateInvoicePage() {
         saveInvoice,
         organisations,
         saving,
-        error,
+        fieldErrors,
     } = useInvoiceForm()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setSuccess(false)
         try {
-            await saveInvoice()
-            setSuccess(true)
-        } catch {}
+            const res = await saveInvoice()
+            if (res.success) setSuccess(true)
+        } catch (err) {
+            console.error('Save failed:', err)
+        }
     }
 
     const invoice = { invoiceDetails, issuer, client, items, totals }
@@ -63,6 +65,7 @@ export default function CreateInvoicePage() {
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
                         setInvoiceDetailsField={setInvoiceDetailsField}
+                        errors={fieldErrors}
                     />
 
                     <IssuerSection
@@ -71,6 +74,7 @@ export default function CreateInvoicePage() {
                         organisations={organisations}
                         issuerId={issuerId}
                         setIssuerId={setIssuerId}
+                        errors={fieldErrors}
                     />
 
                     <ClientSection
@@ -79,6 +83,7 @@ export default function CreateInvoicePage() {
                         organisations={organisations}
                         clientId={clientId}
                         setClientId={setClientId}
+                        errors={fieldErrors}
                     />
 
                     <ItemsSection
@@ -87,17 +92,18 @@ export default function CreateInvoicePage() {
                         onUpdateItem={updateItem}
                         onAddItem={addItem}
                         onRemoveItem={removeItem}
+                        errors={fieldErrors}
                     />
 
                     <TotalsSection
                         items={items}
                         totals={totals}
                         setTotalsField={setTotalsField}
+                        errors={fieldErrors}
                     />
 
-                    {error && <div className="text-red-500 mb-2">{error}</div>}
                     {success && (
-                        <div className="text-green-500 mb-2">
+                        <div className="text-green-500 text-sm mb-2 text-right">
                             {t('saveSuccess') || 'Invoice saved successfully!'}
                         </div>
                     )}
@@ -106,19 +112,16 @@ export default function CreateInvoicePage() {
                         <Button variant="ghost" href="/invoices">
                             {t('cancel')}
                         </Button>
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            disabled={saving}>
-                            {saving ? 'Saving...' : t('save')}
-                        </Button>
+                        <StatefulButton type="submit" loading={saving}>
+                            {t('save')}
+                        </StatefulButton>
                     </section>
                 </form>
 
                 {showPreview && (
-                    <div className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
+                    <aside className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
                         <PDFInvoicePreview invoice={invoice} />
-                    </div>
+                    </aside>
                 )}
             </div>
         </main>

@@ -62,12 +62,14 @@ export function RegisterForm({
                         label: t('firstName'),
                         value: first_name,
                         setValue: setFirstName,
+                        type: 'text'
                     },
                     {
                         id: 'last_name',
                         label: t('lastName'),
                         value: last_name,
                         setValue: setLastName,
+                        type: 'text'
                     },
                     {
                         id: 'email',
@@ -91,11 +93,12 @@ export function RegisterForm({
                         type: 'password',
                     },
                 ] as const
-            ).map(({ id, label, value, setValue }) => (
+            ).map(({ id, label, value, setValue, type }) => (
                 <LabelInputContainer key={id}>
-                    <Label htmlFor={id}>{label}</Label>
+                    <Label required={true} htmlFor={id}>{label}</Label>
                     <InputField
                         id={id}
+                        type={type}
                         placeholder={label}
                         value={value}
                         onChange={e => setValue(e.target.value)}

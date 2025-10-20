@@ -7,10 +7,12 @@ import {
     Button,
     CurrencyInput,
     LabelInputContainer,
+    InputError,
 } from '@/components/ui'
 import { CalculatedTotals, calculateTotals } from '@/lib/invoiceCalculations'
 import { ChevronDownIcon } from 'lucide-react'
 import { InvoiceItem, InvoiceTotals } from '@/types/Invoice'
+import { BackendErrors } from '@/lib/errorUtils'
 
 interface TotalsSectionProps {
     items: InvoiceItem[]
@@ -19,6 +21,7 @@ interface TotalsSectionProps {
         field: K,
         value: InvoiceTotals[K],
     ) => void
+    errors?: BackendErrors
 }
 
 const currencySymbols: Record<string, string> = {
@@ -32,6 +35,7 @@ export default function TotalsSection({
     items,
     totals,
     setTotalsField,
+    errors,
 }: TotalsSectionProps) {
     const t = useTranslations('Invoices.Totals')
     const [open, setOpen] = useState(true)
@@ -42,6 +46,9 @@ export default function TotalsSection({
         total: 0,
         amountDue: 0,
     })
+
+    const getError = (field: keyof InvoiceTotals) =>
+        errors?.[`totals.${field}`] || []
 
     useEffect(() => {
         const calc = calculateTotals({
@@ -55,7 +62,6 @@ export default function TotalsSection({
 
         setComputed(calc)
 
-        // update higher-level totals whenever items or inputs change
         setTotalsField('sum', calc.subtotal ?? 0)
         setTotalsField(
             'totalNet',
@@ -97,7 +103,11 @@ export default function TotalsSection({
                         <LabelInputContainer>
                             <Label>{t('currency')}</Label>
                             <select
-                                className="appearance-none w-full border rounded-md p-2 bg-[var(--input-bg)] text-[var(--foreground)] pr-8"
+                                className={`appearance-none w-full border rounded-md p-2 bg-[var(--input-bg)] text-[var(--foreground)] pr-8 ${
+                                    getError('currency').length
+                                        ? 'border-red-500'
+                                        : ''
+                                }`}
                                 value={totals.currency}
                                 onChange={e =>
                                     setTotalsField('currency', e.target.value)
@@ -110,6 +120,10 @@ export default function TotalsSection({
                             <span className="absolute right-3 top-2 text-gray-500">
                                 {symbol}
                             </span>
+                            <InputError
+                                id="totals-currency-error"
+                                messages={getError('currency')}
+                            />
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -119,6 +133,7 @@ export default function TotalsSection({
                                 onChange={val => setTotalsField('taxRate', val)}
                                 currency="%"
                                 position="suffix"
+                                error={Boolean(getError('taxRate')?.length)}
                             />
                             {totals.taxRate > 0 && computed.tax > 0 && (
                                 <p className={helperTextStyle}>
@@ -128,6 +143,10 @@ export default function TotalsSection({
                                     </span>
                                 </p>
                             )}
+                            <InputError
+                                id="totals-taxRate-error"
+                                messages={getError('taxRate')}
+                            />
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -139,6 +158,11 @@ export default function TotalsSection({
                                 }
                                 currency="%"
                                 position="suffix"
+                                error={Boolean(getError('discount')?.length)}
+                            />
+                            <InputError
+                                id="totals-discount-error"
+                                messages={getError('discount')}
                             />
                         </LabelInputContainer>
 
@@ -150,6 +174,11 @@ export default function TotalsSection({
                                     setTotalsField('shipping', val)
                                 }
                                 currency={symbol}
+                                error={Boolean(getError('shipping')?.length)}
+                            />
+                            <InputError
+                                id="totals-shipping-error"
+                                messages={getError('shipping')}
                             />
                         </LabelInputContainer>
                     </div>

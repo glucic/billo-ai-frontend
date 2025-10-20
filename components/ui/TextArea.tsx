@@ -1,14 +1,17 @@
 'use client'
+
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { useMotionTemplate, useMotionValue, motion } from 'motion/react'
+import { motion, useMotionTemplate, useMotionValue } from 'motion/react'
 
-export interface TextAreaProps
-    extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export type TextAreaProps =
+    React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+        error?: boolean
+    }
 
 const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-    ({ className, ...props }, ref) => {
-        const radius = 100
+    ({ className, error, ...props }, ref) => {
+        const radius = 0
         const [visible, setVisible] = React.useState(false)
 
         const mouseX = useMotionValue(0)
@@ -28,23 +31,43 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             <motion.div
                 style={{
                     background: useMotionTemplate`
-            radial-gradient(
-              ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-              #3b82f6,
-              transparent 80%
-            )
-          `,
+                        radial-gradient(
+                          ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
+                          var(--color-accent-light),
+                          transparent 90%
+                        )
+                    `,
                 }}
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setVisible(true)}
                 onMouseLeave={() => setVisible(false)}
-                className="group/input rounded-lg p-[2px] transition duration-300">
+                className="group/input rounded-[var(--input-radius)] p-[2px] transition-all duration-300">
                 <textarea
+                    ref={ref}
                     className={cn(
-                        `shadow-input dark:placeholder-text-neutral-600 flex w-full rounded-md border-none bg-gray-50 px-3 py-2 text-sm text-black transition duration-400 group-hover/input:shadow-none placeholder:text-neutral-400 focus-visible:ring-[2px] focus-visible:ring-neutral-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-800 dark:text-white dark:shadow-[0px_0px_1px_1px_#404040] dark:focus-visible:ring-neutral-600`,
+                        `flex w-full min-h-[120px]
+                        rounded-[var(--input-radius)]
+                        border
+                        bg-[var(--input-bg)]/70
+                        backdrop-blur-[var(--input-blur)]
+                        px-[var(--input-padding-x)] py-[var(--input-padding-y)]
+                        text-sm text-[var(--input-text)]
+                        placeholder:text-[var(--input-placeholder)]
+                        shadow-[var(--input-shadow)]
+                        transition-all duration-300
+                        hover:bg-[var(--accent-glow)]
+                        focus-visible:ring-2
+                        focus-visible:ring-[var(--color-accent)]
+                        focus-visible:ring-offset-1
+                        focus-visible:ring-offset-[var(--color-background)]
+                        focus-visible:outline-none
+                        disabled:cursor-not-allowed disabled:opacity-50
+                        resize-none`,
+                        error
+                            ? 'border-[var(--error)] focus-visible:ring-[var(--error)] focus-visible:ring-offset-[var(--error)]/50 hover:bg-[var(--error)]/10'
+                            : 'border-[var(--input-border)]',
                         className,
                     )}
-                    ref={ref}
                     {...props}
                 />
             </motion.div>
@@ -52,6 +75,6 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     },
 )
 
-TextAreaField.displayName = 'TextArea'
+TextAreaField.displayName = 'TextAreaField'
 
 export { TextAreaField }

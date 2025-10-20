@@ -2,16 +2,16 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Button } from '@/components/ui'
 import { useTranslations } from 'next-intl'
+import { Button, StatefulButton } from '@/components/ui'
 import { useInvoiceForm } from '@/hooks/useInvoice'
 import {
     InvoiceDetailsSection,
     IssuerSection,
     ClientSection,
     ItemsSection,
-    PDFInvoicePreview,
     TotalsSection,
+    PDFInvoicePreview,
 } from '@/components/invoices'
 
 export default function EditInvoicePage() {
@@ -19,7 +19,6 @@ export default function EditInvoicePage() {
     const router = useRouter()
     const { id } = useParams()
     const invoiceId = Number(id)
-
     const [success, setSuccess] = useState(false)
     const [showPreview] = useState(true)
 
@@ -45,16 +44,21 @@ export default function EditInvoicePage() {
         saving,
         loading,
         error,
+        fieldErrors,
     } = useInvoiceForm(invoiceId)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setSuccess(false)
         try {
-            await saveInvoice()
-            setSuccess(true)
-            setTimeout(() => router.push('/invoices'), 1200)
-        } catch {}
+            const res = await saveInvoice()
+            if (res.success) {
+                setSuccess(true)
+                setTimeout(() => router.push('/invoices'), 1200)
+            }
+        } catch (err) {
+            console.error('Update failed:', err)
+        }
     }
 
     if (loading) {
@@ -74,11 +78,11 @@ export default function EditInvoicePage() {
                     onSubmit={handleSubmit}
                     className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
                         showPreview ? 'flex-1' : 'flex-[1_1_100%]'
-                    }`}
-                >
+                    }`}>
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
                         setInvoiceDetailsField={setInvoiceDetailsField}
+                        errors={fieldErrors}
                     />
 
                     <IssuerSection
@@ -87,6 +91,7 @@ export default function EditInvoicePage() {
                         organisations={organisations}
                         issuerId={issuerId}
                         setIssuerId={setIssuerId}
+                        errors={fieldErrors}
                     />
 
                     <ClientSection
@@ -95,6 +100,7 @@ export default function EditInvoicePage() {
                         organisations={organisations}
                         clientId={clientId}
                         setClientId={setClientId}
+                        errors={fieldErrors}
                     />
 
                     <ItemsSection
@@ -103,18 +109,25 @@ export default function EditInvoicePage() {
                         onUpdateItem={updateItem}
                         onAddItem={addItem}
                         onRemoveItem={removeItem}
+                        errors={fieldErrors}
                     />
 
                     <TotalsSection
                         items={items}
                         totals={totals}
                         setTotalsField={setTotalsField}
+                        errors={fieldErrors}
                     />
 
-                    {error && <div className="text-red-500 mb-2">{error}</div>}
+                    {error && (
+                        <div className="text-red-500 text-sm mb-2 text-right">
+                            {error}
+                        </div>
+                    )}
                     {success && (
-                        <div className="text-green-500 mb-2">
-                            {t('updateSuccess') || 'Invoice updated successfully!'}
+                        <div className="text-green-500 text-sm mb-2 text-right">
+                            {t('updateSuccess') ||
+                                'Invoice updated successfully!'}
                         </div>
                     )}
 
@@ -122,16 +135,16 @@ export default function EditInvoicePage() {
                         <Button variant="ghost" href="/invoices">
                             {t('cancel')}
                         </Button>
-                        <Button type="submit" variant="primary" disabled={saving}>
-                            {saving ? 'Saving...' : t('update')}
-                        </Button>
+                        <StatefulButton type="submit" loading={saving}>
+                            {t('update')}
+                        </StatefulButton>
                     </section>
                 </form>
 
                 {showPreview && (
-                    <div className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
+                    <aside className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
                         <PDFInvoicePreview invoice={invoice} />
-                    </div>
+                    </aside>
                 )}
             </div>
         </main>

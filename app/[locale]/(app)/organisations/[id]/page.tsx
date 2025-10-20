@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import {
@@ -10,34 +10,40 @@ import {
     LabelInputContainer,
     StatefulButton,
     TextAreaField,
+    InputError,
 } from '@/components/ui'
 import { useTranslations } from 'next-intl'
 
 export default function OrganisationDetailPage() {
     const { id } = useParams()
-    const router = useRouter()
+    useRouter()
     const t = useTranslations('Organisation')
     const {
         form,
         saving,
-        deleting,
-        error,
+        fieldErrors,
         fetchOrganisationById,
         handleChange,
         handleSave,
         handleDelete,
     } = useOrganisations()
 
+    const [initialTitle, setInitialTitle] = useState<string>('')
+
     useEffect(() => {
-        if (id) fetchOrganisationById(id as string)
-    }, [id, fetchOrganisationById])
+        if (id) {
+            fetchOrganisationById(id as string).then(() => {
+                setInitialTitle(prev => form?.name || prev)
+            })
+        }
+    }, [id])
 
     if (!form) return null
 
     return (
         <main className="flex flex-col h-screen text-[var(--color-foreground)] p-6 space-y-8">
             <h2 className="text-2xl font-bold">
-                {t('edit')} — {form.name}
+                {t('edit')} — {initialTitle || form.name}
             </h2>
 
             <div className="relative overflow-y-auto p-8 bg-[var(--secondary-background)] border border-[var(--input-border)] rounded-lg shadow-sm space-y-8 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
@@ -54,7 +60,17 @@ export default function OrganisationDetailPage() {
                                 name="name"
                                 value={form.name || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.name)}
+                                aria-describedby={
+                                    fieldErrors?.name ? 'name-error' : undefined
+                                }
                             />
+                            {fieldErrors?.name && (
+                                <InputError
+                                    id="name-error"
+                                    messages={fieldErrors.name}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -67,7 +83,19 @@ export default function OrganisationDetailPage() {
                                 type="number"
                                 value={form.employee_count?.toString() || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.employee_count)}
+                                aria-describedby={
+                                    fieldErrors?.employee_count
+                                        ? 'employee_count-error'
+                                        : undefined
+                                }
                             />
+                            {fieldErrors?.employee_count && (
+                                <InputError
+                                    id="employee_count-error"
+                                    messages={fieldErrors.employee_count}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -78,7 +106,19 @@ export default function OrganisationDetailPage() {
                                 type="email"
                                 value={form.email || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.email)}
+                                aria-describedby={
+                                    fieldErrors?.email
+                                        ? 'email-error'
+                                        : undefined
+                                }
                             />
+                            {fieldErrors?.email && (
+                                <InputError
+                                    id="email-error"
+                                    messages={fieldErrors.email}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -88,7 +128,19 @@ export default function OrganisationDetailPage() {
                                 name="phone"
                                 value={form.phone || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.phone)}
+                                aria-describedby={
+                                    fieldErrors?.phone
+                                        ? 'phone-error'
+                                        : undefined
+                                }
                             />
+                            {fieldErrors?.phone && (
+                                <InputError
+                                    id="phone-error"
+                                    messages={fieldErrors.phone}
+                                />
+                            )}
                         </LabelInputContainer>
                     </div>
                 </section>
@@ -100,15 +152,25 @@ export default function OrganisationDetailPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <LabelInputContainer>
-                            <Label htmlFor="street">
-                                {t('fields.address')}
-                            </Label>
+                            <Label htmlFor="street">{t('fields.street')}</Label>
                             <InputField
                                 id="street"
                                 name="street"
                                 value={form.street || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.street)}
+                                aria-describedby={
+                                    fieldErrors?.street
+                                        ? 'street-error'
+                                        : undefined
+                                }
                             />
+                            {fieldErrors?.street && (
+                                <InputError
+                                    id="street-error"
+                                    messages={fieldErrors.street}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -118,7 +180,17 @@ export default function OrganisationDetailPage() {
                                 name="city"
                                 value={form.city || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.city)}
+                                aria-describedby={
+                                    fieldErrors?.city ? 'city-error' : undefined
+                                }
                             />
+                            {fieldErrors?.city && (
+                                <InputError
+                                    id="city-error"
+                                    messages={fieldErrors.city}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
@@ -128,17 +200,39 @@ export default function OrganisationDetailPage() {
                                 name="zip"
                                 value={form.zip || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.zip)}
+                                aria-describedby={
+                                    fieldErrors?.zip ? 'zip-error' : undefined
+                                }
                             />
+                            {fieldErrors?.zip && (
+                                <InputError
+                                    id="zip-error"
+                                    messages={fieldErrors.zip}
+                                />
+                            )}
                         </LabelInputContainer>
 
                         <LabelInputContainer>
-                            <Label htmlFor="region">{t('fields.state')}</Label>
+                            <Label htmlFor="region">{t('fields.region')}</Label>
                             <InputField
                                 id="region"
                                 name="region"
                                 value={form.region || ''}
                                 onChange={handleChange}
+                                error={Boolean(fieldErrors?.region)}
+                                aria-describedby={
+                                    fieldErrors?.region
+                                        ? 'region-error'
+                                        : undefined
+                                }
                             />
+                            {fieldErrors?.region && (
+                                <InputError
+                                    id="region-error"
+                                    messages={fieldErrors.region}
+                                />
+                            )}
                         </LabelInputContainer>
                     </div>
                 </section>
@@ -153,8 +247,19 @@ export default function OrganisationDetailPage() {
                             value={form.description || ''}
                             onChange={handleChange}
                             rows={4}
-                            className="w-full rounded-md border border-[var(--input-border)] bg-[var(--input-bg)]/70 backdrop-blur-[var(--input-blur)] px-[var(--input-padding-x)] py-[var(--input-padding-y)] text-sm text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] shadow-[var(--input-shadow)] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--color-background)] focus-visible:outline-none"
+                            error={Boolean(fieldErrors?.description)}
+                            aria-describedby={
+                                fieldErrors?.description
+                                    ? 'description-error'
+                                    : undefined
+                            }
                         />
+                        {fieldErrors?.description && (
+                            <InputError
+                                id="description-error"
+                                messages={fieldErrors.description}
+                            />
+                        )}
                     </LabelInputContainer>
                 </section>
 
@@ -164,25 +269,19 @@ export default function OrganisationDetailPage() {
                     </Button>
 
                     <div className="flex gap-4">
-                        <StatefulButton
-                            loading={deleting}
-                            onClick={() => handleDelete(Number(id))}
-                            className="bg-red-500 hover:bg-red-600 text-white">
+                        <Button
+                            variant={'destructive'}
+                            onClick={() => handleDelete(Number(id))}>
                             {t('delete')}
-                        </StatefulButton>
+                        </Button>
                         <StatefulButton
+                            className="rounded-none"
                             loading={saving}
                             onClick={() => handleSave(Number(id))}>
                             {t('save')}
                         </StatefulButton>
                     </div>
                 </div>
-
-                {error && (
-                    <div className="mt-4 text-red-500 text-sm text-right">
-                        {error}
-                    </div>
-                )}
             </div>
         </main>
     )

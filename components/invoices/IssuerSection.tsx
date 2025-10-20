@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useTranslations } from 'next-intl'
 import {
     Label,
@@ -8,10 +9,11 @@ import {
     SelectField,
     ChevronDownIcon,
     Button,
+    InputError,
 } from '@/components/ui'
-import React from 'react'
 import { Organisation } from '@/types/Organisation'
 import { Issuer } from '@/types/Invoice'
+import { BackendErrors } from '@/lib/errorUtils'
 
 interface IssuerSectionProps {
     organisations: Organisation[]
@@ -19,6 +21,7 @@ interface IssuerSectionProps {
     setIssuerId: (id: number | null) => void
     issuer: Issuer
     setIssuerField: (field: keyof Issuer, value: string) => void
+    errors?: BackendErrors
 }
 
 export default function IssuerSection({
@@ -27,34 +30,52 @@ export default function IssuerSection({
     setIssuerId,
     issuer,
     setIssuerField,
+    errors,
 }: IssuerSectionProps) {
     const t = useTranslations('Invoices.IssuerDetails')
     const orgT = useTranslations('Organisation.fields')
-    const [open, setOpen] = React.useState<boolean>(true)
+    const [open, setOpen] = React.useState(true)
+
+    const getError = (key: keyof Issuer): string[] | undefined =>
+        errors?.[`issuer.${key}`] ?? errors?.[key]
+
+    // 🧭 Field configuration arrays
+    const contactFields: { key: keyof Issuer; required?: boolean }[] = [
+        { key: 'name', required: true },
+        { key: 'email', required: true },
+        { key: 'phone', required: false },
+    ]
+
+    const addressFields: { key: keyof Issuer; required?: boolean }[] = [
+        { key: 'street', required: true },
+        { key: 'zip', required: true },
+        { key: 'city', required: true },
+        { key: 'region', required: false },
+    ]
 
     return (
         <section className="card rounded-lg">
+            {/* ─── Header ─────────────────────────────── */}
             <Button
                 variant="ghost"
                 animated={false}
                 className="flex items-center w-full justify-between focus:outline-none hover:cursor-pointer hover:bg-transparent"
                 aria-expanded={open}
                 aria-controls="issuer-fields"
-                onClick={() => setOpen((v: boolean) => !v)}>
+                onClick={() => setOpen(v => !v)}>
                 <h2 className="text-xl font-bold">{t('title')}</h2>
-                <span
-                    className={`transition-transform ${open ? '' : '-rotate-90'}`}>
-                    <ChevronDownIcon className="w-5 h-5" />
-                </span>
+                <ChevronDownIcon
+                    className={`w-5 h-5 transition-transform ${open ? '' : '-rotate-90'}`}
+                />
             </Button>
 
+            {/* ─── Fields ─────────────────────────────── */}
             {open && (
                 <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4">
-                    {/* Organisation selection */}
+                    {/* Organisation select */}
                     <LabelInputContainer>
                         <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
                         <SelectField
-                            className="mb-4"
                             placeholder={t('selectIssuer')}
                             value={issuerId ?? ''}
                             onChange={value =>
@@ -70,49 +91,63 @@ export default function IssuerSection({
                         />
                     </LabelInputContainer>
 
-                    {/* Contact Information */}
+                    {/* Contact Fields */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['name', 'email', 'phone'].map(field => (
-                            <LabelInputContainer key={field}>
-                                <Label htmlFor={`issuer-${field}`}>
-                                    {orgT(field)}
+                        {contactFields.map(({ key, required }) => (
+                            <LabelInputContainer key={key}>
+                                <Label
+                                    htmlFor={`issuer-${key}`}
+                                    required={required}>
+                                    {orgT(key)}
                                 </Label>
                                 <InputField
-                                    required={field === 'name'}
-                                    id={`issuer-${field}`}
-                                    placeholder={orgT(field)}
-                                    value={issuer[field as keyof Issuer] ?? ''}
+                                    id={`issuer-${key}`}
+                                    placeholder={orgT(key)}
+                                    value={issuer[key] ?? ''}
                                     onChange={e =>
-                                        setIssuerField(
-                                            field as keyof Issuer,
-                                            e.target.value,
-                                        )
+                                        setIssuerField(key, e.target.value)
                                     }
-                                    aria-label={orgT(field)}
+                                    error={Boolean(getError(key))}
+                                    aria-describedby={
+                                        getError(key)
+                                            ? `issuer-${key}-error`
+                                            : undefined
+                                    }
+                                />
+                                <InputError
+                                    id={`issuer-${key}-error`}
+                                    messages={getError(key)}
                                 />
                             </LabelInputContainer>
                         ))}
                     </div>
 
-                    {/* Address Information */}
+                    {/* Address Fields */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['street', 'zip', 'city', 'region'].map(field => (
-                            <LabelInputContainer key={field}>
-                                <Label htmlFor={`issuer-${field}`}>
-                                    {orgT(field)}
+                        {addressFields.map(({ key, required }) => (
+                            <LabelInputContainer key={key}>
+                                <Label
+                                    htmlFor={`issuer-${key}`}
+                                    required={required}>
+                                    {orgT(key)}
                                 </Label>
                                 <InputField
-                                    required={field !== 'region'}
-                                    id={`issuer-${field}`}
-                                    placeholder={orgT(field)}
-                                    value={issuer[field as keyof Issuer] ?? ''}
+                                    id={`issuer-${key}`}
+                                    placeholder={orgT(key)}
+                                    value={issuer[key] ?? ''}
                                     onChange={e =>
-                                        setIssuerField(
-                                            field as keyof Issuer,
-                                            e.target.value,
-                                        )
+                                        setIssuerField(key, e.target.value)
                                     }
-                                    aria-label={orgT(field)}
+                                    error={Boolean(getError(key))}
+                                    aria-describedby={
+                                        getError(key)
+                                            ? `issuer-${key}-error`
+                                            : undefined
+                                    }
+                                />
+                                <InputError
+                                    id={`issuer-${key}-error`}
+                                    messages={getError(key)}
                                 />
                             </LabelInputContainer>
                         ))}

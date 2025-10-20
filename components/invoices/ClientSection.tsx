@@ -7,10 +7,12 @@ import {
     InputField,
     ChevronDownIcon,
     Button,
+    InputError,
 } from '@/components/ui'
 import React from 'react'
 import { Organisation } from '@/types/Organisation'
 import { Client } from '@/types/Invoice'
+import { BackendErrors } from '@/lib/errorUtils'
 
 interface ClientSectionProps {
     organisations: Organisation[]
@@ -18,15 +20,33 @@ interface ClientSectionProps {
     setClientId: (id: number | null) => void
     client: Client
     setClientField: (field: keyof Client, value: string) => void
+    errors?: BackendErrors
 }
 
 export default function ClientSection({
     client,
     setClientField,
+    errors,
 }: ClientSectionProps) {
     const t = useTranslations('Invoices.ClientDetails')
     const orgT = useTranslations('Organisation.fields')
     const [open, setOpen] = React.useState(true)
+
+    const getError = (key: keyof Client): string[] | undefined =>
+        errors?.[`client.${key}`] ?? errors?.[key]
+
+    const contactFields: { key: keyof Client; required?: boolean }[] = [
+        { key: 'name', required: true },
+        { key: 'email', required: false },
+        { key: 'phone', required: false },
+    ]
+
+    const addressFields: { key: keyof Client; required?: boolean }[] = [
+        { key: 'street', required: false },
+        { key: 'zip', required: false },
+        { key: 'city', required: false },
+        { key: 'region', required: false },
+    ]
 
     return (
         <section className="card rounded-lg">
@@ -38,64 +58,70 @@ export default function ClientSection({
                 aria-controls="client-fields"
                 onClick={() => setOpen(v => !v)}>
                 <h2 className="text-xl font-bold">{t('title')}</h2>
-                <span
-                    className={`transition-transform ${open ? '' : '-rotate-90'}`}>
-                    <ChevronDownIcon className="w-5 h-5" />
-                </span>
+                <ChevronDownIcon
+                    className={`w-5 h-5 transition-transform ${open ? '' : '-rotate-90'}`}
+                />
             </Button>
 
             {open && (
                 <div id="client-fields" className="grid grid-cols-1 gap-6 mt-4">
-                    {/* Contact Information */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['name', 'email', 'phone'].map(field => (
-                            <LabelInputContainer key={field}>
-                                <Label htmlFor={`client-${field}`}>
-                                    {orgT(field)}
+                        {contactFields.map(({ key, required }) => (
+                            <LabelInputContainer key={key}>
+                                <Label
+                                    htmlFor={`client-${key}`}
+                                    required={required}>
+                                    {orgT(key)}
                                 </Label>
                                 <InputField
-                                    required={field === 'name'}
-                                    type={
-                                        field === 'email'
-                                            ? 'email'
-                                            : field === 'phone'
-                                              ? 'tel'
-                                              : 'text'
-                                    }
-                                    id={`client-${field}`}
-                                    placeholder={orgT(field)}
-                                    value={client[field as keyof Client] ?? ''}
+                                    id={`client-${key}`}
+                                    placeholder={orgT(key)}
+                                    value={client[key] ?? ''}
                                     onChange={e =>
-                                        setClientField(
-                                            field as keyof Client,
-                                            e.target.value,
-                                        )
+                                        setClientField(key, e.target.value)
                                     }
-                                    aria-label={orgT(field)}
+                                    aria-label={orgT(key)}
+                                    error={Boolean(getError(key))}
+                                    aria-describedby={
+                                        getError(key)
+                                            ? `client-${key}-error`
+                                            : undefined
+                                    }
+                                />
+                                <InputError
+                                    id={`client-${key}-error`}
+                                    messages={getError(key)}
                                 />
                             </LabelInputContainer>
                         ))}
                     </div>
 
-                    {/* Address Information */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['street', 'zip', 'city', 'region'].map(field => (
-                            <LabelInputContainer key={field}>
-                                <Label htmlFor={`client-${field}`}>
-                                    {orgT(field)}
+                        {addressFields.map(({ key, required }) => (
+                            <LabelInputContainer key={key}>
+                                <Label
+                                    htmlFor={`client-${key}`}
+                                    required={required}>
+                                    {orgT(key)}
                                 </Label>
                                 <InputField
-                                    required={field !== 'region'}
-                                    id={`client-${field}`}
-                                    placeholder={orgT(field)}
-                                    value={client[field as keyof Client] ?? ''}
+                                    id={`client-${key}`}
+                                    placeholder={orgT(key)}
+                                    value={client[key] ?? ''}
                                     onChange={e =>
-                                        setClientField(
-                                            field as keyof Client,
-                                            e.target.value,
-                                        )
+                                        setClientField(key, e.target.value)
                                     }
-                                    aria-label={orgT(field)}
+                                    aria-label={orgT(key)}
+                                    error={Boolean(getError(key))}
+                                    aria-describedby={
+                                        getError(key)
+                                            ? `client-${key}-error`
+                                            : undefined
+                                    }
+                                />
+                                <InputError
+                                    id={`client-${key}-error`}
+                                    messages={getError(key)}
                                 />
                             </LabelInputContainer>
                         ))}

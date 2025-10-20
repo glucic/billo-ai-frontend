@@ -33,6 +33,7 @@ export function StepCompanyAbout({
                 onChange={e => onChange(e.target.value)}
                 placeholder={t('placeholder')}
                 className="w-120 h-32 resize-none"
+                error={Boolean(errors?.description)}
             />
             {errors?.description && (
                 <InputError messages={errors.description} className="mt-2" />

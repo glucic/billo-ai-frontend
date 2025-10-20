@@ -10,9 +10,11 @@ import {
     ChevronDownIcon,
     CurrencyInput,
     TextAreaField,
+    InputError,
 } from '@/components/ui'
 import { Trash2 as TrashIcon } from 'lucide-react'
 import { InvoiceItem } from '@/types/Invoice'
+import { BackendErrors } from '@/lib/errorUtils'
 
 interface ItemsSectionProps {
     value: InvoiceItem[]
@@ -20,10 +22,11 @@ interface ItemsSectionProps {
     onUpdateItem: <K extends keyof InvoiceItem>(
         index: number,
         field: K,
-        value: InvoiceItem[K]
+        value: InvoiceItem[K],
     ) => void
     onAddItem: () => void
     onRemoveItem: (index: number) => void
+    errors?: BackendErrors
 }
 
 export default function ItemsSection({
@@ -32,9 +35,15 @@ export default function ItemsSection({
     onUpdateItem,
     onAddItem,
     onRemoveItem,
+    errors,
 }: ItemsSectionProps) {
     const t = useTranslations('Invoices.Items')
     const [open, setOpen] = React.useState(true)
+
+    const getError = (index: number, field: keyof InvoiceItem) =>
+        errors?.[`items.${index}.${field}`] || []
+
+    const sectionError = errors?.['items'] || []
 
     return (
         <section className="card rounded-lg">
@@ -53,12 +62,14 @@ export default function ItemsSection({
 
             {open && (
                 <div id="items-fields" className="flex flex-col gap-6 mt-4">
+                    <InputError messages={sectionError} />
+
                     {value.map((item, idx) => (
                         <div
                             key={idx}
                             className="p-5 rounded-lg bg-[var(--primary)] shadow-sm transition-all duration-200 hover:shadow-md">
-                            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
-                                <LabelInputContainer className="md:col-span-3">
+                            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-start content-start md:items-stretch">
+                                <div className="flex flex-col space-y-1 md:col-span-3">
                                     <Label htmlFor={`item-name-${idx}`}>
                                         {t('name')}
                                     </Label>
@@ -73,9 +84,18 @@ export default function ItemsSection({
                                             )
                                         }
                                         placeholder={t('name')}
+                                        error={Boolean(
+                                            getError(idx, 'name')?.length,
+                                        )}
                                     />
-                                </LabelInputContainer>
-                                <LabelInputContainer>
+                                    <InputError
+                                        id={`item-name-${idx}-error`}
+                                        messages={getError(idx, 'name')}
+                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
+                                    />
+                                </div>
+
+                                <div className="flex flex-col space-y-1">
                                     <Label htmlFor={`item-rate-${idx}`}>
                                         {t('rate')}
                                     </Label>
@@ -86,9 +106,18 @@ export default function ItemsSection({
                                         }
                                         currency={currency}
                                         position="suffix"
+                                        error={Boolean(
+                                            getError(idx, 'rate')?.length,
+                                        )}
                                     />
-                                </LabelInputContainer>
-                                <LabelInputContainer>
+                                    <InputError
+                                        id={`item-rate-${idx}-error`}
+                                        messages={getError(idx, 'rate')}
+                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
+                                    />
+                                </div>
+
+                                <div className="flex flex-col space-y-1">
                                     <Label htmlFor={`item-quantity-${idx}`}>
                                         {t('quantity')}
                                     </Label>
@@ -105,10 +134,18 @@ export default function ItemsSection({
                                                 Number(e.target.value),
                                             )
                                         }
+                                        error={Boolean(
+                                            getError(idx, 'quantity')?.length,
+                                        )}
                                     />
-                                </LabelInputContainer>
+                                    <InputError
+                                        id={`item-quantity-${idx}-error`}
+                                        messages={getError(idx, 'quantity')}
+                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
+                                    />
+                                </div>
 
-                                <div className="flex flex-col items-center justify-end">
+                                <div className="flex flex-col justify-end items-center md:items-end h-full">
                                     <CurrencyInput
                                         value={item.rate * item.quantity}
                                         onChange={() => {}}
@@ -118,6 +155,7 @@ export default function ItemsSection({
                                     />
                                 </div>
                             </div>
+
                             <LabelInputContainer className="mt-4">
                                 <Label htmlFor={`item-description-${idx}`}>
                                     {t('description')}
@@ -134,7 +172,12 @@ export default function ItemsSection({
                                         )
                                     }
                                 />
+                                <InputError
+                                    id={`item-description-${idx}-error`}
+                                    messages={getError(idx, 'description')}
+                                />
                             </LabelInputContainer>
+
                             <Button
                                 type="button"
                                 variant="ghost"

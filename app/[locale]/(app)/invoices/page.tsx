@@ -3,18 +3,19 @@
 import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Invoice } from '@/types/Invoice'
-import { useInvoiceTable } from '@/hooks/useInvoiceTable'
 import {
     InvoiceTable,
     InvoicePagination,
     PDFInvoicePreview,
 } from '@/components/invoices'
 import { Button } from '@/components/ui'
+import { useInvoiceTable } from '@/hooks/useInvoiceTable'
 
 export default function InvoicesPage() {
     const t = useTranslations('Invoices')
+
     const {
-        sortedInvoices,
+        invoices,
         loading,
         pagination,
         page,
@@ -24,6 +25,7 @@ export default function InvoicesPage() {
         sortBy,
         setSortBy,
         sortOrder,
+        setSortOrder,
     } = useInvoiceTable()
 
     const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
@@ -31,12 +33,15 @@ export default function InvoicesPage() {
     return (
         <main className="flex h-screen text-[var(--color-foreground)] p-6 gap-4 overflow-hidden">
             <div className="flex-1 overflow-x-auto rounded-xl bg-[var(--secondary-background)] shadow-md p-4">
-                <Button variant="primary" href="/invoices/create">
-                    {t('create')}
-                </Button>
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold">{t('title')}</h1>
+                    <Button variant="primary" href="/invoices/create">
+                        {t('create')}
+                    </Button>
+                </div>
 
                 <InvoiceTable
-                    invoices={sortedInvoices}
+                    invoices={invoices}
                     loading={loading}
                     sortBy={sortBy}
                     sortOrder={sortOrder}
