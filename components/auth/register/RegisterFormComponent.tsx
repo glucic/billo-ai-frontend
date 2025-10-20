@@ -36,8 +36,6 @@ export function RegisterForm({
         setClientError(null)
 
         if (!isFormValid) return setClientError(t('allFieldsRequired'))
-        if (password !== password_confirmation)
-            return setClientError(t('passwordsDontMatch'))
 
         onSubmit({
             first_name,

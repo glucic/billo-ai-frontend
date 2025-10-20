@@ -13,7 +13,12 @@ export function detectErrorKey(field: string, message: string): string | null {
     if (lower.includes('credentials')) return 'invalidCredentials'
     if (lower.includes('confirm') || lower.includes('match'))
         return `${field}Mismatch`
-    if (lower.includes('short') || lower.includes('minimum'))
+    if (
+        lower.includes('short') ||
+        lower.includes('minimum') ||
+        lower.includes('at least') ||
+        lower.includes('must be at least')
+    )
         return `${field}TooShort`
     if (lower.includes('maximum') || lower.includes('too long'))
         return `${field}TooLong`
@@ -32,7 +37,11 @@ export function parseBackendErrors(
 ): BackendErrors {
     if (!error?.response) {
         return {
-            general: [t(`${namespace}.unknownError`, { defaultMessage: 'Unexpected error' })],
+            general: [
+                t(`${namespace}.unknownError`, {
+                    defaultMessage: 'Unexpected error',
+                }),
+            ],
         }
     }
 
@@ -43,7 +52,9 @@ export function parseBackendErrors(
         for (const [field, messages] of Object.entries(data.errors)) {
             translated[field] = (messages as string[]).map(msg => {
                 const key = detectErrorKey(field, msg)
-                const localizedKey = key ? `${namespace}.errors.${key}` : undefined
+                const localizedKey = key
+                    ? `${namespace}.errors.${key}`
+                    : undefined
 
                 try {
                     if (localizedKey) return t(localizedKey)
