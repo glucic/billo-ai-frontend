@@ -39,7 +39,6 @@ export default function IssuerSection({
     const getError = (key: keyof Issuer): string[] | undefined =>
         errors?.[`issuer.${key}`] ?? errors?.[key]
 
-    // 🧭 Field configuration arrays
     const contactFields: { key: keyof Issuer; required?: boolean }[] = [
         { key: 'name', required: true },
         { key: 'email', required: true },
@@ -55,7 +54,6 @@ export default function IssuerSection({
 
     return (
         <section className="card rounded-lg">
-            {/* ─── Header ─────────────────────────────── */}
             <Button
                 variant="ghost"
                 animated={false}
@@ -69,10 +67,8 @@ export default function IssuerSection({
                 />
             </Button>
 
-            {/* ─── Fields ─────────────────────────────── */}
             {open && (
-                <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4">
-                    {/* Organisation select */}
+                <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4 pl-4">
                     <LabelInputContainer>
                         <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
                         <SelectField
@@ -91,7 +87,6 @@ export default function IssuerSection({
                         />
                     </LabelInputContainer>
 
-                    {/* Contact Fields */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {contactFields.map(({ key, required }) => (
                             <LabelInputContainer key={key}>
@@ -122,7 +117,6 @@ export default function IssuerSection({
                         ))}
                     </div>
 
-                    {/* Address Fields */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {addressFields.map(({ key, required }) => (
                             <LabelInputContainer key={key}>

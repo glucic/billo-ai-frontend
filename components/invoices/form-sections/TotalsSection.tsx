@@ -100,7 +100,7 @@ export default function TotalsSection({
 
             {open && (
                 <div className="space-y-6 mt-4 animate-fadeIn">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pl-4">
                         <LabelInputContainer>
                             <Label>{t('mwst')} (%)</Label>
                             <CurrencyInput

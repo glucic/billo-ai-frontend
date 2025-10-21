@@ -64,7 +64,9 @@ export default function ClientSection({
             </Button>
 
             {open && (
-                <div id="client-fields" className="grid grid-cols-1 gap-6 mt-4">
+                <div
+                    id="client-fields"
+                    className="grid grid-cols-1 gap-6 mt-4 pl-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {contactFields.map(({ key, required }) => (
                             <LabelInputContainer key={key}>

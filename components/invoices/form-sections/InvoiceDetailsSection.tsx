@@ -65,7 +65,7 @@ export default function InvoiceDetailsSection({
             {open && (
                 <div
                     id="invoice-details-fields"
-                    className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pl-4">
                     {fields.map(({ key, required, type }) => (
                         <LabelInputContainer key={key}>
                             <Label

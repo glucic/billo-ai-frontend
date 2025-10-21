@@ -58,14 +58,14 @@ export default function InvoicePagination({
     }
 
     return (
-        <div className="flex items-center justify-between border-t border-[var(--border)] pt-4 text-[var(--foreground)]">
-            <div className="flex items-center gap-2 text-sm ">
+        <div className="flex items-center justify-between border-t border-[var(--divider)] pt-4 text-[var(--color-foreground)]">
+            <div className="flex items-center gap-2 text-sm">
                 <span>{invoicesT('rowsPerPage')}</span>
                 <select
-                    className="border border-gray-600 rounded-md bg-[var(--secondary-background)] text-gray-100 text-sm px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[var(--accent)] transition"
+                    className="border border-[var(--border-color)] rounded-md bg-[var(--secondary-background)] text-[var(--color-foreground)] text-sm px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] transition"
                     value={rowsPerPage}
                     onChange={e => onRowsPerPageChange(Number(e.target.value))}>
-                    {rowsOptions.map(option => (
+                    {[10, 20, 50, 100].map(option => (
                         <option key={option} value={option}>
                             {option}
                         </option>
@@ -77,23 +77,23 @@ export default function InvoicePagination({
                 <button
                     disabled={page === 1}
                     onClick={() => onPageChange(page - 1)}
-                    className="font-bold hover:scale-110 transition-all disabled:opacity-40">
-                    <FaArrowLeft/>
+                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-accent)]">
+                    <FaArrowLeft />
                 </button>
 
                 {pages}
 
                 <button
-                    disabled={page === totalPages}
+                    disabled={page === pagination.last_page}
                     onClick={() => onPageChange(page + 1)}
-                    className="font-bold hover:scale-110 transition-all disabled:opacity-40">
+                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-accent)]">
                     <FaArrowRight />
                 </button>
             </div>
 
-            {/* Right: Page info */}
-            <div className="text-sm text-gray-400">
-                {invoicesT('page')} {page} {invoicesT('of')} {pagination.last_page}
+            <div className="text-sm text-[var(--text-muted)]">
+                {invoicesT('page')} {page} {invoicesT('of')}{' '}
+                {pagination.last_page}
             </div>
         </div>
     )
