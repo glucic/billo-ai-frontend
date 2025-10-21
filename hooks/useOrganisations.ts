@@ -20,7 +20,7 @@ export interface UseOrganisationsReturn {
     handleChange: (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => void
-    handleSave: (id?: number) => Promise<void>
+    handleSave: (id?: number) => Promise<{ success: boolean }>
     handleDelete: (id?: number) => Promise<void>
     handleCreate: (payload: Partial<Organisation>) => Promise<void>
     handleLeave: (orgId: number) => Promise<void>
@@ -92,17 +92,24 @@ export function useOrganisations(): UseOrganisationsReturn {
         })
     }
 
-    const handleSave = async (id?: number) => {
+    const handleSave = async (id?: number): Promise<{ success: boolean }> => {
         const orgId = id || selected?.id
-        if (!orgId) return
+        if (!orgId) return { success: false }
+
         setSaving(true)
-        await handleOrgRequest(async () => {
-            await apiClient.put(`/api/organisations/${orgId}`, form)
-            setOrganisations(orgs =>
-                orgs.map(o => (o.id === orgId ? { ...o, ...form } : o)),
-            )
-        }).catch(() => {})
-        setSaving(false)
+        try {
+            await handleOrgRequest(async () => {
+                await apiClient.put(`/api/organisations/${orgId}`, form)
+                setOrganisations(orgs =>
+                    orgs.map(o => (o.id === orgId ? { ...o, ...form } : o)),
+                )
+            })
+            return { success: true }
+        } catch (error) {
+            return { success: false }
+        } finally {
+            setSaving(false)
+        }
     }
 
     const handleDelete = async (id?: number) => {

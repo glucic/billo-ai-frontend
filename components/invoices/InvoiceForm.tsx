@@ -48,7 +48,7 @@ export interface InvoiceFormProps {
     organisations: Organisation[]
     saving: boolean
     loading?: boolean
-    fieldErrors: Record<string, string[]>
+    fieldErrors: Partial<Record<string, string[]>>
     error?: string
     mode: 'create' | 'edit'
     onSuccessRedirect?: () => void
