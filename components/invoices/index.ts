@@ -1,8 +1,3 @@
-export { default as ClientSection } from '@/components/invoices/ClientSection'
-export { default as IssuerSection } from '@/components/invoices/IssuerSection'
-export { default as TotalsSection } from '@/components/invoices/TotalsSection'
-export { default as InvoiceDetailsSection } from '@/components/invoices/InvoiceDetailsSection'
-export { default as ItemsSection } from '@/components/invoices/ItemsSection'
 export { default as PDFInvoicePreview } from '@/components/invoices/PDFInvoicePreview'
 export { default as InvoiceTable } from '@/components/invoices/InvoiceTable'
 export { default as InvoicePagination } from '@/components/invoices/InvoicePagination'

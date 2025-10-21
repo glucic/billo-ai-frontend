@@ -1,0 +1,5 @@
+export { default as InvoiceDetailsSection } from '@/components/invoices/form-sections/InvoiceDetailsSection'
+export { default as IssuerSection } from '@/components/invoices/form-sections/IssuerSection'
+export { default as ClientSection } from '@/components/invoices/form-sections/ClientSection'
+export { default as ItemsSection } from '@/components/invoices/form-sections/ItemsSection'
+export { default as TotalsSection } from '@/components/invoices/form-sections/TotalsSection'
