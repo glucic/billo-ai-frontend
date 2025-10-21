@@ -1,6 +1,13 @@
 'use client'
 
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import {
+    Document,
+    Page,
+    Text,
+    View,
+    StyleSheet,
+    Image,
+} from '@react-pdf/renderer'
 import {
     InvoiceDetails,
     Issuer,
@@ -9,14 +16,65 @@ import {
     InvoiceTotals,
 } from '@/types/Invoice'
 
-interface PDFInvoiceDocumentProps {
-    invoiceDetails: InvoiceDetails
-    issuer: Issuer
-    client: Client
-    items: InvoiceItem[]
-    totals: InvoiceTotals
-    t: Record<string, string>
-}
+const styles = StyleSheet.create({
+    page: {
+        padding: 40,
+        fontFamily: 'Helvetica',
+        fontSize: 10,
+        color: '#222',
+        lineHeight: 1.4,
+    },
+    headerRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 24,
+    },
+    logo: { width: 100, height: 40 },
+    title: { fontSize: 22, fontWeight: 'bold' },
+    section: { marginBottom: 16 },
+    rowBetween: { flexDirection: 'row', justifyContent: 'space-between' },
+    divider: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        marginVertical: 10,
+    },
+    label: { fontWeight: 'bold', marginBottom: 4 },
+    table: { borderWidth: 1, borderColor: '#ccc', marginTop: 10 },
+    tableRow: { flexDirection: 'row' },
+    tableHeader: { backgroundColor: '#f3f4f6' },
+    th: {
+        flex: 1,
+        borderRightWidth: 1,
+        borderRightColor: '#ccc',
+        padding: 6,
+        fontWeight: 'bold',
+    },
+    td: { flex: 1, borderRightWidth: 1, borderRightColor: '#ccc', padding: 6 },
+    totals: { marginTop: 24, alignItems: 'flex-end' },
+    totalLine: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '60%',
+        paddingVertical: 3,
+    },
+    totalBold: { fontSize: 12, fontWeight: 'bold' },
+    footer: {
+        position: 'absolute',
+        bottom: 40,
+        left: 40,
+        right: 40,
+        borderTopWidth: 1,
+        borderTopColor: '#ccc',
+        paddingTop: 8,
+        fontSize: 9,
+        color: '#555',
+        textAlign: 'center',
+    },
+})
+
+const safeText = (v: unknown) => String(v ?? '')
+const money = (n: number, c: string) => `${(n ?? 0).toFixed(2)} ${safeText(c)}`
 
 export default function PDFInvoiceDocument({
     invoiceDetails,
@@ -25,218 +83,137 @@ export default function PDFInvoiceDocument({
     items,
     totals,
     t,
-}: PDFInvoiceDocumentProps) {
-    const symbol = totals.currency === 'EUR' ? '€' : totals.currency
-    const formatValue = (v: number) =>
-        `${v.toFixed(2).replace('.', ',')} ${symbol}`
-
+}: {
+    invoiceDetails: InvoiceDetails
+    issuer: Issuer
+    client: Client
+    items: InvoiceItem[]
+    totals: InvoiceTotals
+    t: Record<string, string>
+}) {
     return (
         <Document>
-            <Page size="A4" style={styles.body}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <Text style={styles.title}>{t['title']}</Text>
-                    <View style={{ textAlign: 'right' }}>
+            <Page size="A4" style={styles.page}>
+                <View style={styles.headerRow}>
+                    <Image src="/logo.png" style={styles.logo} />
+                    <Text style={styles.title}>{safeText(t.title)}</Text>
+                </View>
+
+                <View style={styles.section}>
+                    <Text>
+                        {safeText(t.invoiceNumber)}:{' '}
+                        {safeText(invoiceDetails.invoiceNumber)}
+                    </Text>
+                    <Text>
+                        {safeText(t.invoiceDate)}:{' '}
+                        {safeText(invoiceDetails.invoiceDate)}
+                    </Text>
+                    <Text>
+                        {safeText(t.dueDate)}:{' '}
+                        {safeText(invoiceDetails.dueDate)}
+                    </Text>
+                    {invoiceDetails.reference ? (
                         <Text>
-                            {t['invoiceNumber']}: {invoiceDetails.invoiceNumber}
+                            {safeText(t.reference)}:{' '}
+                            {safeText(invoiceDetails.reference)}
                         </Text>
+                    ) : null}
+                </View>
+
+                <View style={styles.divider} />
+
+                <View style={[styles.section, styles.rowBetween]}>
+                    <View style={{ flex: 1, paddingRight: 8 }}>
+                        <Text style={styles.label}>{safeText(t.from)}</Text>
+                        <Text>{safeText(issuer.name)}</Text>
+                        <Text>{safeText(issuer.street)}</Text>
                         <Text>
-                            {t['invoiceDate']}: {invoiceDetails.invoiceDate}
+                            {[issuer.zip, issuer.city]
+                                .filter(Boolean)
+                                .join(' ')}
                         </Text>
-                        {invoiceDetails.dueDate && (
-                            <Text>
-                                {t['dueDate']}: {invoiceDetails.dueDate}
-                            </Text>
+                        {issuer.region && (
+                            <Text>{safeText(issuer.region)}</Text>
                         )}
-                        {invoiceDetails.reference && (
-                            <Text>
-                                {t['reference']}: {invoiceDetails.reference}
-                            </Text>
+                    </View>
+                    <View style={{ flex: 1, paddingLeft: 8 }}>
+                        <Text style={styles.label}>{safeText(t.billTo)}</Text>
+                        <Text>{safeText(client.name)}</Text>
+                        <Text>{safeText(client.street)}</Text>
+                        <Text>
+                            {[client.zip, client.city]
+                                .filter(Boolean)
+                                .join(' ')}
+                        </Text>
+                        {client.region && (
+                            <Text>{safeText(client.region)}</Text>
                         )}
                     </View>
                 </View>
 
-                {/* Issuer */}
-                <View style={styles.section}>
-                    <Text style={styles.subtitle}>{t['from']}</Text>
-                    <Text>{issuer.name}</Text>
-                    <Text>{issuer.street}</Text>
-                    <Text>
-                        {issuer.zip} {issuer.city}, {issuer.region}
-                    </Text>
-                    {issuer.email && <Text>{issuer.email}</Text>}
-                    {issuer.phone && <Text>{issuer.phone}</Text>}
-                </View>
+                <View style={styles.divider} />
 
-                {/* Client */}
-                <View style={styles.section}>
-                    <Text style={styles.subtitle}>{t['billTo']}</Text>
-                    <Text>{client.name}</Text>
-                    <Text>{client.street}</Text>
-                    <Text>
-                        {client.zip} {client.city}, {client.region}
-                    </Text>
-                    {client.email && <Text>{client.email}</Text>}
-                    {client.phone && <Text>{client.phone}</Text>}
-                </View>
-
-                {/* Items */}
-                <View style={styles.section}>
-                    <Text style={styles.subtitle}>{t['items']}</Text>
-
-                    <View style={[styles.itemRow, styles.itemHeader]}>
-                        <Text style={{ flex: 2 }}>{t['name']}</Text>
-                        <Text style={{ flex: 3 }}>{t['description']}</Text>
-                        <Text style={{ flex: 1, textAlign: 'right' }}>
-                            {t['quantity']}
-                        </Text>
-                        <Text style={{ flex: 1, textAlign: 'right' }}>
-                            {t['unitPrice']}
-                        </Text>
-                        <Text style={{ flex: 1, textAlign: 'right' }}>
-                            {t['subtotal']}
-                        </Text>
+                <View style={styles.table}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                        <Text style={styles.th}>{safeText(t.name)}</Text>
+                        <Text style={styles.th}>{safeText(t.description)}</Text>
+                        <Text style={styles.th}>{safeText(t.quantity)}</Text>
+                        <Text style={styles.th}>{safeText(t.unitPrice)}</Text>
+                        <Text style={styles.th}>{safeText(t.subtotal)}</Text>
                     </View>
-
-                    {items.map((item, idx) => (
-                        <View key={idx} style={styles.itemRow}>
-                            <Text style={{ flex: 2 }}>{item.name}</Text>
-                            <Text style={{ flex: 3 }}>
-                                {item.description || '-'}
+                    {items.map((item, i) => (
+                        <View key={`${item.name}-${i}`} style={styles.tableRow}>
+                            <Text style={styles.td}>{safeText(item.name)}</Text>
+                            <Text style={styles.td}>
+                                {safeText(item.description)}
                             </Text>
-                            <Text style={{ flex: 1, textAlign: 'right' }}>
-                                {item.quantity}
+                            <Text style={styles.td}>
+                                {safeText(item.quantity)}
                             </Text>
-                            <Text style={{ flex: 1, textAlign: 'right' }}>
-                                {formatValue(item.rate)}
+                            <Text style={styles.td}>
+                                {money(item.rate, totals.currency)}
                             </Text>
-                            <Text style={{ flex: 1, textAlign: 'right' }}>
-                                {formatValue(item.rate * item.quantity)}
+                            <Text style={styles.td}>
+                                {money(
+                                    (item.quantity ?? 0) * (item.rate ?? 0),
+                                    totals.currency,
+                                )}
                             </Text>
                         </View>
                     ))}
                 </View>
 
-                {/* Totals */}
-                <View style={[styles.section, styles.totalsSection]}>
-                    <View style={styles.totalsRow}>
-                        <Text>{t['sumNet']}</Text>
-                        <Text>{formatValue(totals.sum)}</Text>
+                <View style={styles.totals}>
+                    <View style={styles.totalLine}>
+                        <Text>{safeText(t.totalNet)}:</Text>
+                        <Text>{money(totals.totalNet, totals.currency)}</Text>
                     </View>
-
-                    {totals.discount > 0 && (
-                        <View style={styles.totalsRow}>
-                            <Text>
-                                {t['discount']} ({totals.discount}%)
-                            </Text>
-                            <Text>
-                                -{formatValue(totals.sum - totals.totalNet)}
-                            </Text>
-                        </View>
-                    )}
-
-                    <View style={styles.totalsRow}>
-                        <Text>{t['totalNet']}</Text>
-                        <Text>{formatValue(totals.totalNet)}</Text>
-                    </View>
-
-                    {totals.shipping > 0 && (
-                        <View style={styles.totalsRow}>
-                            <Text>{t['shipping']}</Text>
-                            <Text>+{formatValue(totals.shipping)}</Text>
-                        </View>
-                    )}
-
-                    <View style={styles.totalsRow}>
+                    <View style={styles.totalLine}>
                         <Text>
-                            {t['tax']} ({totals.taxRate}%)
+                            {safeText(t.tax)} ({safeText(totals.taxRate)}%):
                         </Text>
                         <Text>
-                            +
-                            {formatValue(
-                                totals.totalGross -
-                                    totals.totalNet -
-                                    totals.shipping,
+                            {money(
+                                (totals.totalGross ?? 0) -
+                                    (totals.totalNet ?? 0),
+                                totals.currency,
                             )}
                         </Text>
                     </View>
-
-                    <View style={styles.totalsDivider} />
-
-                    <View style={[styles.totalsRow, styles.totalBold]}>
-                        <Text>{t['totalGross']}</Text>
-                        <Text>{formatValue(totals.totalGross)}</Text>
+                    <View style={styles.totalLine}>
+                        <Text>{safeText(t.totalGross)}:</Text>
+                        <Text>{money(totals.totalGross, totals.currency)}</Text>
                     </View>
-
-                    {totals.deposit > 0 && (
-                        <View style={styles.totalsRow}>
-                            <Text>{t['deposit']}</Text>
-                            <Text>-{formatValue(totals.deposit)}</Text>
-                        </View>
-                    )}
-
-                    {totals.payments > 0 && (
-                        <View style={styles.totalsRow}>
-                            <Text>{t['payments']}</Text>
-                            <Text>-{formatValue(totals.payments)}</Text>
-                        </View>
-                    )}
-
-                    <View style={styles.totalsDivider} />
-
-                    <View style={[styles.totalsRow, styles.amountDue]}>
-                        <Text>{t['amountDue']}</Text>
-                        <Text>{formatValue(totals.amountDue)}</Text>
+                    <View style={[styles.totalLine, styles.totalBold]}>
+                        <Text>{safeText(t.amountDue)}:</Text>
+                        <Text>{money(totals.amountDue, totals.currency)}</Text>
                     </View>
                 </View>
+
+                <Text style={styles.footer}>
+                    {`Thank you for your business! | ${safeText(issuer.name)} · ${safeText(issuer.city)}`}
+                </Text>
             </Page>
         </Document>
     )
 }
-
-const styles = StyleSheet.create({
-    body: { padding: 32, fontSize: 11, fontFamily: 'Helvetica' },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-    },
-    title: { fontSize: 24, fontWeight: 'bold' },
-    subtitle: {
-        fontSize: 13,
-        fontWeight: 'bold',
-        marginTop: 8,
-        marginBottom: 4,
-    },
-    section: { marginBottom: 12 },
-    itemRow: {
-        flexDirection: 'row',
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#999',
-        paddingVertical: 2,
-    },
-    itemHeader: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#000',
-        fontWeight: 'bold',
-        marginBottom: 4,
-    },
-    totalsSection: {
-        marginTop: 12,
-        borderTopWidth: 1,
-        borderTopColor: '#000',
-        paddingTop: 8,
-    },
-    totalsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 3,
-    },
-    totalsDivider: {
-        borderTopWidth: 0.8,
-        borderTopColor: '#666',
-        marginVertical: 5,
-    },
-    totalBold: { fontWeight: 'bold' },
-    amountDue: { fontWeight: 'bold', fontSize: 13, marginTop: 4 },
-})

@@ -1,71 +1,104 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
+import { pdf } from '@react-pdf/renderer'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useDebounce } from 'use-debounce'
+import { useTranslations } from 'next-intl'
 import PDFInvoiceDocument from './PDFInvoiceDocument'
 import { Invoice } from '@/types/Invoice'
-import { useTranslations } from 'next-intl'
 
-const PDFViewer = dynamic(
-    async () => (await import('@react-pdf/renderer')).PDFViewer,
-    { ssr: false },
-)
-
-interface PDFInvoicePreviewProps {
-    invoice: Invoice
+function PDFSkeleton() {
+    return (
+        <div className="w-full h-full flex items-center justify-center bg-[var(--background)] animate-pulse">
+            <div className="w-[90%] h-[95%] rounded-xl bg-[var(--foreground)]/10 shadow-inner" />
+        </div>
+    )
 }
 
-export default function PDFInvoicePreview({ invoice }: PDFInvoicePreviewProps) {
+export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
     const t = useTranslations('Invoices.PDF')
-    const [mounted, setMounted] = useState(false)
-    useEffect(() => setMounted(true), [])
-    if (!mounted) return null
+    const [debouncedInvoice] = useDebounce(invoice, 400)
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+    const [isGenerating, setIsGenerating] = useState(false)
 
-    const labels = {
-        title: t('title'),
-        invoiceNumber: t('invoiceNumber'),
-        invoiceDate: t('invoiceDate'),
-        dueDate: t('dueDate'),
-        reference: t('reference'),
-        from: t('from'),
-        billTo: t('billTo'),
-        items: t('items'),
-        name: t('name'),
-        description: t('description'),
-        quantity: t('quantity'),
-        unitPrice: t('unitPrice'),
-        subtotal: t('subtotal'),
-        sumNet: t('sumNet'),
-        discount: t('discount'),
-        totalNet: t('totalNet'),
-        shipping: t('shipping'),
-        tax: t('tax'),
-        totalGross: t('totalGross'),
-        deposit: t('deposit'),
-        payments: t('payments'),
-        amountDue: t('amountDue'),
-    }
+    useEffect(() => {
+        let active = true
+        async function generate() {
+            setIsGenerating(true)
+            try {
+                const blob = await pdf(
+                    <PDFInvoiceDocument
+                        invoiceDetails={debouncedInvoice.invoiceDetails}
+                        issuer={debouncedInvoice.issuer}
+                        client={debouncedInvoice.client}
+                        items={debouncedInvoice.items}
+                        totals={debouncedInvoice.totals}
+                        t={{
+                            title: t('title'),
+                            invoiceNumber: t('invoiceNumber'),
+                            invoiceDate: t('invoiceDate'),
+                            dueDate: t('dueDate'),
+                            reference: t('reference'),
+                            from: t('from'),
+                            billTo: t('billTo'),
+                            items: t('items'),
+                            name: t('name'),
+                            description: t('description'),
+                            quantity: t('quantity'),
+                            unitPrice: t('unitPrice'),
+                            subtotal: t('subtotal'),
+                            totalNet: t('totalNet'),
+                            tax: t('tax'),
+                            totalGross: t('totalGross'),
+                            amountDue: t('amountDue'),
+                        }}
+                    />,
+                ).toBlob()
+                if (!active) return
+                const url = URL.createObjectURL(blob)
+                setPdfUrl(prev => {
+                    if (prev) URL.revokeObjectURL(prev)
+                    return url
+                })
+            } catch (err) {
+                console.error('PDF generation failed:', err)
+            } finally {
+                if (active) setIsGenerating(false)
+            }
+        }
+
+        generate()
+        return () => {
+            active = false
+        }
+    }, [debouncedInvoice, t])
 
     return (
-        <div className="relative flex flex-col w-full h-full rounded-xl overflow-hidden bg-[var(--background)] text-[var(--foreground)] shadow-sm transition-all duration-300">
-            <PDFViewer
-                key={invoice.invoiceDetails.invoiceNumber}
-                width="100%"
-                height="100%"
-                showToolbar={false}
-                style={{
-                    border: 'none',
-                    backgroundColor: 'var(--background)',
-                }}>
-                <PDFInvoiceDocument
-                    invoiceDetails={invoice.invoiceDetails}
-                    issuer={invoice.issuer}
-                    client={invoice.client}
-                    items={invoice.items}
-                    totals={invoice.totals}
-                    t={labels}
+        <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--background)] text-[var(--foreground)] shadow-sm">
+            <AnimatePresence>
+                {isGenerating && (
+                    <motion.div
+                        key="skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute inset-0 z-10">
+                        <PDFSkeleton />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {pdfUrl ? (
+                <iframe
+                    src={pdfUrl}
+                    className="w-full h-full border-none"
+                    title="Invoice PDF Preview"
                 />
-            </PDFViewer>
+            ) : (
+                <PDFSkeleton />
+            )}
         </div>
     )
 }
