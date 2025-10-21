@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import { useAuthContext } from '@/context/AuthProvider'
+import ThemeToggle from '@/components/common/ThemeToggle'
 
 export function SidebarComponent() {
     const { user } = useAuthContext()
@@ -103,6 +104,7 @@ export function SidebarComponent() {
                                 ),
                             }}
                         />
+                        <ThemeToggle></ThemeToggle>
                     </div>
                 </SidebarBody>
             </Sidebar>

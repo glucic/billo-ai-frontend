@@ -12,9 +12,10 @@ import {
     TextAreaField,
     InputError,
 } from '@/components/ui'
-import { Trash2 as TrashIcon } from 'lucide-react'
+import { MinusIcon, PlusIcon } from 'lucide-react'
 import { InvoiceItem } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
+import { cn } from '@/lib/utils'
 
 interface ItemsSectionProps {
     value: InvoiceItem[]
@@ -39,7 +40,9 @@ export default function ItemsSection({
 }: ItemsSectionProps) {
     const t = useTranslations('Invoices.Items')
     const [open, setOpen] = React.useState(true)
-
+    const [hoverRemoveIdx, setHoverRemoveIdx] = React.useState<number | null>(
+        null,
+    )
     const getError = (index: number, field: keyof InvoiceItem) =>
         errors?.[`items.${index}.${field}`] || []
 
@@ -64,138 +67,182 @@ export default function ItemsSection({
                 <div id="items-fields" className="flex flex-col gap-6 mt-4">
                     <InputError messages={sectionError} />
 
-                    {value.map((item, idx) => (
-                        <div
-                            key={idx}
-                            className="p-5 rounded-lg bg-[var(--primary)] shadow-sm transition-all duration-200 hover:shadow-md">
-                            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-start content-start md:items-stretch">
-                                <div className="flex flex-col space-y-1 md:col-span-3">
-                                    <Label htmlFor={`item-name-${idx}`}>
-                                        {t('name')}
+                    {value.map((item, idx) => {
+                        const total = (item.rate ?? 0) * (item.quantity ?? 0)
+                        const isSingleItem = value.length === 1
+
+                        return (
+                            <div
+                                key={idx}
+                                className={cn(
+                                    'p-5 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md',
+                                    'bg-[var(--primary)]',
+                                    hoverRemoveIdx === idx &&
+                                        'bg-[var(--error)]/10',
+                                )}>
+                                <div className="grid grid-cols-1 md:grid-cols-6 gap-3 items-center">
+                                    <div className="md:col-span-2">
+                                        <Label
+                                            htmlFor={`item-name-${idx}`}
+                                            className="mb-1 block">
+                                            {t('name')}
+                                        </Label>
+                                        <InputField
+                                            id={`item-name-${idx}`}
+                                            value={item.name}
+                                            onChange={e =>
+                                                onUpdateItem(
+                                                    idx,
+                                                    'name',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder={t('name')}
+                                            error={Boolean(
+                                                getError(idx, 'name')?.length,
+                                            )}
+                                        />
+                                        <InputError
+                                            id={`item-name-${idx}-error`}
+                                            messages={getError(idx, 'name')}
+                                            className="mt-1 text-xs"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label
+                                            htmlFor={`item-rate-${idx}`}
+                                            className="mb-1 block">
+                                            {t('rate')}
+                                        </Label>
+                                        <CurrencyInput
+                                            value={item.rate}
+                                            onChange={val =>
+                                                onUpdateItem(idx, 'rate', val)
+                                            }
+                                            currency={currency}
+                                            mode="currency"
+                                            step={0.5}
+                                            min={0}
+                                            error={Boolean(
+                                                getError(idx, 'rate')?.length,
+                                            )}
+                                        />
+                                        <InputError
+                                            id={`item-rate-${idx}-error`}
+                                            messages={getError(idx, 'rate')}
+                                            className="mt-1 text-xs"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label
+                                            htmlFor={`item-quantity-${idx}`}
+                                            className="mb-1 block">
+                                            {t('quantity')}
+                                        </Label>
+                                        <InputField
+                                            id={`item-quantity-${idx}`}
+                                            value={item.quantity.toString()}
+                                            onChange={e =>
+                                                onUpdateItem(
+                                                    idx,
+                                                    'quantity',
+                                                    Number(
+                                                        e.target.value
+                                                            .replace(
+                                                                /[^\d.,-]/g,
+                                                                '',
+                                                            )
+                                                            .replace(',', '.'),
+                                                    ) || 0,
+                                                )
+                                            }
+                                            placeholder="0"
+                                            error={Boolean(
+                                                getError(idx, 'quantity')
+                                                    ?.length,
+                                            )}
+                                            className="text-center"
+                                        />
+                                        <InputError
+                                            id={`item-quantity-${idx}-error`}
+                                            messages={getError(idx, 'quantity')}
+                                            className="mt-1 text-xs"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label className="mb-1 block text-center">
+                                            Total
+                                        </Label>
+                                        <div
+                                            className="flex mb-1 items-center justify-end h-[var(--input-height)]
+                                             px-3 rounded-[var(--input-radius)]
+                                             text-[var(--input-text)]
+                                             text-sm font-semibold tabular-nums">
+                                            {total.toFixed(2)} {currency}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-end">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            onClick={() =>
+                                                !isSingleItem &&
+                                                onRemoveItem(idx)
+                                            }
+                                            onMouseEnter={() =>
+                                                setHoverRemoveIdx(idx)
+                                            }
+                                            onMouseLeave={() =>
+                                                setHoverRemoveIdx(null)
+                                            }
+                                            aria-label={t('removeItem')}
+                                            disabled={isSingleItem}
+                                            className={cn(
+                                                'p-2 rounded-full text-[var(--error)] transition-all duration-200 focus:outline-none focus:ring-0',
+                                                'hover:bg-transparent active:bg-transparent',
+                                                isSingleItem &&
+                                                    'opacity-50 cursor-not-allowed',
+                                            )}>
+                                            <MinusIcon />
+                                        </Button>
+                                    </div>
+                                </div>
+                                <LabelInputContainer className="mt-4">
+                                    <Label htmlFor={`item-description-${idx}`}>
+                                        {t('description')}
                                     </Label>
-                                    <InputField
-                                        id={`item-name-${idx}`}
-                                        value={item.name}
+                                    <TextAreaField
+                                        id={`item-description-${idx}`}
+                                        rows={3}
+                                        value={item.description}
                                         onChange={e =>
                                             onUpdateItem(
                                                 idx,
-                                                'name',
+                                                'description',
                                                 e.target.value,
                                             )
                                         }
-                                        placeholder={t('name')}
-                                        error={Boolean(
-                                            getError(idx, 'name')?.length,
-                                        )}
                                     />
                                     <InputError
-                                        id={`item-name-${idx}-error`}
-                                        messages={getError(idx, 'name')}
-                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
+                                        id={`item-description-${idx}-error`}
+                                        messages={getError(idx, 'description')}
                                     />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <Label htmlFor={`item-rate-${idx}`}>
-                                        {t('rate')}
-                                    </Label>
-                                    <CurrencyInput
-                                        value={item.rate}
-                                        onChange={val =>
-                                            onUpdateItem(idx, 'rate', val)
-                                        }
-                                        currency={currency}
-                                        position="suffix"
-                                        error={Boolean(
-                                            getError(idx, 'rate')?.length,
-                                        )}
-                                    />
-                                    <InputError
-                                        id={`item-rate-${idx}-error`}
-                                        messages={getError(idx, 'rate')}
-                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col space-y-1">
-                                    <Label htmlFor={`item-quantity-${idx}`}>
-                                        {t('quantity')}
-                                    </Label>
-                                    <InputField
-                                        id={`item-quantity-${idx}`}
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        value={item.quantity}
-                                        onChange={e =>
-                                            onUpdateItem(
-                                                idx,
-                                                'quantity',
-                                                Number(e.target.value),
-                                            )
-                                        }
-                                        error={Boolean(
-                                            getError(idx, 'quantity')?.length,
-                                        )}
-                                    />
-                                    <InputError
-                                        id={`item-quantity-${idx}-error`}
-                                        messages={getError(idx, 'quantity')}
-                                        className="min-h-[1.25rem] mt-0.5 leading-tight"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col justify-end items-center md:items-end h-full">
-                                    <CurrencyInput
-                                        value={item.rate * item.quantity}
-                                        onChange={() => {}}
-                                        currency={currency}
-                                        readOnly
-                                        position="suffix"
-                                    />
-                                </div>
+                                </LabelInputContainer>
                             </div>
-
-                            <LabelInputContainer className="mt-4">
-                                <Label htmlFor={`item-description-${idx}`}>
-                                    {t('description')}
-                                </Label>
-                                <TextAreaField
-                                    id={`item-description-${idx}`}
-                                    rows={3}
-                                    value={item.description}
-                                    onChange={e =>
-                                        onUpdateItem(
-                                            idx,
-                                            'description',
-                                            e.target.value,
-                                        )
-                                    }
-                                />
-                                <InputError
-                                    id={`item-description-${idx}-error`}
-                                    messages={getError(idx, 'description')}
-                                />
-                            </LabelInputContainer>
-
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={() => onRemoveItem(idx)}
-                                aria-label={t('removeItem')}
-                                className="p-2 text-red-500 hover:text-red-700">
-                                <TrashIcon className="w-5 h-5" />
-                            </Button>
-                        </div>
-                    ))}
+                        )
+                    })}
 
                     <Button
                         type="button"
                         variant="secondary"
                         animated
-                        className="w-full py-6 rounded-2xl"
+                        className="w-full py-9 rounded-2xl"
                         onClick={onAddItem}>
-                        {t('addItem')}
+                        <PlusIcon className="w-5 h-5" /> {t('addItem')}
                     </Button>
                 </div>
             )}

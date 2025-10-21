@@ -1,138 +1,159 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { motion, useMotionTemplate, useMotionValue } from 'motion/react'
+import { NumberField, Group, Input, Button, Label } from 'react-aria-components'
+import { ChevronUpIcon, ChevronDownIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+type CurrencyInputMode = 'currency' | 'percent'
+
 interface CurrencyInputProps {
-    value: number
-    onChange: (value: number) => void
-    currency: string
+    label?: string
+    value?: number
+    onChange?: (value: number) => void
+    currency?: string
+    mode?: CurrencyInputMode
     placeholder?: string
-    position?: 'prefix' | 'suffix'
     readOnly?: boolean
+    disabled?: boolean
     error?: boolean
     className?: string
-}
-
-const currencySymbols: Record<string, string> = {
-    USD: '$',
-    EUR: '€',
-    GBP: '£',
-    JPY: '¥',
-    CHF: 'CHF',
+    step?: number
+    min?: number
+    max?: number
 }
 
 export default function CurrencyInput({
-    value,
-    onChange,
-    currency,
-    placeholder,
-    position = 'suffix',
-    readOnly = false,
-    error = false,
-    className,
-}: CurrencyInputProps) {
-    const [displayValue, setDisplayValue] = useState('')
-    const symbol = currencySymbols[currency] || currency
+                                          label,
+                                          value = 0,
+                                          onChange,
+                                          currency = 'EUR',
+                                          mode = 'currency',
+                                          placeholder,
+                                          readOnly = false,
+                                          disabled = false,
+                                          error = false,
+                                          className,
+                                          step,
+                                          min,
+                                          max,
+                                      }: CurrencyInputProps) {
+    const [raw, setRaw] = useState<string>('') // free typing buffer
+    const [focused, setFocused] = useState(false)
 
-    const radius = 0
-    const [visible, setVisible] = useState(false)
-    const mouseX = useMotionValue(0)
-    const mouseY = useMotionValue(0)
-
+    // format only after blur
     useEffect(() => {
-        if (typeof value === 'number' && !isNaN(value)) {
-            setDisplayValue(
-                new Intl.NumberFormat('de-DE', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                }).format(value),
-            )
-        } else {
-            setDisplayValue('')
+        if (!focused) {
+            if (value !== undefined && value !== null) {
+                const fmt =
+                    mode === 'currency'
+                        ? new Intl.NumberFormat('de-DE', {
+                            style: 'currency',
+                            currency,
+                            minimumFractionDigits: 2,
+                        }).format(value)
+                        : `${value.toFixed(2)}`
+                setRaw(fmt)
+            }
         }
-    }, [value])
+    }, [value, focused, mode, currency])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const input = e.target.value.replace(/[^\d.,-]/g, '')
-        const normalized = parseFloat(input.replace(',', '.'))
-        setDisplayValue(input)
-        if (!isNaN(normalized)) onChange(normalized)
+    const parse = (s: string): number | null => {
+        const normalized = s.replace(',', '.').replace(/[^\d.-]/g, '')
+        const num = parseFloat(normalized)
+        return isNaN(num) ? null : num
     }
 
-    const handleMouseMove = ({
-        currentTarget,
-        clientX,
-        clientY,
-    }: React.MouseEvent) => {
-        const { left, top } = currentTarget.getBoundingClientRect()
-        mouseX.set(clientX - left)
-        mouseY.set(clientY - top)
+    const commit = (text: string) => {
+        const parsed = parse(text)
+        if (parsed != null) {
+            const clamped = Math.min(
+                max ?? Infinity,
+                Math.max(min ?? -Infinity, parsed),
+            )
+            onChange?.(parseFloat(clamped.toFixed(2)))
+        } else {
+            onChange?.(0)
+        }
+    }
+
+    const increment = () => {
+        const stepVal = step ?? (mode === 'percent' ? 0.1 : 0.5)
+        onChange?.(parseFloat(((value ?? 0) + stepVal).toFixed(2)))
+    }
+
+    const decrement = () => {
+        const stepVal = step ?? (mode === 'percent' ? 0.1 : 0.5)
+        onChange?.(parseFloat(((value ?? 0) - stepVal).toFixed(2)))
     }
 
     return (
-        <motion.div
-            style={{
-                background: useMotionTemplate`
-                    radial-gradient(
-                      ${visible ? radius + 'px' : '0px'} circle at ${mouseX}px ${mouseY}px,
-                      var(--color-accent-light),
-                      transparent 90%
-                    )
-                `,
-            }}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setVisible(true)}
-            onMouseLeave={() => setVisible(false)}
-            className="group/input rounded-[var(--input-radius)] p-[2px] transition-all duration-300 relative w-full">
-            {/* ───── Currency Symbol (prefix) ───── */}
-            {position === 'prefix' && (
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 select-none">
-                    {symbol}
-                </span>
+        <div className="flex flex-col gap-1">
+            {label && (
+                <Label className="text-sm font-medium text-[var(--input-text)]">
+                    {label}
+                </Label>
             )}
-
-            {/* ───── Input Field ───── */}
-            <input
-                type="text"
-                inputMode="decimal"
-                readOnly={readOnly}
-                placeholder={placeholder}
-                value={displayValue}
-                onChange={handleChange}
+            <Group
                 className={cn(
-                    `flex h-[var(--input-height)] w-full
-                    rounded-[var(--input-radius)]
-                    border
-                    bg-[var(--input-bg)]/70
-                    backdrop-blur-[var(--input-blur)]
-                    px-[var(--input-padding-x)] py-[var(--input-padding-y)]
-                    text-sm text-[var(--input-text)]
-                    placeholder:text-[var(--input-placeholder)]
-                    shadow-[var(--input-shadow)]
-                    transition-all duration-300
-                    hover:bg-[var(--accent-glow)]
-                    focus-visible:ring-2
-                    focus-visible:ring-[var(--color-accent)]
-                    focus-visible:ring-offset-1
-                    focus-visible:ring-offset-[var(--color-background)]
-                    focus-visible:outline-none
-                    disabled:cursor-not-allowed disabled:opacity-50`,
-                    error
-                        ? 'border-[var(--error)] focus-visible:ring-[var(--error)] focus-visible:ring-offset-[var(--error)]/50 hover:bg-[var(--error)]/10'
-                        : 'border-[var(--input-border)]',
-                    position === 'prefix' ? 'pl-8 pr-3' : 'pr-8 pl-3',
-                    'text-right md:text-left',
+                    `relative inline-flex h-[var(--input-height)] w-full items-center overflow-hidden
+          rounded-[var(--input-radius)]
+          border border-[var(--input-border)]
+          bg-[var(--input-bg)]/70 backdrop-blur-[var(--input-blur)]
+          text-sm text-[var(--input-text)]
+          shadow-[var(--input-shadow)]
+          transition-all duration-300
+          focus-within:border-[var(--color-accent)]
+          focus-within:ring-2 focus-within:ring-[var(--color-accent)]
+          focus-within:ring-offset-1
+          hover:bg-[var(--accent-glow)]
+          disabled:opacity-50 disabled:cursor-not-allowed`,
+                    error &&
+                    'border-[var(--error)] focus-within:ring-[var(--error)] hover:bg-[var(--error)]/10',
                     className,
                 )}
-            />
+            >
+                <Input
+                    inputMode="decimal"
+                    value={raw}
+                    onChange={e => setRaw(e.target.value)}
+                    onFocus={() => {
+                        setFocused(true)
+                        setRaw(value?.toString() ?? '')
+                    }}
+                    onBlur={() => {
+                        setFocused(false)
+                        commit(raw)
+                    }}
+                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                    className="flex-1 bg-transparent px-3 py-[6px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] tabular-nums outline-none"
+                />
 
-            {position === 'suffix' && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 select-none">
-                    {symbol}
-                </span>
-            )}
-        </motion.div>
+                {mode === 'percent' && (
+                    <span className="absolute right-9 text-[var(--input-placeholder)] select-none">
+            %
+          </span>
+                )}
+
+                <div className="flex h-[calc(100%+2px)] flex-col">
+                    <Button
+                        type="button"
+                        onPress={increment}
+                        className="flex h-1/2 w-6 items-center justify-center border-l border-b border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40"
+                    >
+                        <ChevronUpIcon size={12} />
+                    </Button>
+                    <Button
+                        type="button"
+                        onPress={decrement}
+                        className="flex h-1/2 w-6 items-center justify-center border-l border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40"
+                    >
+                        <ChevronDownIcon size={12} />
+                    </Button>
+                </div>
+            </Group>
+        </div>
     )
 }

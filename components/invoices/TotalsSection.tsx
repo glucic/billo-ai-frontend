@@ -13,6 +13,7 @@ import { CalculatedTotals, calculateTotals } from '@/lib/invoiceCalculations'
 import { ChevronDownIcon } from 'lucide-react'
 import { InvoiceItem, InvoiceTotals } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
+import { NumberField } from 'react-aria-components'
 
 interface TotalsSectionProps {
     items: InvoiceItem[]
@@ -101,38 +102,14 @@ export default function TotalsSection({
                 <div className="space-y-6 mt-4 animate-fadeIn">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <LabelInputContainer>
-                            <Label>{t('currency')}</Label>
-                            <select
-                                className={`appearance-none w-full border rounded-md p-2 bg-[var(--input-bg)] text-[var(--foreground)] pr-8 ${
-                                    getError('currency').length
-                                        ? 'border-red-500'
-                                        : ''
-                                }`}
-                                value={totals.currency}
-                                onChange={e =>
-                                    setTotalsField('currency', e.target.value)
-                                }>
-                                <option value="EUR">€ Euro</option>
-                                <option value="USD">$ US Dollar</option>
-                                <option value="GBP">£ Pound Sterling</option>
-                                <option value="CHF">Fr Swiss Franc</option>
-                            </select>
-                            <span className="absolute right-3 top-2 text-gray-500">
-                                {symbol}
-                            </span>
-                            <InputError
-                                id="totals-currency-error"
-                                messages={getError('currency')}
-                            />
-                        </LabelInputContainer>
-
-                        <LabelInputContainer>
                             <Label>{t('mwst')} (%)</Label>
                             <CurrencyInput
                                 value={totals.taxRate}
-                                onChange={val => setTotalsField('taxRate', val)}
-                                currency="%"
-                                position="suffix"
+                                onChange={v => setTotalsField('taxRate', v)}
+                                mode="percent"
+                                step={0.1}
+                                min={0}
+                                max={100}
                                 error={Boolean(getError('taxRate')?.length)}
                             />
                             {totals.taxRate > 0 && computed.tax > 0 && (
@@ -153,11 +130,9 @@ export default function TotalsSection({
                             <Label>{t('discount')}</Label>
                             <CurrencyInput
                                 value={totals.discount}
-                                onChange={val =>
-                                    setTotalsField('discount', val)
-                                }
-                                currency="%"
-                                position="suffix"
+                                onChange={v => setTotalsField('discount', v)}
+                                mode="percent"
+                                step={0.1}
                                 error={Boolean(getError('discount')?.length)}
                             />
                             <InputError
@@ -170,10 +145,10 @@ export default function TotalsSection({
                             <Label>{t('shipping')}</Label>
                             <CurrencyInput
                                 value={totals.shipping}
-                                onChange={val =>
-                                    setTotalsField('shipping', val)
-                                }
-                                currency={symbol}
+                                onChange={v => setTotalsField('shipping', v)}
+                                currency={totals.currency}
+                                mode="currency"
+                                step={1}
                                 error={Boolean(getError('shipping')?.length)}
                             />
                             <InputError
