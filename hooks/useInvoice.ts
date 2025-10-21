@@ -30,7 +30,10 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         invoiceNumber: `INV-${new Date()
             .toISOString()
             .slice(0, 10)
-            .replace(/-/g, '')}-${Math.floor(Math.random() * 1000)}`,
+            .replace(
+                /-/g,
+                '',
+            )}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
         invoiceDate: format(new Date(), 'yyyy-MM-dd'),
         dueDate: '',
         reference: '',

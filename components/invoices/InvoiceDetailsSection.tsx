@@ -78,7 +78,6 @@ export default function InvoiceDetailsSection({
                                 <InputField
                                     id={`invoice-${key}`}
                                     required={required}
-                                    readOnly={key === 'invoiceNumber'}
                                     value={invoiceDetails[key] ?? ''}
                                     onChange={e =>
                                         setInvoiceDetailsField(
