@@ -34,6 +34,8 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
                         client={debouncedInvoice.client}
                         items={debouncedInvoice.items}
                         totals={debouncedInvoice.totals}
+                        legal={debouncedInvoice.legal}
+                        footer={debouncedInvoice.footer}
                         t={{
                             title: t('title'),
                             invoiceNumber: t('invoiceNumber'),

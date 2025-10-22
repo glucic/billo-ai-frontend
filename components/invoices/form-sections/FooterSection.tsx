@@ -55,7 +55,7 @@ export default function FooterSection({
                         </label>
                         <TextAreaField
                             id="footer-notes"
-                            value={footer.notes || ''}
+                            value={footer.notes ?? ''}
                             onChange={e =>
                                 setFooterField('notes', e.target.value)
                             }

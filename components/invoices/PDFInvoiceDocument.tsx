@@ -14,6 +14,8 @@ import {
     Client,
     InvoiceItem,
     InvoiceTotals,
+    Footer,
+    Legal,
 } from '@/types/Invoice'
 
 const styles = StyleSheet.create({
@@ -82,6 +84,8 @@ export default function PDFInvoiceDocument({
     client,
     items,
     totals,
+    legal,
+    footer,
     t,
 }: {
     invoiceDetails: InvoiceDetails
@@ -89,6 +93,8 @@ export default function PDFInvoiceDocument({
     client: Client
     items: InvoiceItem[]
     totals: InvoiceTotals
+    legal: Legal
+    footer: Footer
     t: Record<string, string>
 }) {
     return (
@@ -210,8 +216,14 @@ export default function PDFInvoiceDocument({
                     </View>
                 </View>
 
+                <View style={styles.divider} />
+
+                <View>
+                    <Text>{safeText(legal.termsAndConditions)}</Text>
+                </View>
+
                 <Text style={styles.footer}>
-                    {`Thank you for your business! | ${safeText(issuer.name)} · ${safeText(issuer.city)}`}
+                    {`${safeText(footer.notes)} | ${safeText(issuer.name)} · ${safeText(issuer.city)}`}
                 </Text>
             </Page>
         </Document>

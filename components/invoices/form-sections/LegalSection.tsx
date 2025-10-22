@@ -57,7 +57,7 @@ export default function LegalSection({
                         </label>
                         <TextAreaField
                             id="legal-terms"
-                            value={legal.termsAndConditions || ''}
+                            value={legal.termsAndConditions ?? ''}
                             onChange={e =>
                                 setLegalField(
                                     'termsAndConditions',

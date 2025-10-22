@@ -70,14 +70,7 @@ export default function TotalsSection({
         )
         setTotalsField('totalGross', calc.total ?? 0)
         setTotalsField('amountDue', calc.amountDue ?? 0)
-    }, [
-        items,
-        totals.taxRate,
-        totals.discount,
-        totals.shipping,
-        totals.deposit,
-        totals.payments,
-    ])
+    }, [items, totals.taxRate, totals.discount, totals.shipping, totals.deposit, totals.payments, setTotalsField])
 
     const symbol = currencySymbols[totals.currency] || totals.currency
     const helperTextStyle =
@@ -204,7 +197,7 @@ export default function TotalsSection({
                                 </span>
                             </div>
 
-                            <hr className="my-2 border-[var(--border)]" />
+                            <hr className="my-2 border-[var(--divider)]" />
 
                             <div className="flex justify-between text-lg font-semibold">
                                 <span>{t('totalGross')}</span>
@@ -231,7 +224,7 @@ export default function TotalsSection({
                                 </div>
                             )}
 
-                            <hr className="my-2 border-[var(--border)]" />
+                            <hr className="my-2 border-[var(--divider)]" />
 
                             <div className="flex justify-between text-xl font-bold">
                                 <span className="text-[var(--accent)]">
