@@ -7,6 +7,9 @@ import {
     ClientSection,
     ItemsSection,
     TotalsSection,
+    FooterSection,
+    LegalSection,
+    AttachmentSection,
 } from '@/components/invoices/form-sections'
 import { PDFInvoicePreview } from '@/components/invoices'
 import { Button, StatefulButton } from '@/components/ui'
@@ -17,6 +20,8 @@ import {
     InvoiceTotals,
     Client,
     Issuer,
+    Legal,
+    Footer,
 } from '@/types/Invoice'
 import { Organisation } from '@/types/Organisation'
 
@@ -44,6 +49,12 @@ export interface InvoiceFormProps {
         field: K,
         value: InvoiceTotals[K],
     ) => void
+    legal: Legal
+    setLegalField: (field: keyof Legal, value: string) => void
+    footer: Footer
+    setFooterField: (field: keyof Footer, value: string) => void
+    attachments: File[]
+    setAttachments: (files: File[]) => void
     saveInvoice: () => Promise<{ success: boolean }>
     organisations: Organisation[]
     saving: boolean
@@ -71,6 +82,12 @@ export function InvoiceForm({
     updateItem,
     totals,
     setTotalsField,
+    legal,
+    setLegalField,
+    footer,
+    setFooterField,
+    attachments,
+    setAttachments,
     saveInvoice,
     organisations,
     saving,
@@ -94,7 +111,16 @@ export function InvoiceForm({
         )
     }
 
-    const invoice = { invoiceDetails, issuer, client, items, totals }
+    const invoice = {
+        invoiceDetails,
+        issuer,
+        client,
+        items,
+        totals,
+        legal,
+        footer,
+        attachments,
+    }
 
     return (
         <main className="flex flex-col h-screen overflow-hidden text-[var(--color-foreground)] p-4 md:p-6">
@@ -104,6 +130,7 @@ export function InvoiceForm({
                     className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
                         showPreview ? 'flex-1' : 'flex-[1_1_100%]'
                     }`}>
+                    {/* Sections */}
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
                         setInvoiceDetailsField={setInvoiceDetailsField}
@@ -141,6 +168,18 @@ export function InvoiceForm({
                         items={items}
                         totals={totals}
                         setTotalsField={setTotalsField}
+                        errors={fieldErrors}
+                    />
+
+                    <LegalSection
+                        legal={legal}
+                        setLegalField={setLegalField}
+                        errors={fieldErrors}
+                    />
+
+                    <FooterSection
+                        footer={footer}
+                        setFooterField={setFooterField}
                         errors={fieldErrors}
                     />
 

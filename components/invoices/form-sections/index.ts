@@ -3,3 +3,6 @@ export { default as IssuerSection } from '@/components/invoices/form-sections/Is
 export { default as ClientSection } from '@/components/invoices/form-sections/ClientSection'
 export { default as ItemsSection } from '@/components/invoices/form-sections/ItemsSection'
 export { default as TotalsSection } from '@/components/invoices/form-sections/TotalsSection'
+export { default as LegalSection } from '@/components/invoices/form-sections/LegalSection'
+export { default as FooterSection } from '@/components/invoices/form-sections/FooterSection'
+export { default as AttachmentSection } from '@/components/invoices/form-sections/AttachmentSection'

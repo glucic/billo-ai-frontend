@@ -7,10 +7,12 @@ import { motion, useMotionTemplate, useMotionValue } from 'motion/react'
 export type TextAreaProps =
     React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
         error?: boolean
+        minHeight?: number
+        maxHeight?: number
     }
 
 const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-    ({ className, error, ...props }, ref) => {
+    ({ className, error, minHeight = 120, maxHeight = 300, ...props }, ref) => {
         const radius = 0
         const [visible, setVisible] = React.useState(false)
 
@@ -44,8 +46,13 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 className="group/input rounded-[var(--input-radius)] p-[2px] transition-all duration-300">
                 <textarea
                     ref={ref}
+                    style={{
+                        minHeight: minHeight,
+                        maxHeight: maxHeight,
+                        overflowY: 'auto',
+                    }}
                     className={cn(
-                        `flex w-full min-h-[120px]
+                        `flex w-full
                         rounded-[var(--input-radius)]
                         border
                         bg-[var(--input-bg)]/70

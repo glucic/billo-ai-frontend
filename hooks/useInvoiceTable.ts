@@ -9,6 +9,8 @@ import {
     Client,
     InvoiceItem,
     InvoiceTotals,
+    Legal,
+    Footer,
 } from '@/types/Invoice'
 
 const normalizeDate = (date: string | null | undefined): string =>
@@ -31,6 +33,8 @@ interface ApiInvoice {
         quantity: string | number
     }[]
     totals?: Partial<InvoiceTotals>
+    legal?: Partial<Legal>
+    footer?: Partial<Footer>
 }
 
 interface ApiPaginationMeta {
@@ -42,6 +46,14 @@ interface ApiPaginationMeta {
 
 type SortKey = 'invoice_number' | 'invoice_date' | 'client_name' | 'total'
 
+export type SortField =
+    | 'invoice_number'
+    | 'invoice_date'
+    | 'created_at'
+    | 'client_name'
+    | 'total'
+    | 'status'
+
 export function useInvoiceTable() {
     const [invoices, setInvoices] = useState<Invoice[]>([])
     const [loading, setLoading] = useState(false)
@@ -50,13 +62,7 @@ export function useInvoiceTable() {
 
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const [sortBy, setSortBy] = useState<
-        | 'invoice_number'
-        | 'invoice_date'
-        | 'created_at'
-        | 'client_name'
-        | 'total'
-    >('created_at')
+    const [sortBy, setSortBy] = useState<SortField>('created_at')
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
     const [searchTerm, setSearchTerm] = useState('')
 
@@ -80,6 +86,14 @@ export function useInvoiceTable() {
             zip: apiInvoice.client?.zip ?? '',
             phone: apiInvoice.client?.phone ?? '',
             email: apiInvoice.client?.email ?? '',
+        }
+
+        const safeLegal: Legal = {
+            termsAndConditions: apiInvoice.legal?.termsAndConditions ?? '',
+        }
+
+        const safeFooter: Footer = {
+            notes: apiInvoice.footer?.notes ?? '',
         }
 
         return {
@@ -112,6 +126,9 @@ export function useInvoiceTable() {
                 amountDue: 0,
                 ...apiInvoice.totals,
             },
+            legal: safeLegal,
+            footer: safeFooter,
+            attachments: [],
         }
     }, [])
 

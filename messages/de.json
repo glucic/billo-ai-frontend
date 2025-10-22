@@ -1,369 +1,385 @@
 {
-  "Navigation": {
-    "features": "Funktionen entdecken",
-    "pricing": "Preise & Pläne",
-    "contact": "Kontakt aufnehmen",
-    "cta": "Jetzt anmelden"
-  },
-  "Sidebar": {
-    "dashboard": "Dashboard",
-    "invoices": "Rechnungen",
-    "clients": "Kunden",
-    "settings": "Einstellungen",
-    "notifications": "Benachrichtigungen",
-    "help": "Hilfe & Support",
-    "logout": "Abmelden",
-    "organisations": "Organisationen"
-  },
-  "LandingPage": {
-    "HeroSection": {
-      "title": "Willkommen bei BilloAI",
-      "description": "Ihre schnellste Lösung für professionelle Rechnungen mit KI. Erstellen, anpassen und versenden Sie Rechnungen in nur wenigen Sekunden.",
-      "primaryCta": "Jetzt Rechnungen erstellen",
-      "secondaryCta": "Alle Funktionen ansehen"
+    "Navigation": {
+        "features": "Funktionen entdecken",
+        "pricing": "Preise & Pläne",
+        "contact": "Kontakt aufnehmen",
+        "cta": "Jetzt anmelden"
     },
-    "Features": {
-      "heading": "Warum BilloAI?",
-      "feature1": {
-        "title": "Schnell & effizient",
-        "description": "Erstellen Sie professionelle Rechnungen in Sekunden dank intelligenter KI-Vorlagen."
-      },
-      "feature2": {
-        "title": "Individuelle Layouts",
-        "description": "Passen Sie PDF-Designs flexibel an Ihr Branding und Ihre Anforderungen an."
-      },
-      "feature3": {
-        "title": "Automatische Prozesse",
-        "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und smarten Zahlungserinnerungen."
-      }
-    }
-  },
-  "Organisation": {
-    "title": "Organisationen",
-    "count": "{count} Organisationen gefunden",
-    "edit": "Organisation bearbeiten",
-    "delete": "Löschen",
-    "save": "Änderungen speichern",
-    "cancel": "Abbrechen",
-    "leave": "Organisation verlassen",
-    "join": "Organisation beitreten",
-    "companyInfo": "Unternehmensdetails",
-    "addressInfo": "Adressdetails",
-    "fields": {
-      "name": "Name",
-      "email": "E-Mail",
-      "phone": "Telefon",
-      "street": "Straße",
-      "zip": "Postleitzahl",
-      "city": "Stadt",
-      "country": "Land",
-      "region": "Bundesland/Provinz",
-      "employeeCount": "Mitarbeiteranzahl",
-      "description": "Beschreibung",
-      "members": "Mitglieder"
+    "Sidebar": {
+        "dashboard": "Dashboard",
+        "invoices": "Rechnungen",
+        "clients": "Kunden",
+        "settings": "Einstellungen",
+        "notifications": "Benachrichtigungen",
+        "help": "Hilfe & Support",
+        "logout": "Abmelden",
+        "organisations": "Organisationen"
     },
-    "errors": {
-        "loadFailed": "Fehler beim Laden der Organisationen.",
-        "saveFailed": "Fehler beim Speichern der Änderungen.",
-        "deleteFailed": "Fehler beim Löschen der Organisation.",
-        "leaveFailed": "Fehler beim Verlassen der Organisation.",
-        "joinFailed": "Fehler beim Beitreten zur Organisation.",
-        "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-        "nameRequired": "Der Name ist erforderlich.",
-        "streetRequired": "Die Straße eingabe ist erforderlich.",
-        "emailRequired": "Die E-Mail-Adresse ist erforderlich.",
-        "zipRequired": "Die Postleitzahl eingabe ist erforderlich.",
-        "cityRequired": "Die Stadt eingabe ist erforderlich.",
-        "nameTooLong": "Der Name darf maximal 255 Zeichen lang sein.",
-        "addressTooLong": "Die Adresse darf maximal 255 Zeichen lang sein.",
-        "streetTooLong": "Die Straße darf maximal 255 Zeichen lang sein.",
-        "cityTooLong": "Die Stadt darf maximal 255 Zeichen lang sein.",
-        "zipTooLong": "Die Postleitzahl darf maximal 20 Zeichen lang sein.",
-        "regionTooLong": "Das Bundesland darf maximal 255 Zeichen lang sein.",
-        "phoneTooLong": "Die Telefonnummer darf maximal 20 Zeichen lang sein.",
-        "phoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein.",
-        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-        "emailTooLong": "Die E-Mail darf maximal 255 Zeichen lang sein.",
-        "descriptionTooLong": "Die Beschreibung darf maximal 1000 Zeichen lang sein.",
-        "employee_countInvalid": "Die Mitarbeiteranzahl muss eine gültige Zahl sein.",
-        "employee_countTooShort": "Die Mitarbeiteranzahl muss mindestens 1 betragen.",
-        "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+    "LandingPage": {
+        "HeroSection": {
+            "title": "Willkommen bei BilloAI",
+            "description": "Ihre schnellste Lösung für professionelle Rechnungen mit KI. Erstellen, anpassen und versenden Sie Rechnungen in nur wenigen Sekunden.",
+            "primaryCta": "Jetzt Rechnungen erstellen",
+            "secondaryCta": "Alle Funktionen ansehen"
+        },
+        "Features": {
+            "heading": "Warum BilloAI?",
+            "feature1": {
+                "title": "Schnell & effizient",
+                "description": "Erstellen Sie professionelle Rechnungen in Sekunden dank intelligenter KI-Vorlagen."
+            },
+            "feature2": {
+                "title": "Individuelle Layouts",
+                "description": "Passen Sie PDF-Designs flexibel an Ihr Branding und Ihre Anforderungen an."
+            },
+            "feature3": {
+                "title": "Automatische Prozesse",
+                "description": "Sparen Sie Zeit mit wiederkehrenden Rechnungen und smarten Zahlungserinnerungen."
+            }
+        }
     },
-    "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?",
-    "notFound": "Keine Organisationen vorhanden.",
-    "GettingStarted": {
-      "StepCompanyName": {
-        "label": "Wie lautet der Name Ihres Unternehmens?",
-        "placeholder": "Geben Sie den Firmennamen ein"
-      },
-      "StepCompanyAbout": {
-        "label": "Beschreiben Sie kurz Ihr Unternehmen",
-        "placeholder": "Beschreiben Sie Ihr Unternehmen in ein bis zwei Sätzen"
-      },
-      "StepCompanyDetails": {
-        "title": "Unternehmensdetails",
-        "emailLabel": "E-Mail-Adresse",
-        "emailPlaceholder": "z. B. kontakt@unternehmen.de",
-        "phoneLabel": "Telefonnummer",
-        "phonePlaceholder": "z. B. +49 123 456789",
-        "addressSection": "Adresse",
-        "streetLabel": "Straße",
-        "streetPlaceholder": "z. B. Musterstraße 1",
-        "zipLabel": "Postleitzahl",
-        "zipPlaceholder": "z. B. 12345",
-        "cityLabel": "Stadt",
-        "cityPlaceholder": "z. B. Berlin",
-        "regionLabel": "Bundesland / Region",
-        "regionPlaceholder": "z. B. Bayern",
-        "workersLabel": "Anzahl der Mitarbeiter",
-        "workersPlaceholder": "z. B. 25"
-      }
-    }
-  },
-  "Auth": {
-    "Login": {
-      "welcome": "Willkommen bei BilloAI",
-      "subtitle": "Melden Sie sich an, um Ihre Rechnungen zu verwalten",
-      "email": "E-Mail",
-      "password": "Passwort",
-      "loginButton": "Anmelden",
-      "forgotPassword": "Passwort vergessen?",
-      "or": "ODER",
-      "signInGoogle": "Mit Google anmelden",
-      "signInGithub": "Mit GitHub anmelden",
-      "noAccount": "Noch kein Konto?",
-      "signUp": "Registrieren",
-      "errors": {
-        "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-        "emailRequired": "E-Mail ist erforderlich.",
-        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-        "passwordRequired": "Passwort ist erforderlich.",
-        "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt.",
-        "tooManyAttempts": "Zu viele Anmeldeversuche. Bitte versuchen Sie es in wenigen Minuten erneut."
-      }
+    "Organisation": {
+        "title": "Organisationen",
+        "count": "{count} Organisationen gefunden",
+        "edit": "Organisation bearbeiten",
+        "delete": "Löschen",
+        "save": "Änderungen speichern",
+        "cancel": "Abbrechen",
+        "leave": "Organisation verlassen",
+        "join": "Organisation beitreten",
+        "companyInfo": "Unternehmensdetails",
+        "addressInfo": "Adressdetails",
+        "fields": {
+            "name": "Name",
+            "email": "E-Mail",
+            "phone": "Telefon",
+            "street": "Straße",
+            "zip": "Postleitzahl",
+            "city": "Stadt",
+            "country": "Land",
+            "region": "Bundesland/Provinz",
+            "employeeCount": "Mitarbeiteranzahl",
+            "description": "Beschreibung",
+            "members": "Mitglieder"
+        },
+        "errors": {
+            "loadFailed": "Fehler beim Laden der Organisationen.",
+            "saveFailed": "Fehler beim Speichern der Änderungen.",
+            "deleteFailed": "Fehler beim Löschen der Organisation.",
+            "leaveFailed": "Fehler beim Verlassen der Organisation.",
+            "joinFailed": "Fehler beim Beitreten zur Organisation.",
+            "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+            "nameRequired": "Der Name ist erforderlich.",
+            "streetRequired": "Die Straße eingabe ist erforderlich.",
+            "emailRequired": "Die E-Mail-Adresse ist erforderlich.",
+            "zipRequired": "Die Postleitzahl eingabe ist erforderlich.",
+            "cityRequired": "Die Stadt eingabe ist erforderlich.",
+            "nameTooLong": "Der Name darf maximal 255 Zeichen lang sein.",
+            "addressTooLong": "Die Adresse darf maximal 255 Zeichen lang sein.",
+            "streetTooLong": "Die Straße darf maximal 255 Zeichen lang sein.",
+            "cityTooLong": "Die Stadt darf maximal 255 Zeichen lang sein.",
+            "zipTooLong": "Die Postleitzahl darf maximal 20 Zeichen lang sein.",
+            "regionTooLong": "Das Bundesland darf maximal 255 Zeichen lang sein.",
+            "phoneTooLong": "Die Telefonnummer darf maximal 20 Zeichen lang sein.",
+            "phoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein.",
+            "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+            "emailTooLong": "Die E-Mail darf maximal 255 Zeichen lang sein.",
+            "descriptionTooLong": "Die Beschreibung darf maximal 1000 Zeichen lang sein.",
+            "employee_countInvalid": "Die Mitarbeiteranzahl muss eine gültige Zahl sein.",
+            "employee_countTooShort": "Die Mitarbeiteranzahl muss mindestens 1 betragen.",
+            "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+        },
+        "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?",
+        "notFound": "Keine Organisationen vorhanden.",
+        "GettingStarted": {
+            "StepCompanyName": {
+                "label": "Wie lautet der Name Ihres Unternehmens?",
+                "placeholder": "Geben Sie den Firmennamen ein"
+            },
+            "StepCompanyAbout": {
+                "label": "Beschreiben Sie kurz Ihr Unternehmen",
+                "placeholder": "Beschreiben Sie Ihr Unternehmen in ein bis zwei Sätzen"
+            },
+            "StepCompanyDetails": {
+                "title": "Unternehmensdetails",
+                "emailLabel": "E-Mail-Adresse",
+                "emailPlaceholder": "z. B. kontakt@unternehmen.de",
+                "phoneLabel": "Telefonnummer",
+                "phonePlaceholder": "z. B. +49 123 456789",
+                "addressSection": "Adresse",
+                "streetLabel": "Straße",
+                "streetPlaceholder": "z. B. Musterstraße 1",
+                "zipLabel": "Postleitzahl",
+                "zipPlaceholder": "z. B. 12345",
+                "cityLabel": "Stadt",
+                "cityPlaceholder": "z. B. Berlin",
+                "regionLabel": "Bundesland / Region",
+                "regionPlaceholder": "z. B. Bayern",
+                "workersLabel": "Anzahl der Mitarbeiter",
+                "workersPlaceholder": "z. B. 25"
+            }
+        }
     },
-    "Register": {
-      "welcome": "Konto erstellen",
-      "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
-      "firstName": "Vorname",
-      "lastName": "Nachname",
-      "email": "E-Mail",
-      "password": "Passwort",
-      "confirmPassword": "Passwort bestätigen",
-      "registerButton": "Registrieren",
-      "haveAccount": "Bereits ein Konto?",
-      "login": "Anmelden",
-      "or": "ODER",
-      "signUpGoogle": "Mit Google registrieren",
-      "signUpGithub": "Mit GitHub registrieren",
-      "loading": "Wird geladen...",
-      "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
-      "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
-      "errors": {
-        "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-        "first_nameRequired": "Vorname ist erforderlich.",
-        "last_nameRequired": "Nachname ist erforderlich.",
-        "emailRequired": "E-Mail ist erforderlich.",
-        "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-        "emailTaken": "Diese E-Mail wird bereits verwendet.",
-        "passwordRequired": "Passwort ist erforderlich.",
-        "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
-        "passwordMismatch": "Passwörter stimmen nicht überein."
-      }
+    "Auth": {
+        "Login": {
+            "welcome": "Willkommen bei BilloAI",
+            "subtitle": "Melden Sie sich an, um Ihre Rechnungen zu verwalten",
+            "email": "E-Mail",
+            "password": "Passwort",
+            "loginButton": "Anmelden",
+            "forgotPassword": "Passwort vergessen?",
+            "or": "ODER",
+            "signInGoogle": "Mit Google anmelden",
+            "signInGithub": "Mit GitHub anmelden",
+            "noAccount": "Noch kein Konto?",
+            "signUp": "Registrieren",
+            "errors": {
+                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+                "emailRequired": "E-Mail ist erforderlich.",
+                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                "passwordRequired": "Passwort ist erforderlich.",
+                "invalidCredentials": "E-Mail oder Passwort ist nicht korrekt.",
+                "tooManyAttempts": "Zu viele Anmeldeversuche. Bitte versuchen Sie es in wenigen Minuten erneut."
+            }
+        },
+        "Register": {
+            "welcome": "Konto erstellen",
+            "subtitle": "Erstellen Sie Ihr kostenloses Konto und starten Sie sofort",
+            "firstName": "Vorname",
+            "lastName": "Nachname",
+            "email": "E-Mail",
+            "password": "Passwort",
+            "confirmPassword": "Passwort bestätigen",
+            "registerButton": "Registrieren",
+            "haveAccount": "Bereits ein Konto?",
+            "login": "Anmelden",
+            "or": "ODER",
+            "signUpGoogle": "Mit Google registrieren",
+            "signUpGithub": "Mit GitHub registrieren",
+            "loading": "Wird geladen...",
+            "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
+            "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
+            "errors": {
+                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+                "first_nameRequired": "Vorname ist erforderlich.",
+                "last_nameRequired": "Nachname ist erforderlich.",
+                "emailRequired": "E-Mail ist erforderlich.",
+                "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                "emailTaken": "Diese E-Mail wird bereits verwendet.",
+                "passwordRequired": "Passwort ist erforderlich.",
+                "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+                "passwordMismatch": "Passwörter stimmen nicht überein."
+            }
+        },
+        "GlobalErrors": {
+            "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+        }
+    },
+    "Dashboard": {
+        "stats": {
+            "organisations": "Organisationen",
+            "activeUsers": "Aktive Benutzer",
+            "invoicesGenerated": "Erstellte Rechnungen",
+            "upcomingMeetings": "Bevorstehende Meetings"
+        },
+        "metrics": {
+            "totalCompanies": "Gesamtzahl Unternehmen",
+            "activeUsers": "Aktive Benutzer",
+            "invoicesGenerated": "Erstellte Rechnungen"
+        },
+        "activity": {
+            "addedCompany": "{name} hinzugefügt",
+            "createdInvoice": "Rechnung für {name} erstellt",
+            "updatedProfile": "Profil aktualisiert"
+        },
+        "actions": {
+            "addCompany": "Unternehmen hinzufügen",
+            "createInvoice": "Rechnung erstellen",
+            "viewReports": "Berichte ansehen"
+        }
+    },
+    "Invoices": {
+        "actions": "Aktionen",
+        "cancel": "Abbrechen",
+        "create": "Rechnung erstellen",
+        "editMode": "Bearbeitungsmodus",
+        "hideToolbar": "Symbolleiste ausblenden",
+        "loading": "Rechnungen werden geladen...",
+        "noInvoices": "Keine Rechnungen gefunden",
+        "of": "von",
+        "page": "Seite",
+        "previewMode": "Vorschaumodus",
+        "rowsPerPage": "Zeilen pro Seite",
+        "save": "Rechnung speichern",
+        "update": "Rechnung bearbeiten",
+        "saveSuccess": "Rechnung erfolgreich gespeichert!",
+        "searchPlaceholder": "Rechnungen durchsuchen...",
+        "selectIssuer": "Aussteller auswählen",
+        "showToolbar": "Symbolleiste anzeigen",
+        "sort": {
+            "asc": "Aufsteigend",
+            "created": "Erstellungsdatum",
+            "date": "Rechnungsdatum",
+            "desc": "Absteigend",
+            "number": "Rechnungsnummer"
+        },
+        "title": "Rechnungen",
+        "PDF": {
+            "title": "Rechnung",
+            "invoiceNumber": "Rechnungsnummer",
+            "invoiceDate": "Rechnungsdatum",
+            "dueDate": "Fälligkeitsdatum",
+            "reference": "Referenz",
+            "from": "Von",
+            "billTo": "Rechnung an",
+            "items": "Positionen",
+            "name": "Bezeichnung",
+            "description": "Beschreibung",
+            "quantity": "Menge",
+            "unitPrice": "Einzelpreis",
+            "subtotal": "Zwischensumme",
+            "sumNet": "Summe (Netto)",
+            "discount": "Rabatt",
+            "totalNet": "Gesamtbetrag (Netto)",
+            "shipping": "Versandkosten",
+            "tax": "MwSt",
+            "totalGross": "Gesamtbetrag (Brutto)",
+            "deposit": "Anzahlung",
+            "payments": "Zahlungen",
+            "amountDue": "Offener Betrag"
+        },
+        "InvoiceDetails": {
+            "title": "Rechnungsdetails",
+            "invoiceNumber": "Rechnungsnummer",
+            "invoiceDate": "Rechnungsdatum",
+            "dueDate": "Fälligkeitsdatum",
+            "reference": "Referenz / Bestellnummer"
+        },
+        "IssuerDetails": {
+            "title": "Absenderdetails",
+            "selectIssuer": "Absender auswählen"
+        },
+        "ClientDetails": {
+            "title": "Kundendetails",
+            "selectClient": "Kunde auswählen"
+        },
+        "Items": {
+            "title": "Positionen",
+            "addItem": "Position hinzufügen",
+            "removeItem": "Position entfernen",
+            "name": "Bezeichnung",
+            "description": "Beschreibung",
+            "rate": "Preis",
+            "quantity": "Menge"
+        },
+        "Totals": {
+            "title": "Gesamtübersicht",
+            "currency": "Währung",
+            "sum": "Summe",
+            "totalNet": "Gesamtbetrag (Netto)",
+            "totalGross": "Gesamtbetrag (Brutto)",
+            "mwst": "MwSt",
+            "discount": "Rabatt (%)",
+            "discountAmount": "Rabattbetrag",
+            "shipping": "Versandkosten",
+            "deposit": "Anzahlung",
+            "payments": "Zahlungen",
+            "amountDue": "Offener Betrag"
+        },
+        "Legal": {
+            "title": "Rechtliche Hinweise",
+            "legalTermsLabel": "Allgemeine Geschäftsbedingungen",
+            "legalTermsPlaceholder": "Geben Sie hier die allgemeinen Geschäftsbedingungen ein..."
+        },
+        "Footer": {
+            "title": "Fußzeile",
+            "footerLabel": "Fußzeilentext",
+            "footerPlaceholder": "Geben Sie hier den Fußzeilentext ein..."
+        },
+        "Attachments": {
+            "title": "Anhänge",
+            "addAttachment": "Anhang hinzufügen",
+            "remove": "Entfernen",
+            "noAttachments": "Keine Anhänge hinzugefügt"
+        },
+        "errors": {
+            "general": "Es ist ein unerwarteter Fehler aufgetreten.",
+            "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
+            "invalidCredentials": "Die angegebenen Zugangsdaten sind ungültig.",
+            "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
+            "invoiceDetails": {
+                "invoiceNumberRequired": "Die Rechnungsnummer ist erforderlich.",
+                "invoiceNumberInvalid": "Die Rechnungsnummer ist ungültig.",
+                "invoiceDateRequired": "Das Rechnungsdatum ist erforderlich.",
+                "invoiceDateInvalid": "Das Rechnungsdatum ist ungültig.",
+                "dueDateBefore": "Das Fälligkeitsdatum darf nicht vor dem Rechnungsdatum liegen.",
+                "dueDateInvalid": "Das Fälligkeitsdatum ist ungültig.",
+                "referenceInvalid": "Die Referenz ist ungültig."
+            },
+            "issuer": {
+                "nameRequired": "Der Absendername ist erforderlich.",
+                "streetRequired": "Die Straße des Absenders ist erforderlich.",
+                "cityRequired": "Die Stadt des Absenders ist erforderlich.",
+                "zipRequired": "Die Postleitzahl des Absenders ist erforderlich.",
+                "emailRequired": "Die E-Mail-Adresse des Absenders ist erforderlich.",
+                "emailInvalid": "Die E-Mail-Adresse des Absenders ist ungültig.",
+                "phoneInvalid": "Die Telefonnummer des Absenders ist ungültig."
+            },
+            "client": {
+                "nameRequired": "Der Kundenname ist erforderlich.",
+                "emailInvalid": "Die E-Mail-Adresse des Kunden ist ungültig.",
+                "phoneInvalid": "Die Telefonnummer des Kunden ist ungültig."
+            },
+            "items": {
+                "required": "Mindestens eine Position ist erforderlich.",
+                "nameRequired": "Der Name der Position ist erforderlich.",
+                "rateRequired": "Der Preis der Position ist erforderlich.",
+                "rateInvalid": "Der Preis der Position muss eine Zahl sein.",
+                "quantityRequired": "Die Menge ist erforderlich.",
+                "quantityInvalid": "Die Menge muss eine positive Zahl sein."
+            },
+            "totals": {
+                "currencyRequired": "Die Währung ist erforderlich.",
+                "currencyInvalid": "Die Währung ist ungültig.",
+                "taxRateInvalid": "Der Steuersatz muss zwischen 0 und 100 liegen.",
+                "sumInvalid": "Die Summe muss eine positive Zahl sein.",
+                "totalNetInvalid": "Der Nettobetrag muss eine positive Zahl sein.",
+                "totalGrossInvalid": "Der Bruttobetrag muss eine positive Zahl sein.",
+                "amountDueInvalid": "Der offene Betrag muss eine positive Zahl sein."
+            },
+            "saveFailed": "Beim Speichern der Rechnung ist ein Fehler aufgetreten.",
+            "loadFailed": "Die Rechnung konnte nicht geladen werden."
+        }
+    },
+    "Clients": {
+        "title": "Kunden",
+        "metrics": {
+            "total": "Gesamtanzahl Kunden",
+            "active": "Aktiv",
+            "new": "Neu in diesem Monat"
+        },
+        "actions": {
+            "add": "Kunde hinzufügen",
+            "export": "Exportieren"
+        },
+        "filters": {
+            "search": "Kunden durchsuchen...",
+            "all": "Alle",
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+        },
+        "table": {
+            "name": "Name",
+            "email": "E-Mail",
+            "phone": "Telefon",
+            "company": "Firma",
+            "street": "Straße",
+            "state": "Bundesland / Region",
+            "status": "Status",
+            "date": "Hinzugefügt am"
+        }
     },
     "GlobalErrors": {
-      "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+        "unknownError": "Es ist ein unerwarteter Fehler aufgetreten."
     }
-  },
-  "Dashboard": {
-    "stats": {
-      "organisations": "Organisationen",
-      "activeUsers": "Aktive Benutzer",
-      "invoicesGenerated": "Erstellte Rechnungen",
-      "upcomingMeetings": "Bevorstehende Meetings"
-    },
-    "metrics": {
-      "totalCompanies": "Gesamtzahl Unternehmen",
-      "activeUsers": "Aktive Benutzer",
-      "invoicesGenerated": "Erstellte Rechnungen"
-    },
-    "activity": {
-      "addedCompany": "{name} hinzugefügt",
-      "createdInvoice": "Rechnung für {name} erstellt",
-      "updatedProfile": "Profil aktualisiert"
-    },
-    "actions": {
-      "addCompany": "Unternehmen hinzufügen",
-      "createInvoice": "Rechnung erstellen",
-      "viewReports": "Berichte ansehen"
-    }
-  },
-  "Invoices": {
-    "actions": "Aktionen",
-    "cancel": "Abbrechen",
-    "create": "Rechnung erstellen",
-    "editMode": "Bearbeitungsmodus",
-    "hideToolbar": "Symbolleiste ausblenden",
-    "loading": "Rechnungen werden geladen...",
-    "noInvoices": "Keine Rechnungen gefunden",
-    "of": "von",
-    "page": "Seite",
-    "previewMode": "Vorschaumodus",
-    "rowsPerPage": "Zeilen pro Seite",
-    "save": "Rechnung speichern",
-    "update": "Rechnung bearbeiten",
-    "saveSuccess": "Rechnung erfolgreich gespeichert!",
-    "searchPlaceholder": "Rechnungen durchsuchen...",
-    "selectIssuer": "Aussteller auswählen",
-    "showToolbar": "Symbolleiste anzeigen",
-    "sort": {
-      "asc": "Aufsteigend",
-      "created": "Erstellungsdatum",
-      "date": "Rechnungsdatum",
-      "desc": "Absteigend",
-      "number": "Rechnungsnummer"
-    },
-    "title": "Rechnungen",
-    "PDF": {
-      "title": "Rechnung",
-      "invoiceNumber": "Rechnungsnummer",
-      "invoiceDate": "Rechnungsdatum",
-      "dueDate": "Fälligkeitsdatum",
-      "reference": "Referenz",
-      "from": "Von",
-      "billTo": "Rechnung an",
-      "items": "Positionen",
-      "name": "Bezeichnung",
-      "description": "Beschreibung",
-      "quantity": "Menge",
-      "unitPrice": "Einzelpreis",
-      "subtotal": "Zwischensumme",
-      "sumNet": "Summe (Netto)",
-      "discount": "Rabatt",
-      "totalNet": "Gesamtbetrag (Netto)",
-      "shipping": "Versandkosten",
-      "tax": "MwSt",
-      "totalGross": "Gesamtbetrag (Brutto)",
-      "deposit": "Anzahlung",
-      "payments": "Zahlungen",
-      "amountDue": "Offener Betrag"
-    },
-    "InvoiceDetails": {
-      "title": "Rechnungsdetails",
-      "invoiceNumber": "Rechnungsnummer",
-      "invoiceDate": "Rechnungsdatum",
-      "dueDate": "Fälligkeitsdatum",
-      "reference": "Referenz / Bestellnummer"
-    },
-    "IssuerDetails": {
-      "title": "Absenderdetails",
-      "selectIssuer": "Absender auswählen"
-    },
-    "ClientDetails": {
-      "title": "Kundendetails",
-      "selectClient": "Kunde auswählen"
-    },
-    "Items": {
-      "title": "Positionen",
-      "addItem": "Position hinzufügen",
-      "removeItem": "Position entfernen",
-      "name": "Bezeichnung",
-      "description": "Beschreibung",
-      "rate": "Preis",
-      "quantity": "Menge"
-    },
-    "Totals": {
-      "title": "Gesamtübersicht",
-      "currency": "Währung",
-      "sum": "Summe",
-      "totalNet": "Gesamtbetrag (Netto)",
-      "totalGross": "Gesamtbetrag (Brutto)",
-      "mwst": "MwSt",
-      "discount": "Rabatt (%)",
-      "discountAmount": "Rabattbetrag",
-      "shipping": "Versandkosten",
-      "deposit": "Anzahlung",
-      "payments": "Zahlungen",
-      "amountDue": "Offener Betrag"
-    },
-    "errors": {
-      "general": "Es ist ein unerwarteter Fehler aufgetreten.",
-      "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
-      "invalidCredentials": "Die angegebenen Zugangsdaten sind ungültig.",
-      "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
-      "invoiceDetails": {
-        "invoiceNumberRequired": "Die Rechnungsnummer ist erforderlich.",
-        "invoiceNumberInvalid": "Die Rechnungsnummer ist ungültig.",
-        "invoiceDateRequired": "Das Rechnungsdatum ist erforderlich.",
-        "invoiceDateInvalid": "Das Rechnungsdatum ist ungültig.",
-        "dueDateBefore": "Das Fälligkeitsdatum darf nicht vor dem Rechnungsdatum liegen.",
-        "dueDateInvalid": "Das Fälligkeitsdatum ist ungültig.",
-        "referenceInvalid": "Die Referenz ist ungültig."
-      },
-      "issuer": {
-        "nameRequired": "Der Absendername ist erforderlich.",
-        "streetRequired": "Die Straße des Absenders ist erforderlich.",
-        "cityRequired": "Die Stadt des Absenders ist erforderlich.",
-        "zipRequired": "Die Postleitzahl des Absenders ist erforderlich.",
-        "emailRequired": "Die E-Mail-Adresse des Absenders ist erforderlich.",
-        "emailInvalid": "Die E-Mail-Adresse des Absenders ist ungültig.",
-        "phoneInvalid": "Die Telefonnummer des Absenders ist ungültig."
-      },
-      "client": {
-        "nameRequired": "Der Kundenname ist erforderlich.",
-        "emailInvalid": "Die E-Mail-Adresse des Kunden ist ungültig.",
-        "phoneInvalid": "Die Telefonnummer des Kunden ist ungültig."
-      },
-      "items": {
-        "required": "Mindestens eine Position ist erforderlich.",
-        "nameRequired": "Der Name der Position ist erforderlich.",
-        "rateRequired": "Der Preis der Position ist erforderlich.",
-        "rateInvalid": "Der Preis der Position muss eine Zahl sein.",
-        "quantityRequired": "Die Menge ist erforderlich.",
-        "quantityInvalid": "Die Menge muss eine positive Zahl sein."
-      },
-      "totals": {
-        "currencyRequired": "Die Währung ist erforderlich.",
-        "currencyInvalid": "Die Währung ist ungültig.",
-        "taxRateInvalid": "Der Steuersatz muss zwischen 0 und 100 liegen.",
-        "sumInvalid": "Die Summe muss eine positive Zahl sein.",
-        "totalNetInvalid": "Der Nettobetrag muss eine positive Zahl sein.",
-        "totalGrossInvalid": "Der Bruttobetrag muss eine positive Zahl sein.",
-        "amountDueInvalid": "Der offene Betrag muss eine positive Zahl sein."
-      },
-      "saveFailed": "Beim Speichern der Rechnung ist ein Fehler aufgetreten.",
-      "loadFailed": "Die Rechnung konnte nicht geladen werden."
-    }
-  },
-  "Clients": {
-    "title": "Kunden",
-    "metrics": {
-      "total": "Gesamtanzahl Kunden",
-      "active": "Aktiv",
-      "new": "Neu in diesem Monat"
-    },
-    "actions": {
-      "add": "Kunde hinzufügen",
-      "export": "Exportieren"
-    },
-    "filters": {
-      "search": "Kunden durchsuchen...",
-      "all": "Alle",
-      "active": "Aktiv",
-      "inactive": "Inaktiv"
-    },
-    "table": {
-      "name": "Name",
-      "email": "E-Mail",
-      "phone": "Telefon",
-      "company": "Firma",
-      "street": "Straße",
-      "state": "Bundesland / Region",
-      "status": "Status",
-      "date": "Hinzugefügt am"
-    }
-  },
-  "GlobalErrors": {
-    "unknownError": "Es ist ein unerwarteter Fehler aufgetreten."
-  }
 }

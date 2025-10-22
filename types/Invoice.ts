@@ -48,6 +48,13 @@ export interface InvoiceTotals {
     amountDue: number
 }
 
+export interface Legal {
+    termsAndConditions: string
+}
+
+export interface Footer {
+    notes: string
+}
 
 export interface Invoice {
     invoiceDetails: InvoiceDetails
@@ -55,4 +62,7 @@ export interface Invoice {
     client: Client
     items: InvoiceItem[]
     totals: InvoiceTotals
+    legal: Legal
+    footer: Footer
+    attachments: File[]
 }

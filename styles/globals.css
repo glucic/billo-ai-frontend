@@ -87,9 +87,9 @@
     --table-row-alt: rgba(255, 255, 255, 0.03);
     --table-row-hover: rgba(59, 130, 246, 0.1);
     --table-border: rgba(255, 255, 255, 0.12);
-    --table-header-bg: rgba(255, 255, 255, 0.05);
+    --table-header-bg: var(--secondary-background);
     --table-header-text: var(--foreground);
-    --table-header-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    --table-header-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme='light'] {
@@ -129,9 +129,7 @@
     --table-row-alt: rgba(0, 0, 0, 0.03);
     --table-row-hover: rgba(37, 99, 235, 0.05);
     --table-border: rgba(0, 0, 0, 0.08);
-    --table-header-bg: rgba(37, 99, 235, 0.05);
-    --table-header-text: var(--foreground);
-    --table-header-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    --table-header-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 html {
@@ -201,14 +199,9 @@ p {
 .invoice-table th {
     padding: 0.75rem 1.5rem;
     text-align: left;
-    cursor: pointer;
     transition:
         color 0.2s ease,
         background 0.2s ease;
-}
-
-.invoice-table th:hover {
-    color: var(--accent-light);
 }
 
 .invoice-row {
@@ -221,6 +214,45 @@ p {
 
 .invoice-row:nth-child(even) {
     background-color: var(--table-row-alt);
+}
+
+/* Header column separators and resizer handle */
+.invoice-table th {
+    border-right: 1px solid var(--border-color);
+    position: relative; /* for resizer positioning */
+}
+
+.invoice-table th:last-child {
+    border-right: none;
+}
+
+/* Improve visibility of sticky header and resizer handles */
+.invoice-table thead {
+    z-index: 40;
+}
+
+.resizer {
+    background: var(--border-color);
+    opacity: 1;
+    transition:
+        background-color 0.12s ease,
+        width 0.12s ease,
+        opacity 0.12s ease;
+    z-index: 45; /* above header content */
+}
+
+.resizer:hover,
+.resizer:active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    opacity: 0.95;
+    width: 4px !important; /* slightly widen on hover for grab */
+}
+
+/* Make resizer easier to touch on mobile */
+@media (pointer: coarse) {
+    .resizer {
+        width: 18px !important;
+    }
 }
 
 .invoice-row:hover {

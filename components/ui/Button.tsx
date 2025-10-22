@@ -20,6 +20,7 @@ const buttonVariants = cva(
                 ghost: 'text-[var(--color-foreground)] hover:bg-[var(--accent-glow)]',
                 destructive:
                     'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500',
+                icon: 'bg-transparent rounded-full p-2 hover:pointer-cursor hover:bg-[var(--accent-glow)]',
             },
             size: {
                 sm: 'h-8 px-3 text-sm',

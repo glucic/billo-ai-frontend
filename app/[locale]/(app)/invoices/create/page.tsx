@@ -1,9 +1,11 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useInvoiceForm } from '@/hooks/useInvoice'
 import { InvoiceForm } from '@/components/invoices/InvoiceForm'
 
 export default function CreateInvoicePage() {
+    const router = useRouter()
     const {
         invoiceDetails,
         setInvoiceDetailsField,
@@ -21,6 +23,12 @@ export default function CreateInvoicePage() {
         updateItem,
         totals,
         setTotalsField,
+        legal,
+        setLegalField,
+        footer,
+        setFooterField,
+        attachments,
+        setAttachments,
         saveInvoice,
         organisations,
         saving,
@@ -45,11 +53,18 @@ export default function CreateInvoicePage() {
             updateItem={updateItem}
             totals={totals}
             setTotalsField={setTotalsField}
+            legal={legal}
+            setLegalField={setLegalField}
+            footer={footer}
+            setFooterField={setFooterField}
+            attachments={attachments}
+            setAttachments={setAttachments}
             saveInvoice={saveInvoice}
             organisations={organisations}
             saving={saving}
             fieldErrors={fieldErrors}
             mode="create"
+            onSuccessRedirect={() => router.push('/invoices')}
         />
     )
 }

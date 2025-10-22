@@ -10,6 +10,8 @@ import {
     InvoiceItem,
     Invoice,
     InvoiceTotals,
+    Legal,
+    Footer,
 } from '@/types/Invoice'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
@@ -25,6 +27,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const { organisations, fetchOrganisations } = useOrganisations()
     const t = useTranslations()
 
+    // Core sections
     const [invoiceDetails, setInvoiceDetails] = useState<InvoiceDetails>({
         id: initialInvoiceId ?? 0,
         invoiceNumber: `INV-${new Date()
@@ -78,6 +81,12 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         amountDue: 0,
     })
 
+    // New sections
+    const [legal, setLegal] = useState<Legal>({ termsAndConditions: '' })
+    const [footer, setFooter] = useState<Footer>({ notes: '' })
+    const [attachments, setAttachments] = useState<File[]>([])
+
+    // Loading & errors
     const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -90,7 +99,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         )
     }, [fetchOrganisations])
 
-    // Auto-fill issuer when selected
+    // Auto-fill issuer
     useEffect(() => {
         if (!issuerId) return
         const org = organisations.find(o => o.id === issuerId)
@@ -107,7 +116,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         )
     }, [issuerId, organisations])
 
-    // Auto-fill client when selected
+    // Auto-fill client
     useEffect(() => {
         if (!clientId) return
         const org = organisations.find(o => o.id === clientId)
@@ -130,31 +139,38 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             setInvoiceDetails(prev => ({ ...prev, [field]: value })),
         [],
     )
-
     const setIssuerField = useCallback(
         (field: keyof Issuer, value: string) =>
             setIssuer(prev => ({ ...prev, [field]: value })),
         [],
     )
-
     const setClientField = useCallback(
         (field: keyof Client, value: string) =>
             setClient(prev => ({ ...prev, [field]: value })),
         [],
     )
-
     const setTotalsField = useCallback(
         <K extends keyof InvoiceTotals>(field: K, value: InvoiceTotals[K]) =>
             setTotals(prev => ({ ...prev, [field]: value })),
         [],
     )
+    const setLegalField = useCallback(
+        (field: keyof Legal, value: string) =>
+            setLegal(prev => ({ ...prev, [field]: value })),
+        [],
+    )
+    const setFooterField = useCallback(
+        (field: keyof Footer, value: string) =>
+            setFooter(prev => ({ ...prev, [field]: value })),
+        [],
+    )
 
+    // Items
     const addItem = () =>
         setItems(prev => [
             ...prev,
             { name: '', description: '', rate: 0, quantity: 1 },
         ])
-
     const updateItem = useCallback(
         (index: number, field: keyof InvoiceItem, value: string | number) =>
             setItems(prev =>
@@ -164,11 +180,10 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             ),
         [],
     )
-
     const removeItem = (index: number) =>
         setItems(prev => prev.filter((_, i) => i !== index))
 
-    // Derived totals (memoized)
+    // Derived totals
     const computedTotals = useMemo(
         () =>
             calculateTotals({
@@ -188,7 +203,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             totals.payments,
         ],
     )
-
     useEffect(() => {
         setTotals(prev => ({
             ...prev,
@@ -201,6 +215,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         }))
     }, [computedTotals])
 
+    // Load invoice from backend
     useEffect(() => {
         if (!initialInvoiceId) return
         const loadInvoice = async () => {
@@ -219,8 +234,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     dueDate: normalizeDate(inv.due_date),
                     reference: inv.reference ?? '',
                 })
-                setIssuer(inv.issuer ?? {})
-                setClient(inv.client ?? {})
+                setIssuer(inv.issuer ?? issuer)
+                setClient(inv.client ?? client)
                 setItems(
                     inv.items?.map((item: any) => ({
                         name: item.name,
@@ -230,6 +245,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     })) ?? [],
                 )
                 setTotals(inv.totals ?? totals)
+                setLegal(inv.legal ?? { termsAndConditions: '' })
+                setFooter(inv.footer ?? { notes: '' })
+                setAttachments(inv.attachments ?? [])
             } catch (err) {
                 console.error('Failed to load invoice:', err)
                 setError(
@@ -242,6 +260,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         loadInvoice()
     }, [initialInvoiceId, t])
 
+    // Save invoice
     const saveInvoice = async () => {
         setSaving(true)
         setError(null)
@@ -261,6 +280,9 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 totalGross: computedTotals.total ?? 0,
                 amountDue: computedTotals.amountDue ?? 0,
             },
+            legal,
+            footer,
+            attachments,
         }
 
         try {
@@ -302,6 +324,12 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         removeItem,
         totals,
         setTotalsField,
+        legal,
+        setLegalField,
+        footer,
+        setFooterField,
+        attachments,
+        setAttachments,
         computedTotals,
         loading,
         saving,
