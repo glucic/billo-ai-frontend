@@ -303,3 +303,14 @@ p {
     filter: blur(80px);
     border-radius: 9999px;
 }
+
+.sidebar-link-active {
+    background: var(--accent-glow);
+    color: var(--text-accent);
+    border-left: 2px solid var(--accent);
+}
+
+.sidebar-link-hover {
+    background: var(--accent-glow);
+    opacity: 0.2;
+}

@@ -8,6 +8,8 @@
     "Sidebar": {
         "dashboard": "Dashboard",
         "invoices": "Rechnungen",
+        "invoicesOverview": "Rechnungsübersicht",
+        "invoicesCreate": "Rechnung erstellen",
         "clients": "Kunden",
         "settings": "Einstellungen",
         "notifications": "Benachrichtigungen",
