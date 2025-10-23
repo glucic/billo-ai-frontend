@@ -9,7 +9,6 @@ import {
     TotalsSection,
     FooterSection,
     LegalSection,
-    AttachmentSection,
 } from '@/components/invoices/form-sections'
 import { PDFInvoicePreview } from '@/components/invoices'
 import { Button, StatefulButton } from '@/components/ui'

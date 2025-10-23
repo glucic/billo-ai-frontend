@@ -10,7 +10,7 @@ import {
 } from '@/components/invoices'
 import { Button } from '@/components/ui'
 import { useInvoiceTable } from '@/hooks/useInvoiceTable'
-import { XIcon, MaximizeIcon, MinimizeIcon } from 'lucide-react'
+import { XIcon, MaximizeIcon, MinimizeIcon, PlusIcon } from 'lucide-react'
 
 export default function InvoicesPage() {
     const t = useTranslations('Invoices')
@@ -26,6 +26,8 @@ export default function InvoicesPage() {
         sortBy,
         setSortBy,
         sortOrder,
+        searchTerm,
+        setSearchTerm,
     } = useInvoiceTable()
 
     const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
@@ -49,10 +51,10 @@ export default function InvoicesPage() {
                                 : 'md:basis-2/3 md:max-w-2/3'
                             : 'flex-1'
                     }`}>
-                <header className="flex items-center justify-between mb-4">
+                <header className="flex items-center justify-between m-4">
                     <h1 className="text-2xl font-bold">{t('title')}</h1>
-                    <Button variant="primary" href="/invoices/create">
-                        {t('create')}
+                    <Button variant="ghost" href="/invoices/create">
+                        <PlusIcon /> {t('create')}
                     </Button>
                 </header>
 
@@ -63,6 +65,8 @@ export default function InvoicesPage() {
                         sortBy={sortBy}
                         sortOrder={sortOrder}
                         onSort={setSortBy}
+                        searchTerm={searchTerm}
+                        onSearch={setSearchTerm}
                         onSelect={setSelectedInvoice}
                         onDownloadPDF={() => {}}
                         onArchive={() => {}}

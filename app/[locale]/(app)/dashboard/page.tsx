@@ -20,7 +20,9 @@ export default function DashboardPage() {
         <main
             id="dashboard"
             className="flex flex-col min-h-screen text-[var(--color-foreground)] p-6 space-y-8">
-            <WelcomeSection userName={user?.name} />
+            <WelcomeSection
+                userName={user?.first_name + ' ' + user?.last_name}
+            />
         </main>
     )
 }

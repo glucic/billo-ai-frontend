@@ -9,6 +9,8 @@ interface PaginationMeta {
     last_page: number
     per_page: number
     total: number
+    from?: number
+    to?: number
 }
 
 interface InvoicePaginationProps {
@@ -91,8 +93,17 @@ export default function InvoicePagination({
             </div>
 
             <div className="text-sm text-[var(--text-muted)]">
-                {invoicesT('page')} {page} {invoicesT('of')}{' '}
-                {pagination.last_page}
+                {pagination.from && pagination.to ? (
+                    <>
+                        {invoicesT('showing')} {pagination.from}–{pagination.to}{' '}
+                        {invoicesT('of')} {pagination.total}
+                    </>
+                ) : (
+                    <>
+                        {invoicesT('page')} {page} {invoicesT('of')}{' '}
+                        {pagination.last_page}
+                    </>
+                )}
             </div>
         </div>
     )

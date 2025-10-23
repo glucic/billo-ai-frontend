@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { Invoice } from '@/types/Invoice'
 import { IoChevronUp, IoChevronDown } from 'react-icons/io5'
 import { InputField } from '@/components/ui/InputField'
@@ -18,6 +18,10 @@ interface InvoiceTableProps {
     onSelect: (invoice: Invoice) => void
     onDownloadPDF: (invoice: Invoice) => void
     onArchive: (invoice: Invoice) => void
+    /** optional external search value (server-side) */
+    searchTerm?: string
+    /** called with debounced search value when provided */
+    onSearch?: (value: string) => void
 }
 
 const InvoiceTableComponent = ({
@@ -29,9 +33,10 @@ const InvoiceTableComponent = ({
     onSelect,
     onDownloadPDF,
     onArchive,
+    searchTerm,
+    onSearch,
 }: InvoiceTableProps) => {
     const invoicesT = useTranslations('Invoices')
-    const clientsT = useTranslations('Clients')
 
     const [search, setSearch] = useState('')
     const [debouncedSearch, setDebouncedSearch] = useState('')
@@ -41,6 +46,16 @@ const InvoiceTableComponent = ({
         const handler = setTimeout(() => setDebouncedSearch(search), 300)
         return () => clearTimeout(handler)
     }, [search])
+
+    // forward debounced search to parent if onSearch provided
+    useEffect(() => {
+        if (typeof onSearch === 'function') onSearch(debouncedSearch)
+    }, [debouncedSearch, onSearch])
+
+    // if parent controls searchTerm, sync it into local input so user sees it
+    useEffect(() => {
+        if (typeof searchTerm === 'string') setSearch(searchTerm)
+    }, [searchTerm])
 
     const [colWidths, setColWidths] = useState<number[]>([
         15, 18, 30, 15, 12, 10,
@@ -84,18 +99,21 @@ const InvoiceTableComponent = ({
         window.removeEventListener('mouseup', onMouseUp)
     }
 
+    const effectiveSearch = useMemo(
+        () => searchTerm ?? debouncedSearch,
+        [searchTerm, debouncedSearch],
+    )
+
     const filteredInvoices = useMemo(() => {
         return invoices.filter(inv => {
-            const searchTerm = debouncedSearch.toLowerCase()
+            const s = effectiveSearch.toLowerCase()
             return (
-                inv.invoiceDetails.invoiceNumber
-                    .toLowerCase()
-                    .includes(searchTerm) ||
-                inv.client.name.toLowerCase().includes(searchTerm) ||
-                inv.client.email?.toLowerCase().includes(searchTerm)
+                inv.invoiceDetails.invoiceNumber.toLowerCase().includes(s) ||
+                inv.client.name.toLowerCase().includes(s) ||
+                (inv.client.email ?? '').toLowerCase().includes(s)
             )
         })
-    }, [debouncedSearch, invoices])
+    }, [effectiveSearch, invoices])
 
     const getSortIndicator = (field: string) => {
         if (sortBy !== field) return null

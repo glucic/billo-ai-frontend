@@ -8,10 +8,12 @@ import {
     Issuer,
     InvoiceDetails,
     InvoiceItem,
-    Invoice,
     InvoiceTotals,
     Legal,
     Footer,
+    InvoiceResponse,
+    InvoiceCreatePayload,
+    InvoiceUpdatePayload,
 } from '@/types/Invoice'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
@@ -43,43 +45,56 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     })
 
     const [issuerId, setIssuerId] = useState<number | null>(null)
-    const [issuer, setIssuer] = useState<Issuer>({
-        name: '',
-        street: '',
-        city: '',
-        region: '',
-        zip: '',
-        phone: '',
-        email: '',
-    })
+    const defaultIssuer = useMemo<Issuer>(
+        () => ({
+            id: 1,
+            name: '',
+            street: '',
+            city: '',
+            region: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }),
+        [],
+    )
+    const [issuer, setIssuer] = useState<Issuer>(defaultIssuer)
 
     const [clientId, setClientId] = useState<number | null>(null)
-    const [client, setClient] = useState<Client>({
-        name: '',
-        street: '',
-        city: '',
-        region: '',
-        zip: '',
-        phone: '',
-        email: '',
-    })
+    const defaultClient = useMemo<Client>(
+        () => ({
+            name: '',
+            street: '',
+            city: '',
+            region: '',
+            zip: '',
+            phone: '',
+            email: '',
+        }),
+        [],
+    )
+    const [client, setClient] = useState<Client>(defaultClient)
 
     const [items, setItems] = useState<InvoiceItem[]>([
         { name: '', description: '', rate: 0, quantity: 1 },
     ])
 
-    const [totals, setTotals] = useState<InvoiceTotals>({
-        currency: 'EUR',
-        taxRate: 19,
-        discount: 0,
-        shipping: 0,
-        deposit: 0,
-        payments: 0,
-        sum: 0,
-        totalNet: 0,
-        totalGross: 0,
-        amountDue: 0,
-    })
+    const defaultTotals = useMemo<InvoiceTotals>(
+        () => ({
+            currency: 'EUR',
+            taxRate: 19,
+            discount: 0,
+            shipping: 0,
+            deposit: 0,
+            payments: 0,
+            sum: 0,
+            totalNet: 0,
+            totalGross: 0,
+            amountDue: 0,
+        }),
+        [],
+    )
+    const [totals, setTotals] = useState<InvoiceTotals>(defaultTotals)
 
     // New sections
     const [legal, setLegal] = useState<Legal>({ termsAndConditions: '' })
@@ -103,18 +118,22 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     useEffect(() => {
         if (!issuerId) return
         const org = organisations.find(o => o.id === issuerId)
-        setIssuer(
-            org ?? {
-                name: '',
-                street: '',
-                city: '',
-                region: '',
-                zip: '',
-                phone: '',
-                email: '',
-            },
-        )
-    }, [issuerId, organisations])
+        if (org) {
+            const issuerData: Issuer = {
+                id: org.id,
+                name: org.name,
+                street: org.street,
+                city: org.city,
+                region: org.region,
+                zip: org.zip,
+                phone: org.phone,
+                email: org.email,
+            }
+            setIssuer(issuerData)
+        } else {
+            setIssuer(defaultIssuer)
+        }
+    }, [issuerId, organisations, defaultIssuer, setIssuer])
 
     // Auto-fill client
     useEffect(() => {
@@ -221,7 +240,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         const loadInvoice = async () => {
             setLoading(true)
             try {
-                const res = await apiClient.get(
+                const res = await apiClient.get<{ data: InvoiceResponse }>(
                     `/api/invoices/${initialInvoiceId}`,
                 )
                 const inv = res.data?.data
@@ -234,20 +253,27 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     dueDate: normalizeDate(inv.due_date),
                     reference: inv.reference ?? '',
                 })
-                setIssuer(inv.issuer ?? issuer)
-                setClient(inv.client ?? client)
+
+                // Use stable defaults (avoid referencing state that the effect will write)
+                setIssuer(inv.issuer ?? defaultIssuer)
+                setClient(inv.client ?? defaultClient)
+
+                // Handle items with proper typing
                 setItems(
-                    inv.items?.map((item: any) => ({
+                    inv.items?.map(item => ({
                         name: item.name,
                         description: item.description ?? '',
                         rate: Number(item.rate),
                         quantity: Number(item.quantity),
-                    })) ?? [],
+                    })) ?? [
+                        { name: '', description: '', rate: 0, quantity: 1 },
+                    ],
                 )
-                setTotals(inv.totals ?? totals)
+
+                setTotals(inv.totals ?? defaultTotals)
                 setLegal(inv.legal ?? { termsAndConditions: '' })
                 setFooter(inv.footer ?? { notes: '' })
-                setAttachments(inv.attachments ?? [])
+                setAttachments([]) // Backend doesn't return attachments in the response
             } catch (err) {
                 console.error('Failed to load invoice:', err)
                 setError(
@@ -258,7 +284,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
             }
         }
         loadInvoice()
-    }, [initialInvoiceId, t])
+    }, [initialInvoiceId, t, defaultClient, defaultIssuer, defaultTotals])
 
     // Save invoice
     const saveInvoice = async () => {
@@ -266,8 +292,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         setError(null)
         setFieldErrors({})
 
-        const payload: Invoice = {
-            invoiceDetails,
+        // Prepare payload based on whether it's a create or update operation
+        const basePayload = {
             issuer,
             client,
             items,
@@ -290,8 +316,25 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 ? `/api/invoices/${initialInvoiceId}`
                 : '/api/invoices'
             const method = initialInvoiceId ? 'put' : 'post'
-            const res = await apiClient[method](url, payload)
-            return { success: true, data: res.data }
+
+            // Type the payload based on the operation
+            const payload = initialInvoiceId
+                ? ({ ...basePayload, invoiceDetails } as InvoiceUpdatePayload)
+                : ({
+                      ...basePayload,
+                      invoiceDetails: {
+                          invoiceNumber: invoiceDetails.invoiceNumber,
+                          invoiceDate: invoiceDetails.invoiceDate,
+                          dueDate: invoiceDetails.dueDate,
+                          reference: invoiceDetails.reference,
+                      },
+                  } as InvoiceCreatePayload)
+
+            const res = await apiClient[method]<{ data: InvoiceResponse }>(
+                url,
+                payload,
+            )
+            return { success: true, data: res.data.data }
         } catch (err: unknown) {
             const parsed = parseBackendErrors(err, t, 'Invoices')
             setFieldErrors(parsed)

@@ -2,47 +2,13 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import apiClient from '@/lib/apiClient'
-import {
-    Invoice,
-    InvoiceDetails,
-    Issuer,
-    Client,
-    InvoiceItem,
-    InvoiceTotals,
-    Legal,
-    Footer,
-} from '@/types/Invoice'
+import { Invoice, Issuer, Client, InvoiceResponse } from '@/types/Invoice'
+import { PaginatedResponse } from '@/types/Pagination'
 
 const normalizeDate = (date: string | null | undefined): string =>
     date && !isNaN(Date.parse(date))
         ? new Date(date).toISOString().split('T')[0]
         : ''
-
-interface ApiInvoice {
-    id: number
-    invoice_number: string
-    invoice_date: string
-    due_date?: string | null
-    reference?: string | null
-    issuer?: Partial<Issuer>
-    client?: Partial<Client>
-    items?: {
-        name: string
-        description?: string
-        rate: string | number
-        quantity: string | number
-    }[]
-    totals?: Partial<InvoiceTotals>
-    legal?: Partial<Legal>
-    footer?: Partial<Footer>
-}
-
-interface ApiPaginationMeta {
-    current_page: number
-    last_page: number
-    per_page: number
-    total: number
-}
 
 type SortKey = 'invoice_number' | 'invoice_date' | 'client_name' | 'total'
 
@@ -54,11 +20,31 @@ export type SortField =
     | 'total'
     | 'status'
 
-export function useInvoiceTable() {
+interface UseInvoiceTableReturn {
+    invoices: Invoice[]
+    loading: boolean
+    error: string | null
+    pagination: PaginatedResponse<InvoiceResponse>['meta'] | null
+    page: number
+    setPage: (page: number) => void
+    rowsPerPage: number
+    setRowsPerPage: (rowsPerPage: number) => void
+    sortBy: SortField
+    setSortBy: (sortBy: SortField) => void
+    sortOrder: 'asc' | 'desc'
+    setSortOrder: (sortOrder: 'asc' | 'desc') => void
+    searchTerm: string
+    setSearchTerm: (searchTerm: string) => void
+    fetchInvoices: () => Promise<void>
+}
+
+export function useInvoiceTable(): UseInvoiceTableReturn {
     const [invoices, setInvoices] = useState<Invoice[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [pagination, setPagination] = useState<ApiPaginationMeta | null>(null)
+    const [pagination, setPagination] = useState<
+        PaginatedResponse<InvoiceResponse>['meta'] | null
+    >(null)
 
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -66,80 +52,69 @@ export function useInvoiceTable() {
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
     const [searchTerm, setSearchTerm] = useState('')
 
-    // Normalize API data
-    const mapApiInvoice = useCallback((apiInvoice: ApiInvoice): Invoice => {
-        const safeIssuer: Issuer = {
-            name: apiInvoice.issuer?.name ?? '',
-            street: apiInvoice.issuer?.street ?? '',
-            city: apiInvoice.issuer?.city ?? '',
-            region: apiInvoice.issuer?.region ?? '',
-            zip: apiInvoice.issuer?.zip ?? '',
-            phone: apiInvoice.issuer?.phone ?? '',
-            email: apiInvoice.issuer?.email ?? '',
-        }
+    // Convert backend response to frontend Invoice format
+    const mapResponseToInvoice = useCallback(
+        (response: InvoiceResponse): Invoice => {
+            const defaultIssuer: Issuer = {
+                id: response.organisation?.id ?? 1,
+                name: '',
+                street: '',
+                city: '',
+                region: '',
+                zip: '',
+                phone: '',
+                email: '',
+            }
 
-        const safeClient: Client = {
-            name: apiInvoice.client?.name ?? '',
-            street: apiInvoice.client?.street ?? '',
-            city: apiInvoice.client?.city ?? '',
-            region: apiInvoice.client?.region ?? '',
-            zip: apiInvoice.client?.zip ?? '',
-            phone: apiInvoice.client?.phone ?? '',
-            email: apiInvoice.client?.email ?? '',
-        }
+            const defaultClient: Client = {
+                name: '',
+                street: '',
+                city: '',
+                region: '',
+                zip: '',
+                phone: '',
+                email: '',
+            }
 
-        const safeLegal: Legal = {
-            termsAndConditions: apiInvoice.legal?.termsAndConditions ?? '',
-        }
-
-        const safeFooter: Footer = {
-            notes: apiInvoice.footer?.notes ?? '',
-        }
-
-        return {
-            invoiceDetails: {
-                id: apiInvoice.id,
-                invoiceNumber: apiInvoice.invoice_number,
-                invoiceDate: normalizeDate(apiInvoice.invoice_date),
-                dueDate: normalizeDate(apiInvoice.due_date),
-                reference: apiInvoice.reference ?? '',
-            },
-            issuer: safeIssuer,
-            client: safeClient,
-            items:
-                apiInvoice.items?.map(item => ({
+            return {
+                invoiceDetails: {
+                    id: response.id,
+                    invoiceNumber: response.invoice_number,
+                    invoiceDate: normalizeDate(response.invoice_date),
+                    dueDate: normalizeDate(response.due_date),
+                    reference: response.reference ?? '',
+                },
+                issuer: {
+                    ...defaultIssuer,
+                    ...response.issuer,
+                },
+                client: {
+                    ...defaultClient,
+                    ...response.client,
+                },
+                items: response.items.map(item => ({
                     name: item.name,
                     description: item.description ?? '',
                     rate: Number(item.rate),
                     quantity: Number(item.quantity),
-                })) ?? [],
-            totals: {
-                currency: 'EUR',
-                taxRate: 19,
-                discount: 0,
-                shipping: 0,
-                deposit: 0,
-                payments: 0,
-                sum: 0,
-                totalNet: 0,
-                totalGross: 0,
-                amountDue: 0,
-                ...apiInvoice.totals,
-            },
-            legal: safeLegal,
-            footer: safeFooter,
-            attachments: [],
-        }
-    }, [])
+                })),
+                totals: response.totals,
+                legal: response.legal ?? { termsAndConditions: '' },
+                footer: response.footer ?? { notes: '' },
+                attachments: [],
+            }
+        },
+        [],
+    )
 
-    // Fetch invoices
+    // Fetch invoices with pagination
     const fetchInvoices = useCallback(async () => {
         setLoading(true)
         setError(null)
         try {
-            const res = await apiClient.get<{
-                data: { data: ApiInvoice[] } & ApiPaginationMeta
-            }>('/api/invoices', {
+            const response = await apiClient.get<
+                PaginatedResponse<InvoiceResponse>
+            >('/api/invoices', {
                 params: {
                     page,
                     per_page: rowsPerPage,
@@ -149,24 +124,20 @@ export function useInvoiceTable() {
                 },
             })
 
-            const payload = res.data?.data
-            if (!payload?.data) throw new Error('Invalid API response format.')
+            if (!response.data?.data) {
+                throw new Error('Invalid API response format.')
+            }
 
-            const mappedInvoices = payload.data.map(mapApiInvoice)
+            const mappedInvoices = response.data.data.map(mapResponseToInvoice)
             setInvoices(mappedInvoices)
-            setPagination({
-                current_page: payload.current_page,
-                last_page: payload.last_page,
-                per_page: payload.per_page,
-                total: payload.total,
-            })
+            setPagination(response.data.meta)
         } catch (err) {
             console.error('Failed to load invoices:', err)
             setError('Failed to load invoices. Please try again.')
         } finally {
             setLoading(false)
         }
-    }, [page, rowsPerPage, sortBy, sortOrder, searchTerm, mapApiInvoice])
+    }, [page, rowsPerPage, sortBy, sortOrder, searchTerm, mapResponseToInvoice])
 
     useEffect(() => {
         fetchInvoices()

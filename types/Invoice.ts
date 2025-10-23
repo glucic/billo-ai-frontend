@@ -1,13 +1,9 @@
 import { Organisation } from '@/types/Organisation'
+import { User } from '@/types/User'
 
 export type Issuer = Omit<
     Organisation,
-    | 'id'
-    | 'description'
-    | 'employee_count'
-    | 'users'
-    | 'created_at'
-    | 'updated_at'
+    'description' | 'employee_count' | 'users' | 'created_at' | 'updated_at'
 >
 
 export type Client = Omit<
@@ -65,4 +61,35 @@ export interface Invoice {
     legal: Legal
     footer: Footer
     attachments: File[]
+}
+
+// New types for backend responses
+export interface InvoiceResponse {
+    id: number
+    invoice_number: string
+    invoice_date: string
+    due_date: string | null
+    reference: string | null
+    issuer: Issuer
+    client: Client
+    items: InvoiceItem[]
+    totals: InvoiceTotals
+    legal: Legal | null
+    footer: Footer | null
+    user: {
+        id: number
+        name: string
+        email: string
+    }
+    organisation: Organisation | null
+    created_at: string
+    updated_at: string
+}
+
+export interface InvoiceCreatePayload extends Omit<Invoice, 'invoiceDetails'> {
+    invoiceDetails: Omit<InvoiceDetails, 'id'>
+}
+
+export interface InvoiceUpdatePayload extends Invoice {
+    invoiceDetails: InvoiceDetails
 }
