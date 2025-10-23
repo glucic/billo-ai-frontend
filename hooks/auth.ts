@@ -149,8 +149,8 @@ export const useAuth = ({
             await apiClient.post('/logout')
         } finally {
             await mutateUser(null, false)
-            router.push('/login')
         }
+        router.push('/login')
     }, [router, mutateUser])
 
     // ---- Redirect logic ----
