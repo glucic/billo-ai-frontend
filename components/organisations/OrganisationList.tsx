@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
-import { OrganisationLogo } from './OrganisationLogo'
+import { DefaultAvatar } from '../common/DefaultAvatar'
 import { Organisation } from '@/types/Organisation'
 
 interface OrganisationListProps {
@@ -11,9 +11,7 @@ interface OrganisationListProps {
     onLeave: (orgId: number) => void
 }
 
-export function OrganisationList({
-    organisations,
-}: OrganisationListProps) {
+export function OrganisationList({ organisations }: OrganisationListProps) {
     const t = useTranslations('Organisation')
 
     if (!organisations?.length) {
@@ -40,7 +38,7 @@ export function OrganisationList({
                         href={`/organisations/${org.id}`}
                         className="block p-6 rounded-[var(--radius-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]">
                         <div className="flex items-start gap-4 mb-4">
-                            <OrganisationLogo name={org.name} size="lg" />
+                            <DefaultAvatar name={org.name} size="lg" />
                             <div className="flex-1">
                                 <div className="flex items-start justify-between w-full">
                                     <div>

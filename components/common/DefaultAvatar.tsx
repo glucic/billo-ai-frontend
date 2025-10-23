@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-interface OrganisationLogoProps {
+interface DefaultAvatarProps {
     name: string
     size?: 'sm' | 'md' | 'lg'
     className?: string
@@ -12,11 +12,11 @@ const sizes = {
     lg: 'w-12 h-12 text-lg',
 }
 
-export function OrganisationLogo({
+export function DefaultAvatar({
     name,
     size = 'md',
     className,
-}: OrganisationLogoProps) {
+}: DefaultAvatarProps) {
     const initials = name
         .split(' ')
         .map(word => word[0])
@@ -25,12 +25,12 @@ export function OrganisationLogo({
         .slice(0, 2)
 
     const colors = [
-        'bg-blue-100 text-blue-700',
-        'bg-green-100 text-green-700',
-        'bg-purple-100 text-purple-700',
-        'bg-orange-100 text-orange-700',
-        'bg-pink-100 text-pink-700',
-        'bg-cyan-100 text-cyan-700',
+        'bg-blue-400 text-blue-900',
+        'bg-green-400 text-green-900',
+        'bg-purple-400 text-purple-900',
+        'bg-orange-400 text-orange-900',
+        'bg-pink-400 text-pink-900',
+        'bg-cyan-400 text-cyan-900',
     ]
 
     const darkColors = [

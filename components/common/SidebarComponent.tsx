@@ -10,10 +10,6 @@ import {
     IconHelpCircle,
     IconBuildingSkyscraper,
     IconChevronDown,
-    IconMenu2,
-    IconX,
-    IconLayoutNavbarExpand,
-    IconLayoutSidebarRightExpand,
     IconLayoutSidebarLeftExpand,
     IconLayoutSidebarRightCollapse,
 } from '@tabler/icons-react'
@@ -22,6 +18,8 @@ import { useAuthContext } from '@/context/AuthProvider'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
+import { usePathname } from 'next/navigation'
+import { DefaultAvatar } from './DefaultAvatar'
 
 type SidebarLinkType = {
     label: string
@@ -33,6 +31,7 @@ type SidebarLinkType = {
 export function SidebarComponent() {
     const { user } = useAuthContext()
     const t = useTranslations('Sidebar')
+    const pathname = usePathname()
     const [openDropdown, setOpenDropdown] = useState<string | null>(null)
     const [collapsed, setCollapsed] = useState(false)
 
@@ -49,6 +48,8 @@ export function SidebarComponent() {
         {
             label: t('invoices'),
             icon: <IconReceipt className="h-5 w-5 shrink-0" />,
+            href: '/invoices',
+
             children: [
                 {
                     label: t('invoicesOverview'),
@@ -94,36 +95,49 @@ export function SidebarComponent() {
         },
     ]
 
+    const isActive = (href?: string) => {
+        return href && pathname?.startsWith(href)
+    }
+
     return (
         <motion.div
-            animate={{
-                width: collapsed ? 80 : 260,
-            }}
-            transition={{
-                type: 'spring',
-                stiffness: 200,
-                damping: 25,
-            }}
-            className="h-screen border-r border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 flex flex-col shadow-sm">
+            animate={{ width: collapsed ? 80 : 260 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+            className="h-screen flex flex-col"
+            style={{
+                background: 'var(--secondary-background)',
+                borderRight: '1px solid var(--divider)',
+                boxShadow: 'var(--shadow-md)',
+            }}>
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-300 dark:border-neutral-700">
+            <div
+                className="flex items-center justify-between px-4 py-3"
+                style={{
+                    borderBottom: '1px solid var(--divider)',
+                }}>
                 <motion.h1
                     initial={false}
                     animate={{ opacity: collapsed ? 0 : 1 }}
                     transition={{ duration: 0.2 }}
-                    className={`text-lg font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap overflow-hidden ${
-                        collapsed ? 'hidden' : 'block'
-                    }`}>
+                    className="text-lg font-semibold whitespace-nowrap overflow-hidden"
+                    style={{
+                        color: 'var(--text-heading)',
+                        display: collapsed ? 'none' : 'block',
+                    }}>
                     BilloAI
                 </motion.h1>
 
                 <button
                     onClick={() => setCollapsed(!collapsed)}
-                    className="p-2 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition">
+                    className="p-2 rounded-md"
+                    style={{
+                        background: 'transparent',
+                        color: 'var(--text-heading)',
+                    }}>
                     {collapsed ? (
-                        <IconLayoutSidebarLeftExpand className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
+                        <IconLayoutSidebarLeftExpand className="h-5 w-5" />
                     ) : (
-                        <IconLayoutSidebarRightCollapse className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
+                        <IconLayoutSidebarRightCollapse className="h-5 w-5" />
                     )}
                 </button>
             </div>
@@ -136,7 +150,13 @@ export function SidebarComponent() {
                             <>
                                 <button
                                     onClick={() => toggleDropdown(link.label)}
-                                    className="flex items-center w-full gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all">
+                                    className={`flex items-center w-full gap-3 px-4 py-2 text-sm rounded-md transition-colors`}
+                                    style={{
+                                        color: 'var(--text-heading)',
+                                        background: isActive(link.href)
+                                            ? 'var(--accent-glow)'
+                                            : 'transparent',
+                                    }}>
                                     {link.icon}
                                     <AnimatePresence>
                                         {!collapsed && (
@@ -157,6 +177,9 @@ export function SidebarComponent() {
                                                     ? 'rotate-180'
                                                     : ''
                                             }`}
+                                            style={{
+                                                color: 'var(--text-muted)',
+                                            }}
                                         />
                                     )}
                                 </button>
@@ -184,7 +207,38 @@ export function SidebarComponent() {
                                                                 child.href ||
                                                                 '#'
                                                             }
-                                                            className="flex items-center gap-3 px-3 py-2 text-sm text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md transition-all">
+                                                            className={`flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors`}
+                                                            style={{
+                                                                color: 'var(--text-heading)',
+                                                                background:
+                                                                    isActive(
+                                                                        link.href,
+                                                                    )
+                                                                        ? 'var(--accent-glow)'
+                                                                        : 'transparent',
+                                                                borderLeft:
+                                                                    isActive(
+                                                                        link.href,
+                                                                    )
+                                                                        ? '3px solid var(--accent)'
+                                                                        : '3px solid transparent',
+                                                            }}
+                                                            onMouseEnter={e =>
+                                                                (e.currentTarget.style.background =
+                                                                    isActive(
+                                                                        link.href,
+                                                                    )
+                                                                        ? 'var(--accent-glow)'
+                                                                        : 'rgba(59, 130, 246, 0.05)')
+                                                            }
+                                                            onMouseLeave={e =>
+                                                                (e.currentTarget.style.background =
+                                                                    isActive(
+                                                                        link.href,
+                                                                    )
+                                                                        ? 'var(--accent-glow)'
+                                                                        : 'transparent')
+                                                            }>
                                                             {child.icon}
                                                             <span>
                                                                 {child.label}
@@ -199,7 +253,23 @@ export function SidebarComponent() {
                         ) : (
                             <Link
                                 href={link.href || '#'}
-                                className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all">
+                                className={`flex items-center gap-3 px-4 py-2 text-sm rounded-md transition-colors`}
+                                style={{
+                                    color: 'var(--text-heading)',
+                                    background: isActive(link.href)
+                                        ? 'var(--accent-glow)'
+                                        : 'transparent',
+                                }}
+                                onMouseEnter={e =>
+                                    (e.currentTarget.style.background =
+                                        'rgba(59, 130, 246, 0.05)')
+                                }
+                                onMouseLeave={e =>
+                                    (e.currentTarget.style.background =
+                                        isActive(link.href)
+                                            ? 'var(--accent-glow)'
+                                            : 'transparent')
+                                }>
                                 {link.icon}
                                 <AnimatePresence>
                                     {!collapsed && (
@@ -219,14 +289,17 @@ export function SidebarComponent() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-neutral-300 dark:border-neutral-700 p-4 flex flex-col gap-3">
+            <div
+                className="p-4 flex flex-col gap-3"
+                style={{
+                    borderTop: '1px solid var(--divider)',
+                }}>
                 <Link
                     href={`/settings/profile/${user?.id}`}
                     className="flex items-center gap-3">
-                    <img
-                        src="https://assets.aceternity.com/manu.png"
-                        className="h-8 w-8 rounded-full"
-                        alt="Avatar"
+                    <DefaultAvatar
+                        name={`${user?.first_name} ${user?.last_name}`}
+                        size="sm"
                     />
                     <AnimatePresence>
                         {!collapsed && (
@@ -235,15 +308,12 @@ export function SidebarComponent() {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="text-sm text-neutral-700 dark:text-neutral-200">
+                                style={{ color: 'var(--text-heading)' }}>
                                 {user?.first_name} {user?.last_name}
                             </motion.span>
                         )}
                     </AnimatePresence>
                 </Link>
-                <AnimatePresence>
-                    {!collapsed && <ThemeToggle />}
-                </AnimatePresence>
             </div>
         </motion.div>
     )

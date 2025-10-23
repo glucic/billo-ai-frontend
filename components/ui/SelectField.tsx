@@ -54,7 +54,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, SelectFieldProps>(
                         px-[var(--input-padding-x)] py-[var(--input-padding-y)]
                         bg-[var(--input-bg)]/70
                         backdrop-blur-[var(--input-blur)]
-                        hover:bg-[var(--accent-glow)]
+                        hover:bg-[var(--input-bg)]/100
                         rounded-[var(--input-radius)] 
                         shadow-[var(--input-shadow)]
                         text-sm text-[var(--input-text)]

@@ -54,7 +54,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputProps>(
                         placeholder:text-[var(--input-placeholder)]
                         shadow-[var(--input-shadow)]
                         transition-all duration-300
-                        hover:bg-[var(--accent-glow)]
+                        hover:bg-[var(--input-bg)]/100
                         focus-visible:ring-2
                         focus-visible:ring-[var(--color-accent)]
                         focus-visible:ring-offset-1

@@ -105,7 +105,7 @@ export default function CurrencyInput({
           focus-within:border-[var(--color-accent)]
           focus-within:ring-2 focus-within:ring-[var(--color-accent)]
           focus-within:ring-offset-1
-          hover:bg-[var(--accent-glow)]
+          hover:bg-[var(--input-bg)]/100
           disabled:opacity-50 disabled:cursor-not-allowed`,
                     error &&
                         'border-[var(--error)] focus-within:ring-[var(--error)] hover:bg-[var(--error)]/10',
