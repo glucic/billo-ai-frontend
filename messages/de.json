@@ -136,7 +136,7 @@
             "noAccount": "Noch kein Konto?",
             "signUp": "Registrieren",
             "errors": {
-                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+                "generalMismatch": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
                 "emailRequired": "E-Mail ist erforderlich.",
                 "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
                 "passwordRequired": "Passwort ist erforderlich.",
@@ -162,7 +162,7 @@
             "allFieldsRequired": "Bitte füllen Sie alle Felder aus.",
             "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
             "errors": {
-                "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+                "generalMismatch": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
                 "first_nameRequired": "Vorname ist erforderlich.",
                 "last_nameRequired": "Nachname ist erforderlich.",
                 "emailRequired": "E-Mail ist erforderlich.",

@@ -5,6 +5,35 @@ export type BackendErrors = Partial<Record<string, string[]>>
 export type TranslateFn = ReturnType<typeof useTranslations>
 
 /**
+ * Returns true when a translation value should be considered "missing".
+ * Some i18n setups return the key itself or an empty string when missing.
+ */
+export function isTranslationMissing(
+    translated: string | undefined,
+    key: string,
+): boolean {
+    return !translated || translated === '' || translated === key
+}
+
+/**
+ * Try to translate a key and return undefined when the translation is missing.
+ * defaultMessage defaults to empty string so callers can detect missing keys.
+ */
+export function translateIfExists(
+    t: TranslateFn,
+    key: string,
+    defaultMessage: string = '',
+): string | undefined {
+    try {
+        const v = t(key, { defaultMessage })
+        if (isTranslationMissing(v, key)) return undefined
+        return v
+    } catch {
+        return undefined
+    }
+}
+
+/**
  * Tries to detect the most fitting error key name from a backend message.
  * Used to build i18n translation keys dynamically.
  */
@@ -30,10 +59,9 @@ export function detectErrorKey(field: string, message: string): string | null {
         return `${field}Taken`
     if (lower.includes('too many') || lower.includes('throttle'))
         return 'tooManyAttempts'
-    if (lower.includes('date after or equal'))
-        return `${field}Before`
+    if (lower.includes('date after or equal')) return `${field}Before`
 
-    return null
+    return `${field}.general`
 }
 
 /**
@@ -56,7 +84,7 @@ export function parseBackendErrors(
     if (!error?.response) {
         return {
             general: [
-                t(`${namespace}.unknownError`, {
+                t('GlobalErrors.unexpectedError', {
                     defaultMessage: 'Unexpected error',
                 }),
             ],
@@ -77,18 +105,17 @@ export function parseBackendErrors(
                     ? `${namespace}.errors.${key}`
                     : undefined
 
-                try {
-                    if (localizedKey) return t(localizedKey)
-                } catch {
-                    /* ignore and fallback */
-                }
+                // Try namespace-specific translation first
+                const nsTranslated =
+                    localizedKey && translateIfExists(t, localizedKey, '')
+                if (nsTranslated) return nsTranslated
 
-                try {
-                    const globalKey = `GlobalErrors.${key ?? 'unknownError'}`
-                    return t(globalKey)
-                } catch {
-                    return msg
-                }
+                // Fallback to global unknown error (use raw message as default)
+                const globalKey = `GlobalErrors.unknownError`
+                const globalTranslated = translateIfExists(t, globalKey, msg)
+                if (globalTranslated) return globalTranslated
+
+                return msg
             })
         }
 
@@ -99,14 +126,15 @@ export function parseBackendErrors(
         const key = detectErrorKey('general', data.message)
         const localizedKey = key ? `${namespace}.errors.${key}` : undefined
 
-        try {
-            if (localizedKey) return { general: [t(localizedKey)] }
-        } catch {}
+        // Try namespace-specific translation first
+        const nsTranslated =
+            localizedKey && translateIfExists(t, localizedKey, '')
+        if (nsTranslated) return { general: [nsTranslated] }
 
-        try {
-            const globalKey = `GlobalErrors.${key ?? 'unknownError'}`
-            return { general: [t(globalKey)] }
-        } catch {}
+        // Fallback to global key (default to raw message)
+        const globalKey = `GlobalErrors.${key ?? 'unknownError'}`
+        const globalTranslated = translateIfExists(t, globalKey, data.message)
+        if (globalTranslated) return { general: [globalTranslated] }
 
         return { general: [data.message] }
     }

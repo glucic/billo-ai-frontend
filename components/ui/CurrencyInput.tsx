@@ -102,9 +102,7 @@ export default function CurrencyInput({
           text-sm text-[var(--input-text)]
           shadow-[var(--input-shadow)]
           transition-all duration-300
-          focus-within:border-[var(--color-accent)]
-          focus-within:ring-2 focus-within:ring-[var(--color-accent)]
-          focus-within:ring-offset-1
+          focus-within:ring-2 focus-within:ring-[var(--color-accent)] focus-within:ring-offset-1 focus-within:ring-offset-[var(--color-background)]
           hover:bg-[var(--input-bg)]/100
           disabled:opacity-50 disabled:cursor-not-allowed`,
                     error &&
