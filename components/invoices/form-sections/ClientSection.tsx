@@ -11,8 +11,11 @@ import {
 } from '@/components/ui'
 import React from 'react'
 import { Organisation } from '@/types/Organisation'
-import { Client } from '@/types/Invoice'
+import { Client, Issuer } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
+import LocationFields, {
+    LocationValues,
+} from '@/components/common/LocationFields'
 
 interface ClientSectionProps {
     organisations: Organisation[]
@@ -35,17 +38,22 @@ export default function ClientSection({
     const getError = (key: keyof Client): string[] | undefined =>
         errors?.[`client.${key}`] ?? errors?.[key]
 
+    const handleFullAddressSelect = (address: {
+        street: string
+        zip: string
+        city: string
+        region: string
+    }) => {
+        if (address.street) setClientField('street', address.street)
+        if (address.zip) setClientField('zip', address.zip)
+        if (address.city) setClientField('city', address.city)
+        if (address.region) setClientField('region', address.region)
+    }
+
     const contactFields: { key: keyof Client; required?: boolean }[] = [
         { key: 'name', required: true },
         { key: 'email', required: false },
         { key: 'phone', required: false },
-    ]
-
-    const addressFields: { key: keyof Client; required?: boolean }[] = [
-        { key: 'street', required: false },
-        { key: 'zip', required: false },
-        { key: 'city', required: false },
-        { key: 'region', required: false },
     ]
 
     return (
@@ -98,35 +106,52 @@ export default function ClientSection({
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {addressFields.map(({ key, required }) => (
-                            <LabelInputContainer key={key}>
-                                <Label
-                                    htmlFor={`client-${key}`}
-                                    required={required}>
-                                    {orgT(key)}
-                                </Label>
-                                <InputField
-                                    id={`client-${key}`}
-                                    placeholder={orgT(key)}
-                                    value={client[key] ?? ''}
-                                    onChange={e =>
-                                        setClientField(key, e.target.value)
-                                    }
-                                    aria-label={orgT(key)}
-                                    error={Boolean(getError(key))}
-                                    aria-describedby={
-                                        getError(key)
-                                            ? `client-${key}-error`
-                                            : undefined
-                                    }
-                                />
-                                <InputError
-                                    id={`client-${key}-error`}
-                                    messages={getError(key)}
-                                />
-                            </LabelInputContainer>
-                        ))}
+                    <div className="grid grid-cols-1 gap-4">
+                        <LocationFields
+                            values={{
+                                street: client.street ?? '',
+                                zip: client.zip ?? '',
+                                city: client.city ?? '',
+                                region: client.region ?? '',
+                            }}
+                            onChange={(field, value) =>
+                                setClientField(field as keyof Client, value)
+                            }
+                            onFullAddressSelect={(address: LocationValues) =>
+                                handleFullAddressSelect({
+                                    street: address.street ?? '',
+                                    zip: address.zip ?? '',
+                                    city: address.city ?? '',
+                                    region: address.region ?? '',
+                                })
+                            }
+                            required={{ street: true, zip: true, city: true }}
+                            placeholders={{
+                                street: orgT('street'),
+                                zip: orgT('zip'),
+                                city: orgT('city'),
+                                region: orgT('region'),
+                            }}
+                        />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <InputError
+                                id="issuer-street-error"
+                                messages={getError('street')}
+                            />
+                            <InputError
+                                id="issuer-zip-error"
+                                messages={getError('zip')}
+                            />
+                            <InputError
+                                id="issuer-city-error"
+                                messages={getError('city')}
+                            />
+                            <InputError
+                                id="issuer-region-error"
+                                messages={getError('region')}
+                            />
+                        </div>
                     </div>
                 </div>
             )}

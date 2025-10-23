@@ -1,0 +1,143 @@
+'use client'
+
+import React from 'react'
+import { Label, LabelInputContainer, InputField } from '@/components/ui'
+import { AddressField } from '@/components/ui/AddressField'
+
+export type LocationValues = {
+    street?: string
+    zip?: string
+    city?: string
+    region?: string
+}
+
+export interface LocationFieldsProps {
+    values: LocationValues
+    onChange?: (field: keyof LocationValues, value: string) => void
+    onFullAddressSelect?: (address: LocationValues) => void
+    showLabels?: boolean
+    required?: Partial<Record<keyof LocationValues, boolean>>
+    className?: string
+    fieldClassName?: string
+    disableZipSuggestions?: boolean
+    ids?: Partial<Record<keyof LocationValues, string>>
+    placeholders?: Partial<Record<keyof LocationValues, string>>
+}
+
+export function LocationFields({
+    values,
+    onChange,
+    onFullAddressSelect,
+    showLabels = true,
+    required = {},
+    className = '',
+    fieldClassName = '',
+    disableZipSuggestions = true,
+    ids = {},
+    placeholders = {},
+}: LocationFieldsProps) {
+    const handleFieldChange =
+        (field: keyof LocationValues) =>
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(field, e.target.value)
+        }
+
+    const handleFullSelect = (address: LocationValues) => {
+        onFullAddressSelect?.(address)
+        if (address.street !== undefined) onChange?.('street', address.street)
+        if (address.zip !== undefined) onChange?.('zip', address.zip)
+        if (address.city !== undefined) onChange?.('city', address.city)
+        if (address.region !== undefined) onChange?.('region', address.region)
+    }
+
+    return (
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${className}`}>
+            <LabelInputContainer>
+                {showLabels && (
+                    <Label
+                        htmlFor={ids.street ?? 'street'}
+                        required={!!required.street}>
+                        {placeholders.street ?? 'Street'}
+                    </Label>
+                )}
+                <AddressField
+                    type="street"
+                    id={ids.street}
+                    placeholder={placeholders.street}
+                    value={values.street ?? ''}
+                    onChange={handleFieldChange('street')}
+                    onSelect={handleFullSelect}
+                    className={fieldClassName}
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                {showLabels && (
+                    <Label htmlFor={ids.zip ?? 'zip'} required={!!required.zip}>
+                        {placeholders.zip ?? 'ZIP'}
+                    </Label>
+                )}
+                {disableZipSuggestions ? (
+                    <InputField
+                        id={ids.zip}
+                        placeholder={placeholders.zip}
+                        value={values.zip ?? ''}
+                        onChange={handleFieldChange('zip')}
+                        className={fieldClassName}
+                    />
+                ) : (
+                    <AddressField
+                        type="zip"
+                        id={ids.zip}
+                        placeholder={placeholders.zip}
+                        value={values.zip ?? ''}
+                        onChange={handleFieldChange('zip')}
+                        onSelect={handleFullSelect}
+                        className={fieldClassName}
+                    />
+                )}
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                {showLabels && (
+                    <Label
+                        htmlFor={ids.city ?? 'city'}
+                        required={!!required.city}>
+                        {placeholders.city ?? 'City'}
+                    </Label>
+                )}
+                <AddressField
+                    type="city"
+                    id={ids.city}
+                    placeholder={placeholders.city}
+                    value={values.city ?? ''}
+                    onChange={handleFieldChange('city')}
+                    onSelect={handleFullSelect}
+                    className={fieldClassName}
+                />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+                {showLabels && (
+                    <Label
+                        htmlFor={ids.region ?? 'region'}
+                        required={!!required.region}>
+                        {placeholders.region ?? 'Region'}
+                    </Label>
+                )}
+                <AddressField
+                    type="region"
+                    id={ids.region}
+                    placeholder={placeholders.region}
+                    value={values.region ?? ''}
+                    onChange={handleFieldChange('region')}
+                    onSelect={handleFullSelect}
+                    className={fieldClassName}
+                />
+            </LabelInputContainer>
+        </div>
+    )
+}
+
+export default LocationFields
+export const LocationFieldsComponent = LocationFields

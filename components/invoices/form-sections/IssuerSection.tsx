@@ -11,6 +11,9 @@ import {
     Button,
     InputError,
 } from '@/components/ui'
+import LocationFields, {
+    LocationValues,
+} from '@/components/common/LocationFields'
 import { Organisation } from '@/types/Organisation'
 import { Issuer } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
@@ -39,17 +42,22 @@ export default function IssuerSection({
     const getError = (key: keyof Issuer): string[] | undefined =>
         errors?.[`issuer.${key}`] ?? errors?.[key]
 
+    const handleFullAddressSelect = (address: {
+        street: string
+        zip: string
+        city: string
+        region: string
+    }) => {
+        if (address.street) setIssuerField('street', address.street)
+        if (address.zip) setIssuerField('zip', address.zip)
+        if (address.city) setIssuerField('city', address.city)
+        if (address.region) setIssuerField('region', address.region)
+    }
+
     const contactFields: { key: keyof Issuer; required?: boolean }[] = [
         { key: 'name', required: true },
         { key: 'email', required: true },
         { key: 'phone', required: false },
-    ]
-
-    const addressFields: { key: keyof Issuer; required?: boolean }[] = [
-        { key: 'street', required: true },
-        { key: 'zip', required: true },
-        { key: 'city', required: true },
-        { key: 'region', required: false },
     ]
 
     return (
@@ -68,7 +76,9 @@ export default function IssuerSection({
             </Button>
 
             {open && (
-                <div id="issuer-fields" className="grid grid-cols-1 gap-4 mt-4 pl-4">
+                <div
+                    id="issuer-fields"
+                    className="grid grid-cols-1 gap-4 mt-4 pl-4">
                     <LabelInputContainer>
                         <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
                         <SelectField
@@ -117,34 +127,52 @@ export default function IssuerSection({
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {addressFields.map(({ key, required }) => (
-                            <LabelInputContainer key={key}>
-                                <Label
-                                    htmlFor={`issuer-${key}`}
-                                    required={required}>
-                                    {orgT(key)}
-                                </Label>
-                                <InputField
-                                    id={`issuer-${key}`}
-                                    placeholder={orgT(key)}
-                                    value={issuer[key] ?? ''}
-                                    onChange={e =>
-                                        setIssuerField(key, e.target.value)
-                                    }
-                                    error={Boolean(getError(key))}
-                                    aria-describedby={
-                                        getError(key)
-                                            ? `issuer-${key}-error`
-                                            : undefined
-                                    }
-                                />
-                                <InputError
-                                    id={`issuer-${key}-error`}
-                                    messages={getError(key)}
-                                />
-                            </LabelInputContainer>
-                        ))}
+                    <div className="grid grid-cols-1 gap-4">
+                        <LocationFields
+                            values={{
+                                street: issuer.street ?? '',
+                                zip: issuer.zip ?? '',
+                                city: issuer.city ?? '',
+                                region: issuer.region ?? '',
+                            }}
+                            onChange={(field, value) =>
+                                setIssuerField(field as keyof Issuer, value)
+                            }
+                            onFullAddressSelect={(address: LocationValues) =>
+                                handleFullAddressSelect({
+                                    street: address.street ?? '',
+                                    zip: address.zip ?? '',
+                                    city: address.city ?? '',
+                                    region: address.region ?? '',
+                                })
+                            }
+                            required={{ street: true, zip: true, city: true }}
+                            placeholders={{
+                                street: orgT('street'),
+                                zip: orgT('zip'),
+                                city: orgT('city'),
+                                region: orgT('region'),
+                            }}
+                        />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <InputError
+                                id="issuer-street-error"
+                                messages={getError('street')}
+                            />
+                            <InputError
+                                id="issuer-zip-error"
+                                messages={getError('zip')}
+                            />
+                            <InputError
+                                id="issuer-city-error"
+                                messages={getError('city')}
+                            />
+                            <InputError
+                                id="issuer-region-error"
+                                messages={getError('region')}
+                            />
+                        </div>
                     </div>
                 </div>
             )}
