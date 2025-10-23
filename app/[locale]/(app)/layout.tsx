@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { SidebarComponent } from '@/components/common/SidebarComponent'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/auth'
 
 interface AppLayoutProps {
@@ -10,16 +9,7 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
-    const router = useRouter()
-    const { user, loading } = useAuth({
-        middleware: 'auth',
-    })
-
-    useEffect(() => {
-        if (!loading && !user) {
-            router.push('/login')
-        }
-    }, [loading, user, router])
+    const { loading } = useAuth({ middleware: 'auth' })
 
     if (loading) {
         return (
@@ -29,20 +19,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
         )
     }
 
+    // user will always be defined here if we reached this point
     return (
-        <div className="flex">
+        <div className="flex min-h-screen">
             <aside>
                 <SidebarComponent />
             </aside>
-
-            <main className="flex-1 p-5 overflow-y-auto relative">
-                {loading ? (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-12 w-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-                    </div>
-                ) : (
-                    children
-                )}
+            <main className="flex-1 p-5 overflow-y-auto bg-[var(--color-background)]">
+                {children}
             </main>
         </div>
     )

@@ -49,16 +49,23 @@ export const useAuth = ({
     const router = useRouter()
     const params = useParams()
     const { user, loading, mutateUser } = useAuthContext()
-    const t = useTranslations('Auth') // top-level Auth namespace
+    const t = useTranslations('Auth')
 
+    // ---- CSRF Setup ----
     const csrfPromise = React.useRef<Promise<any> | null>(null)
-    const csrf = () => {
-        if (!csrfPromise.current) {
-            csrfPromise.current = apiClient.get('/sanctum/csrf-cookie')
+    const csrf = async () => {
+        try {
+            if (!csrfPromise.current) {
+                csrfPromise.current = apiClient.get('/sanctum/csrf-cookie')
+            }
+            return await csrfPromise.current
+        } catch (err) {
+            csrfPromise.current = null // reset on failure
+            throw err
         }
-        return csrfPromise.current
     }
 
+    // ---- Unified request wrapper ----
     const handleAuthRequest = async (
         requestFn: () => Promise<any>,
         setErrors: (errors: BackendErrors) => void,
@@ -67,6 +74,7 @@ export const useAuth = ({
     ) => {
         setErrors({})
         setStatus?.(null)
+
         try {
             await csrf()
             return await requestFn()
@@ -76,6 +84,7 @@ export const useAuth = ({
         }
     }
 
+    // ---- Actions ----
     const register = async (props: RegisterProps) =>
         handleAuthRequest(
             async () => {
@@ -135,28 +144,38 @@ export const useAuth = ({
     }
 
     const logout = React.useCallback(async () => {
-        await csrf()
-        await apiClient.post('/logout')
-        await mutateUser(null, false)
-        router.push('/login')
+        try {
+            await csrf()
+            await apiClient.post('/logout')
+        } finally {
+            await mutateUser(null, false)
+            router.push('/login')
+        }
     }, [router, mutateUser])
 
+    // ---- Redirect logic ----
     React.useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user) {
-            router.push(redirectIfAuthenticated)
+        if (loading) return // ✅ Wait for loading to finish
+
+        // If guest-only route, redirect authenticated users
+        if (middleware === 'guest' && user) {
+            router.push(redirectIfAuthenticated ?? '/')
+            return
         }
 
+        // If auth-only route, redirect unauthenticated users
+        if (middleware === 'auth' && !user) {
+            router.push('/login')
+            return
+        }
+
+        // Optional: verification route logic
         if (
-            window.location.pathname === '/verify-email' &&
-            user?.email_verified_at
+            window.location.pathname === '/verify-email' //&& user?.email_verified_at
         ) {
             router.push(redirectIfAuthenticated ?? '/')
         }
-
-        if (middleware === 'auth' && !user && !loading) {
-            logout()
-        }
-    }, [user, loading, middleware, redirectIfAuthenticated, router, logout])
+    }, [user, loading, middleware, redirectIfAuthenticated, router])
 
     return {
         user,

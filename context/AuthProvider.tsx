@@ -3,36 +3,36 @@
 import React, { createContext, useContext } from 'react'
 import useSWR from 'swr'
 import apiClient from '@/lib/apiClient'
-import { useRouter } from 'next/navigation'
+import { User } from '@/types/User'
 
 interface AuthContextType {
-    user: any | null
+    user: User | null
     loading: boolean
-    mutateUser: (data?: any, shouldRevalidate?: boolean) => Promise<any>
+    mutateUser: (data?: User | null, shouldRevalidate?: boolean) => Promise<any>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const router = useRouter()
-
     const {
         data: user,
         error,
         mutate,
-    } = useSWR(
+        isLoading,
+    } = useSWR<User>(
         '/api/user',
-        () =>
-            apiClient
-                .get('/api/user')
-                .then(res => res.data)
-                .catch(err => {
-                    if (err.response?.status === 409) {
-                        //router.push('/verify-email')
-                    } else {
-                        throw err
-                    }
-                }),
+        async () => {
+            try {
+                const res = await apiClient.get('/api/user')
+                return res.data
+            } catch (err: any) {
+                if (err.response?.status === 401) {
+                    // Not logged in — return null, don’t throw
+                    return null
+                }
+                throw err
+            }
+        },
         {
             revalidateOnFocus: false,
             dedupingInterval: 60000,
@@ -40,10 +40,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
     )
 
-    const loading = !user && !error
+    const loading = isLoading
 
     return (
-        <AuthContext.Provider value={{ user, loading, mutateUser: mutate }}>
+        <AuthContext.Provider
+            value={{ user: user ?? null, loading, mutateUser: mutate }}>
             {children}
         </AuthContext.Provider>
     )
