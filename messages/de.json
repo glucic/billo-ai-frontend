@@ -201,6 +201,7 @@
         }
     },
     "Invoices": {
+        "title": "Rechnungen",
         "actions": "Aktionen",
         "cancel": "Abbrechen",
         "create": "Rechnung erstellen",
@@ -213,11 +214,24 @@
         "previewMode": "Vorschaumodus",
         "rowsPerPage": "Zeilen pro Seite",
         "save": "Rechnung speichern",
+        "view": "Rechnung ansehen",
         "update": "Rechnung bearbeiten",
+        "downloadPDF": "PDF herunterladen",
+        "copy": "Rechnung kopieren",
+        "archive": "Rechnung archivieren",
         "saveSuccess": "Rechnung erfolgreich gespeichert!",
         "searchPlaceholder": "Rechnungen durchsuchen...",
         "selectIssuer": "Aussteller auswählen",
         "showToolbar": "Symbolleiste anzeigen",
+        "columns": {
+            "invoiceNumber": "Rechnungsnummer",
+            "clientName": "Kundenname",
+            "invoiceDate": "Rechnungsdatum",
+            "dueDate": "Fälligkeitsdatum",
+            "status": "Status",
+            "amountDue": "Offener Betrag",
+            "actions": "Aktionen"
+        },
         "sort": {
             "asc": "Aufsteigend",
             "created": "Erstellungsdatum",
@@ -225,7 +239,6 @@
             "desc": "Absteigend",
             "number": "Rechnungsnummer"
         },
-        "title": "Rechnungen",
         "PDF": {
             "title": "Rechnung",
             "invoiceNumber": "Rechnungsnummer",
@@ -249,6 +262,14 @@
             "deposit": "Anzahlung",
             "payments": "Zahlungen",
             "amountDue": "Offener Betrag"
+        },
+        "InvoiceStatus": {
+            "draft": "Entwurf",
+            "sent": "Gesendet",
+            "pending": "Ausstehend",
+            "paid": "Bezahlt",
+            "overdue": "Überfällig",
+            "archived": "Archiviert"
         },
         "InvoiceDetails": {
             "title": "Rechnungsdetails",

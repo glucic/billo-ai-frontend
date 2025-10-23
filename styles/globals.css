@@ -93,7 +93,7 @@
 }
 
 [data-theme='light'] {
-    --background: #fdfdfdf6;
+    --background: #e6e6e6f6;
     --foreground: #2a2a2bc7;
     --secondary-background: #fdfdfd;
 
@@ -153,7 +153,7 @@ body {
     background: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 * {
@@ -186,81 +186,6 @@ p {
     line-height: 1.6;
 }
 
-.invoice-table thead {
-    background: var(--table-header-bg);
-    color: var(--table-header-text);
-    box-shadow: var(--table-header-shadow);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-size: 0.75rem; /* slightly smaller and modern */
-}
-
-.invoice-table th {
-    padding: 0.75rem 1.5rem;
-    text-align: left;
-    transition:
-        color 0.2s ease,
-        background 0.2s ease;
-}
-
-.invoice-row {
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease,
-        background-color 0.2s ease;
-    border-bottom: 1px solid var(--table-border);
-}
-
-.invoice-row:nth-child(even) {
-    background-color: var(--table-row-alt);
-}
-
-/* Header column separators and resizer handle */
-.invoice-table th {
-    border-right: 1px solid var(--border-color);
-    position: relative; /* for resizer positioning */
-}
-
-.invoice-table th:last-child {
-    border-right: none;
-}
-
-/* Improve visibility of sticky header and resizer handles */
-.invoice-table thead {
-    z-index: 40;
-}
-
-.resizer {
-    background: var(--border-color);
-    opacity: 1;
-    transition:
-        background-color 0.12s ease,
-        width 0.12s ease,
-        opacity 0.12s ease;
-    z-index: 45; /* above header content */
-}
-
-.resizer:hover,
-.resizer:active {
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    opacity: 0.95;
-    width: 4px !important; /* slightly widen on hover for grab */
-}
-
-/* Make resizer easier to touch on mobile */
-@media (pointer: coarse) {
-    .resizer {
-        width: 18px !important;
-    }
-}
-
-.invoice-row:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-    background-color: var(--table-row-hover);
-}
-
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -283,7 +208,7 @@ p {
     background: var(--secondary-background);
     border-radius: var(--radius-lg);
     box-shadow: var(--card-shadow);
-    border: var(--card-border, none); /* fallback to none for dark mode */
+    border: var(--card-border, none);
     padding: 1rem;
     margin: 1rem;
     transition:

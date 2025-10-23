@@ -24,35 +24,34 @@ interface CurrencyInputProps {
 }
 
 export default function CurrencyInput({
-                                          label,
-                                          value = 0,
-                                          onChange,
-                                          currency = 'EUR',
-                                          mode = 'currency',
-                                          placeholder,
-                                          readOnly = false,
-                                          disabled = false,
-                                          error = false,
-                                          className,
-                                          step,
-                                          min,
-                                          max,
-                                      }: CurrencyInputProps) {
-    const [raw, setRaw] = useState<string>('') // free typing buffer
+    label,
+    value = 0,
+    onChange,
+    currency = 'EUR',
+    mode = 'currency',
+    placeholder,
+    readOnly = false,
+    disabled = false,
+    error = false,
+    className,
+    step,
+    min,
+    max,
+}: CurrencyInputProps) {
+    const [raw, setRaw] = useState<string>('')
     const [focused, setFocused] = useState(false)
 
-    // format only after blur
     useEffect(() => {
         if (!focused) {
             if (value !== undefined && value !== null) {
                 const fmt =
                     mode === 'currency'
                         ? new Intl.NumberFormat('de-DE', {
-                            style: 'currency',
-                            currency,
-                            minimumFractionDigits: 2,
-                        }).format(value)
-                        : `${value.toFixed(2)}`
+                              style: 'currency',
+                              currency,
+                              minimumFractionDigits: 2,
+                          }).format(value)
+                        : `${value.toFixed(2)} %`
                 setRaw(fmt)
             }
         }
@@ -109,10 +108,9 @@ export default function CurrencyInput({
           hover:bg-[var(--accent-glow)]
           disabled:opacity-50 disabled:cursor-not-allowed`,
                     error &&
-                    'border-[var(--error)] focus-within:ring-[var(--error)] hover:bg-[var(--error)]/10',
+                        'border-[var(--error)] focus-within:ring-[var(--error)] hover:bg-[var(--error)]/10',
                     className,
-                )}
-            >
+                )}>
                 <Input
                     inputMode="decimal"
                     value={raw}
@@ -131,26 +129,18 @@ export default function CurrencyInput({
                     className="flex-1 bg-transparent px-3 py-[6px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] tabular-nums outline-none"
                 />
 
-                {mode === 'percent' && (
-                    <span className="absolute right-9 text-[var(--input-placeholder)] select-none">
-            %
-          </span>
-                )}
-
                 <div className="flex h-[calc(100%+2px)] flex-col">
                     <Button
                         type="button"
                         onPress={increment}
-                        className="flex h-1/2 w-6 items-center justify-center border-l border-b border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40"
-                    >
-                        <ChevronUpIcon size={12} />
+                        className="flex h-1/2 w-6 items-center justify-center border-l border-b border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40">
+                        <ChevronUpIcon size={15} />
                     </Button>
                     <Button
                         type="button"
                         onPress={decrement}
-                        className="flex h-1/2 w-6 items-center justify-center border-l border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40"
-                    >
-                        <ChevronDownIcon size={12} />
+                        className="flex h-1/2 w-6 items-center justify-center border-l border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white transition-colors disabled:opacity-40">
+                        <ChevronDownIcon size={15} />
                     </Button>
                 </div>
             </Group>

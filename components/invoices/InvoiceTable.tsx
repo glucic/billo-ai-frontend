@@ -1,14 +1,13 @@
 'use client'
 
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { Invoice } from '@/types/Invoice'
 import { IoChevronUp, IoChevronDown } from 'react-icons/io5'
-import { FaEdit, FaFileDownload, FaArchive } from 'react-icons/fa'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/Button'
 import { InputField } from '@/components/ui/InputField'
+import { useTranslations } from 'next-intl'
 import { SortField } from '@/hooks/useInvoiceTable'
+import { InvoiceActionsMenu } from '@/components/invoices'
+import '@/styles/invoice-table.css'
 
 interface InvoiceTableProps {
     invoices: Invoice[]
@@ -21,7 +20,7 @@ interface InvoiceTableProps {
     onArchive: (invoice: Invoice) => void
 }
 
-export default function InvoiceTable({
+const InvoiceTableComponent = ({
     invoices,
     loading,
     sortBy,
@@ -30,12 +29,18 @@ export default function InvoiceTable({
     onSelect,
     onDownloadPDF,
     onArchive,
-}: InvoiceTableProps) {
+}: InvoiceTableProps) => {
     const invoicesT = useTranslations('Invoices')
     const clientsT = useTranslations('Clients')
-    const router = useRouter()
 
     const [search, setSearch] = useState('')
+    const [debouncedSearch, setDebouncedSearch] = useState('')
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+
+    useEffect(() => {
+        const handler = setTimeout(() => setDebouncedSearch(search), 300)
+        return () => clearTimeout(handler)
+    }, [search])
 
     const [colWidths, setColWidths] = useState<number[]>([
         15, 18, 30, 15, 12, 10,
@@ -46,11 +51,9 @@ export default function InvoiceTable({
 
     const onMouseDownResize = (index: number, e: React.MouseEvent) => {
         e.preventDefault()
-        e.stopPropagation()
         resizingCol.current = index
         startX.current = e.clientX
         startWidths.current = [...colWidths]
-
         window.addEventListener('mousemove', onMouseMove)
         window.addEventListener('mouseup', onMouseUp)
     }
@@ -64,17 +67,14 @@ export default function InvoiceTable({
         if (!table) return
         const tableWidth = table.getBoundingClientRect().width
         const deltaPercent = (dx / tableWidth) * 100
-
         const idx = resizingCol.current
         const newWidths = [...startWidths.current]
-
         newWidths[idx] = Math.max(5, startWidths.current[idx] + deltaPercent)
-        if (idx + 1 < newWidths.length) {
+        if (idx + 1 < newWidths.length)
             newWidths[idx + 1] = Math.max(
                 5,
                 startWidths.current[idx + 1] - deltaPercent,
             )
-        }
         setColWidths(newWidths)
     }
 
@@ -85,283 +85,198 @@ export default function InvoiceTable({
     }
 
     const filteredInvoices = useMemo(() => {
-        return invoices.filter(
-            inv =>
+        return invoices.filter(inv => {
+            const searchTerm = debouncedSearch.toLowerCase()
+            return (
                 inv.invoiceDetails.invoiceNumber
                     .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                inv.client.name.toLowerCase().includes(search.toLowerCase()),
-        )
-    }, [search, invoices])
+                    .includes(searchTerm) ||
+                inv.client.name.toLowerCase().includes(searchTerm) ||
+                inv.client.email?.toLowerCase().includes(searchTerm)
+            )
+        })
+    }, [debouncedSearch, invoices])
 
     const getSortIndicator = (field: string) => {
         if (sortBy !== field) return null
         return sortOrder === 'asc' ? <IoChevronUp /> : <IoChevronDown />
     }
 
-    const getStatus = (invoice: Invoice) => {
+    const getStatusBadge = (invoice: Invoice) => {
         const dueDate = invoice.invoiceDetails.dueDate
             ? new Date(invoice.invoiceDetails.dueDate)
             : null
-        const total =
-            invoice.totals?.amountDue ??
-            invoice.items.reduce(
-                (sum, item) => sum + item.rate * item.quantity,
-                0,
-            )
-        if (total <= 0) return 'Paid'
-        if (dueDate && dueDate < new Date()) return 'Overdue'
-        return 'Pending Payment'
+        const total = invoice.totals?.amountDue ?? 0
+
+        let label = ''
+        let variantClass = ''
+        if (total <= 0) {
+            label = invoicesT('InvoiceStatus.paid')
+            variantClass = 'bg-[var(--success)]/15 text-[var(--success)]'
+        } else if (dueDate && dueDate < new Date()) {
+            label = invoicesT('InvoiceStatus.overdue')
+            variantClass = 'bg-[var(--error)]/15 text-[var(--error)]'
+        } else {
+            label = invoicesT('InvoiceStatus.pending')
+            variantClass = 'bg-[var(--warning)]/15 text-[var(--warning)]'
+        }
+
+        return (
+            <span
+                className={`px-3 py-1 rounded-md text-sm font-semibold capitalize ${variantClass}`}>
+                {label}
+            </span>
+        )
     }
 
     return (
-        <div className="flex flex-col h-full min-h-0 overflow-hidden rounded-xl bg-[var(--secondary-background)] shadow-[var(--card-shadow)] p-4 border-[var(--card-border)]">
+        <div className="flex flex-col h-full rounded-xl bg-[var(--secondary-background)] shadow-[var(--card-shadow)] p-4 border-[var(--card-border)]">
             <div className="mb-4">
                 <InputField
-                    placeholder="Search invoices or clients..."
+                    placeholder="Search invoices, clients or emails..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
             </div>
 
-            <div className="flex-1 min-h-0 overflow-hidden">
-                <div className="h-full overflow-y-auto overflow-x-scroll">
-                    <table className="min-w-full table-fixed text-sm text-left border-collapse invoice-table">
-                        <thead className="bg-[var(--secondary-background)] text-[var(--color-foreground)] uppercase text-xs tracking-wide rounded-t-lg sticky top-0 left-0 right-0 z-10">
+            <div className="flex-1 overflow-auto">
+                <table className="min-w-full table-fixed text-sm text-left border-collapse invoice-table">
+                    <thead className="sticky top-0 bg-[var(--secondary-background)] text-xs uppercase tracking-wide z-10">
+                        <tr>
+                            {[
+                                'invoiceNumber',
+                                'invoiceDate',
+                                'clientName',
+                                'amountDue',
+                                'status',
+                                'actions',
+                            ].map((key, i) => (
+                                <th
+                                    key={key}
+                                    style={{ width: `${colWidths[i]}%` }}
+                                    className="px-6 py-4 relative whitespace-nowrap">
+                                    {key !== 'actions' ? (
+                                        <div
+                                            onClick={() =>
+                                                key !== 'status' &&
+                                                onSort(key as SortField)
+                                            }
+                                            className="flex items-center gap-1 cursor-pointer hover:text-[var(--accent-light)]">
+                                            {invoicesT(`columns.${key}`)}
+                                            {getSortIndicator(key)}
+                                        </div>
+                                    ) : (
+                                        invoicesT('actions')
+                                    )}
+                                    {i < colWidths.length - 1 && (
+                                        <div
+                                            className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize"
+                                            onMouseDown={e =>
+                                                onMouseDownResize(i, e)
+                                            }
+                                        />
+                                    )}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loading ? (
                             <tr>
-                                <th
-                                    style={{ width: `${colWidths[0]}%` }}
-                                    className="px-6 py-4 relative">
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            onClick={() =>
-                                                onSort('invoice_number')
-                                            }
-                                            className="flex cursor-pointer hover:text-[var(--accent-light)]">
-                                            {invoicesT(
-                                                'InvoiceDetails.invoiceNumber',
-                                            )}{' '}
-                                            {getSortIndicator('invoice_number')}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none"
-                                        onMouseDown={e =>
-                                            onMouseDownResize(0, e)
-                                        }
-                                        aria-hidden
-                                    />
-                                </th>
-                                <th
-                                    style={{ width: `${colWidths[1]}%` }}
-                                    className="px-6 py-4 relative">
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            onClick={() =>
-                                                onSort('invoice_date')
-                                            }
-                                            className="flex cursor-pointer hover:text-[var(--accent-light)]">
-                                            {invoicesT(
-                                                'InvoiceDetails.invoiceDate',
-                                            )}{' '}
-                                            {getSortIndicator('invoice_date')}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none"
-                                        onMouseDown={e =>
-                                            onMouseDownResize(1, e)
-                                        }
-                                        aria-hidden
-                                    />
-                                </th>
-                                <th
-                                    style={{ width: `${colWidths[2]}%` }}
-                                    className="px-6 py-4 relative">
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            onClick={() =>
-                                                onSort('client_name')
-                                            }
-                                            className="flex cursor-pointer hover:text-[var(--accent-light)]">
-                                            {clientsT('title')}{' '}
-                                            {getSortIndicator('client_name')}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none"
-                                        onMouseDown={e =>
-                                            onMouseDownResize(2, e)
-                                        }
-                                        aria-hidden
-                                    />
-                                </th>
-                                <th
-                                    style={{ width: `${colWidths[3]}%` }}
-                                    className="px-6 py-4 relative">
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            onClick={() => onSort('total')}
-                                            className="flex cursor-pointer hover:text-[var(--accent-light)]">
-                                            {invoicesT('Totals.amountDue')}
-                                            {getSortIndicator('total')}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none"
-                                        onMouseDown={e =>
-                                            onMouseDownResize(3, e)
-                                        }
-                                        aria-hidden
-                                    />
-                                </th>
-                                <th
-                                    style={{ width: `${colWidths[4]}%` }}
-                                    className="px-6 py-4 relative">
-                                    <div className="flex items-center gap-1">
-                                        <div
-                                            onClick={() => onSort('status')}
-                                            className="flex cursor-pointer hover:text-[var(--accent-light)]">
-                                            Status {getSortIndicator('status')}
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none"
-                                        onMouseDown={e =>
-                                            onMouseDownResize(4, e)
-                                        }
-                                        aria-hidden
-                                    />
-                                </th>
-                                <th
-                                    style={{ width: `${colWidths[5]}%` }}
-                                    className="px-6 py-4 text-right">
-                                    {invoicesT('actions')}
-                                </th>
+                                <td colSpan={6} className="text-center py-6">
+                                    {invoicesT('loading')}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {!loading &&
-                                filteredInvoices.map((invoice, idx) => {
-                                    const total =
-                                        invoice.totals?.amountDue ??
-                                        invoice.items.reduce(
-                                            (sum, item) =>
-                                                sum + item.rate * item.quantity,
-                                            0,
-                                        )
-                                    const status = getStatus(invoice)
-
-                                    return (
-                                        <tr
-                                            key={
-                                                invoice.invoiceDetails.id || idx
+                        ) : filteredInvoices.length === 0 ? (
+                            <tr>
+                                <td
+                                    colSpan={6}
+                                    className="text-center py-6 text-[var(--muted-foreground)]">
+                                    {invoicesT('noInvoices')}
+                                </td>
+                            </tr>
+                        ) : (
+                            filteredInvoices.map((invoice, idx) => {
+                                const total = invoice.totals?.amountDue ?? 0
+                                return (
+                                    <tr
+                                        key={invoice.invoiceDetails.id || idx}
+                                        className="h-16 hover:bg-[var(--accent-light)]/10 transition-colors">
+                                        <td className="px-6 py-4 font-semibold text-[var(--accent)]">
+                                            {
+                                                invoice.invoiceDetails
+                                                    .invoiceNumber
                                             }
-                                            className="invoice-row h-16 cursor-pointer table-row"
-                                            onClick={() => onSelect(invoice)}>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[0]}%`,
-                                                }}
-                                                className="px-6 py-4 font-semibold text-[var(--accent)]">
-                                                {
-                                                    invoice.invoiceDetails
-                                                        .invoiceNumber
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {new Date(
+                                                invoice.invoiceDetails.invoiceDate,
+                                            ).toLocaleDateString('de-DE')}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {invoice.client.name}
+                                        </td>
+                                        <td className="px-6 py-4 text-right font-semibold">
+                                            €{total.toFixed(2)}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {getStatusBadge(invoice)}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <InvoiceActionsMenu
+                                                invoice={invoice}
+                                                isOpen={
+                                                    activeDropdown ===
+                                                    String(
+                                                        invoice.invoiceDetails
+                                                            .id,
+                                                    )
                                                 }
-                                            </td>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[1]}%`,
-                                                }}
-                                                className="px-6 py-4">
-                                                {new Date(
-                                                    invoice.invoiceDetails.invoiceDate,
-                                                ).toLocaleDateString('de-DE')}
-                                            </td>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[2]}%`,
-                                                }}
-                                                className="px-6 py-4">
-                                                {invoice.client.name}
-                                            </td>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[3]}%`,
-                                                }}
-                                                className="px-6 py-4 font-semibold">
-                                                €{total.toFixed(2)}
-                                            </td>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[4]}%`,
-                                                }}
-                                                className="px-6 py-4 font-semibold">
-                                                <span
-                                                    className={`
-                                                    px-2 py-1 rounded-md
-                                                    ${
-                                                        status === 'Paid'
-                                                            ? 'bg-[var(--success)] text-black'
-                                                            : status ===
-                                                                'Overdue'
-                                                              ? 'bg-[var(--error)] text-white'
-                                                              : 'bg-[var(--warning)] text-black'
-                                                    }
-                                                `}>
-                                                    {status}
-                                                </span>
-                                            </td>
-                                            <td
-                                                style={{
-                                                    width: `${colWidths[5]}%`,
-                                                }}
-                                                className="px-6 py-4 flex gap-5">
-                                                <Button
-                                                    variant="icon"
-                                                    motionEffect
-                                                    animated={true}
-                                                    onClick={e => {
-                                                        e.stopPropagation()
-                                                        router.push(
-                                                            `/invoices/${invoice.invoiceDetails.id}`,
+                                                onClose={() =>
+                                                    setActiveDropdown(null)
+                                                }
+                                                onToggle={() =>
+                                                    setActiveDropdown(prev =>
+                                                        prev ===
+                                                        String(
+                                                            invoice
+                                                                .invoiceDetails
+                                                                .id,
                                                         )
-                                                    }}
-                                                    aria-label="Edit invoice">
-                                                    <FaEdit />
-                                                </Button>
-
-                                                <Button
-                                                    variant="icon"
-                                                    motionEffect
-                                                    animated={true}
-                                                    onClick={e => {
-                                                        e.stopPropagation()
-                                                        onDownloadPDF(invoice)
-                                                    }}
-                                                    aria-label="Download PDF">
-                                                    <FaFileDownload />
-                                                </Button>
-
-                                                <Button
-                                                    variant="icon"
-                                                    motionEffect
-                                                    animated={true}
-                                                    onClick={e => {
-                                                        e.stopPropagation()
-                                                        onArchive(invoice)
-                                                    }}
-                                                    aria-label="Archive invoice">
-                                                    <FaArchive />
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                        </tbody>
-                    </table>
-                </div>
+                                                            ? null
+                                                            : String(
+                                                                  invoice
+                                                                      .invoiceDetails
+                                                                      .id,
+                                                              ),
+                                                    )
+                                                }
+                                                onSelect={onSelect}
+                                                onDownloadPDF={onDownloadPDF}
+                                                onArchive={onArchive}
+                                                t={invoicesT}
+                                            />
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        )}
+                    </tbody>
+                </table>
             </div>
+
+            <style jsx>{`
+                @media (max-width: 768px) {
+                    td:nth-child(2),
+                    th:nth-child(2),
+                    td:nth-child(4),
+                    th:nth-child(4) {
+                        display: none;
+                    }
+                }
+            `}</style>
         </div>
     )
 }
+
+export const InvoiceTable = React.memo(InvoiceTableComponent)

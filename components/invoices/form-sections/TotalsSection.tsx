@@ -70,7 +70,15 @@ export default function TotalsSection({
         )
         setTotalsField('totalGross', calc.total ?? 0)
         setTotalsField('amountDue', calc.amountDue ?? 0)
-    }, [items, totals.taxRate, totals.discount, totals.shipping, totals.deposit, totals.payments, setTotalsField])
+    }, [
+        items,
+        totals.taxRate,
+        totals.discount,
+        totals.shipping,
+        totals.deposit,
+        totals.payments,
+        setTotalsField,
+    ])
 
     const symbol = currencySymbols[totals.currency] || totals.currency
     const helperTextStyle =

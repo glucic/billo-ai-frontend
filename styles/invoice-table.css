@@ -1,0 +1,142 @@
+/* Table styles */
+.invoice-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.875rem;
+    text-align: left;
+    scroll-behavior: smooth;
+}
+
+.invoice-table thead {
+    background: var(--table-header-bg);
+    color: var(--table-header-text);
+    box-shadow: var(--table-header-shadow);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 0.75rem 1.5rem;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.invoice-table th {
+    font-weight: 600;
+    white-space: nowrap;
+    border-right: 1px solid var(--border-color);
+    position: relative;
+}
+
+.invoice-table th:last-child {
+    border-right: none;
+}
+
+.invoice-table tbody tr {
+    border-bottom: 1px solid var(--table-border);
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+.invoice-table tbody tr:nth-child(even) {
+    background-color: var(--table-row-alt);
+}
+
+.invoice-table tbody tr:hover {
+    background-color: var(--table-row-hover);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.invoice-table tbody tr:focus-within,
+.invoice-table tbody tr:focus {
+    outline: 2px solid var(--accent-light);
+    outline-offset: -2px;
+}
+
+.invoice-table tbody td.text-right {
+    text-align: right;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .invoice-table td:nth-child(2),
+    .invoice-table th:nth-child(2),
+    .invoice-table td:nth-child(4),
+    .invoice-table th:nth-child(4) {
+        display: none;
+    }
+}
+
+.invoice-table::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.invoice-table::-webkit-scrollbar-thumb {
+    background: var(--accent-glow);
+    border-radius: 9999px;
+}
+
+.invoice-table::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-light);
+}
+
+.invoice-table::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dropdown-content {
+    opacity: 0;
+    transform: translateY(-5px);
+    transition:
+        opacity 0.2s var(--ease-out-soft),
+        transform 0.2s var(--ease-out-soft);
+    z-index: var(--z-dropdown);
+}
+
+.dropdown-content.show,
+.dropdown-content[style] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-content button {
+    transition: background 0.2s ease;
+}
+
+.dropdown-content button:hover {
+    background: var(--accent-glow);
+}
+
+.resizer {
+    background: var(--border-color);
+    opacity: 1;
+    transition:
+        background-color 0.12s ease,
+        width 0.12s ease,
+        opacity 0.12s ease;
+    z-index: 45; /* above header content */
+}
+
+.resizer:hover,
+.resizer:active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    opacity: 0.95;
+    width: 4px !important; /* slightly widen on hover for grab */
+}
+
+/* Make resizer easier to touch on mobile */
+@media (pointer: coarse) {
+    .resizer {
+        width: 18px !important;
+    }
+}

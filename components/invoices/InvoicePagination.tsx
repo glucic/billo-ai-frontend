@@ -28,7 +28,6 @@ export default function InvoicePagination({
     pagination,
 }: InvoicePaginationProps) {
     const invoicesT = useTranslations('Invoices')
-    const rowsOptions = [10, 20, 50, 100]
 
     if (!pagination) return null
 
@@ -49,8 +48,8 @@ export default function InvoicePagination({
                 }}
                 className={`px-2 text-base font-medium transition-all duration-200 ${
                     i === page
-                        ? 'text-white font-semibold scale-110'
-                        : 'text-gray-400 hover:text-white hover:scale-105'
+                        ? 'text-[var(--text-muted)] font-semibold scale-110'
+                        : 'text-[var(--color-foreground)] hover:scale-105'
                 }`}>
                 {i}
             </Link>,
@@ -77,7 +76,7 @@ export default function InvoicePagination({
                 <button
                     disabled={page === 1}
                     onClick={() => onPageChange(page - 1)}
-                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-accent)]">
+                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-foreground)]">
                     <FaArrowLeft />
                 </button>
 
@@ -86,7 +85,7 @@ export default function InvoicePagination({
                 <button
                     disabled={page === pagination.last_page}
                     onClick={() => onPageChange(page + 1)}
-                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-accent)]">
+                    className="font-bold hover:scale-110 transition-all disabled:opacity-40 text-[var(--color-foreground)]">
                     <FaArrowRight />
                 </button>
             </div>
