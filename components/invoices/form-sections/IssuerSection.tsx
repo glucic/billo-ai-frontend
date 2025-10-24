@@ -20,7 +20,6 @@ import { BackendErrors } from '@/lib/errorUtils'
 
 interface IssuerSectionProps {
     organisations: Organisation[]
-    issuerId: number | null
     setIssuerId: (id: number | null) => void
     issuer: Issuer
     setIssuerField: (field: keyof Issuer, value: string) => void
@@ -29,7 +28,6 @@ interface IssuerSectionProps {
 
 export default function IssuerSection({
     organisations,
-    issuerId,
     setIssuerId,
     issuer,
     setIssuerField,
@@ -83,7 +81,7 @@ export default function IssuerSection({
                         <Label htmlFor="issuer-org">{t('selectIssuer')}</Label>
                         <SelectField
                             placeholder={t('selectIssuer')}
-                            value={issuerId ?? ''}
+                            value={issuer.id ?? ''}
                             onChange={value =>
                                 setIssuerId(Number(value) || null)
                             }

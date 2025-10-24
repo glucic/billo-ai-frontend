@@ -14,11 +14,13 @@ import {
     InvoiceResponse,
     InvoiceCreatePayload,
     InvoiceUpdatePayload,
+    BankDetails,
 } from '@/types/Invoice'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
 import { useTranslations } from 'next-intl'
 import { parseBackendErrors, BackendErrors } from '@/lib/errorUtils'
+import { Organisation } from '@/types/Organisation'
 
 const normalizeDate = (date: string | null | undefined): string =>
     date && !isNaN(Date.parse(date))
@@ -42,6 +44,14 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         invoiceDate: format(new Date(), 'yyyy-MM-dd'),
         dueDate: '',
         reference: '',
+    })
+
+    const [bankDetails, setBankDetails] = useState<BankDetails>({
+        accountHolder: '',
+        bankName: '',
+        iban: '',
+        bic: '',
+        currency: 'EUR',
     })
 
     const [issuerId, setIssuerId] = useState<number | null>(null)
@@ -116,10 +126,23 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 
     // Auto-fill issuer
     useEffect(() => {
-        if (!issuerId) return
-        const org = organisations.find(o => o.id === issuerId)
+        if (organisations.length === 0) {
+            setIssuer(defaultIssuer)
+            return
+        }
+
+        let org: Organisation | undefined
+
+        if (issuerId) {
+            org = organisations.find(o => o.id === issuerId)
+        }
+
+        if (!issuerId && organisations.length === 1) {
+            org = organisations[0]
+        }
+
         if (org) {
-            const issuerData: Issuer = {
+            setIssuer({
                 id: org.id,
                 name: org.name,
                 street: org.street,
@@ -128,8 +151,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 zip: org.zip,
                 phone: org.phone,
                 email: org.email,
-            }
-            setIssuer(issuerData)
+            })
         } else {
             setIssuer(defaultIssuer)
         }
@@ -156,6 +178,11 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const setInvoiceDetailsField = useCallback(
         (field: keyof InvoiceDetails, value: string) =>
             setInvoiceDetails(prev => ({ ...prev, [field]: value })),
+        [],
+    )
+    const setBankDetailsField = useCallback(
+        (field: keyof BankDetails, value: string) =>
+            setBankDetails(prev => ({ ...prev, [field]: value })),
         [],
     )
     const setIssuerField = useCallback(
@@ -254,6 +281,14 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     reference: inv.reference ?? '',
                 })
 
+                setBankDetails({
+                    accountHolder: inv.bank_details?.accountHolder ?? '',
+                    bankName: inv.bank_details?.bankName ?? '',
+                    iban: inv.bank_details?.iban ?? '',
+                    bic: inv.bank_details?.bic ?? '',
+                    currency: inv.bank_details?.currency ?? 'EUR',
+                })
+
                 // Use stable defaults (avoid referencing state that the effect will write)
                 setIssuer(inv.issuer ?? defaultIssuer)
                 setClient(inv.client ?? defaultClient)
@@ -294,6 +329,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 
         // Prepare payload based on whether it's a create or update operation
         const basePayload = {
+            bankDetails,
             issuer,
             client,
             items,
@@ -353,6 +389,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         organisations,
         invoiceDetails,
         setInvoiceDetailsField,
+        bankDetails,
+        setBankDetailsField,
         issuer,
         setIssuerField,
         issuerId,

@@ -262,7 +262,12 @@
             "totalGross": "Gesamtbetrag (Brutto)",
             "deposit": "Anzahlung",
             "payments": "Zahlungen",
-            "amountDue": "Offener Betrag"
+            "amountDue": "Offener Betrag",
+            "paymentInformation": "Zahlungsinformationen",
+            "accountHolder": "Kontoinhaber",
+            "bankName": "Bankname",
+            "iban": "IBAN",
+            "bic": "BIC/SWIFT"
         },
         "InvoiceStatus": {
             "draft": "Entwurf",
@@ -278,6 +283,14 @@
             "invoiceDate": "Rechnungsdatum",
             "dueDate": "Fälligkeitsdatum",
             "reference": "Referenz / Bestellnummer"
+        },
+        "BankDetails": {
+            "title": "Bankdetails",
+            "accountHolder": "Kontoinhaber",
+            "bankName": "Bankname",
+            "iban": "IBAN",
+            "bic": "BIC/SWIFT",
+            "currency": "Währung"
         },
         "IssuerDetails": {
             "title": "Absenderdetails",

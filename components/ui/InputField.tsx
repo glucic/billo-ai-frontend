@@ -2,13 +2,18 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { motion, useMotionTemplate, useMotionValue } from 'motion/react'
+import { InputError } from './InputError'
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     error?: boolean
+    errorMessages?: string[]
 }
 
 const InputField = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, type = 'text', error, ...props }, ref) => {
+    (
+        { className, type = 'text', error, errorMessages = [], ...props },
+        ref,
+    ) => {
         const radius = 0
         const [visible, setVisible] = React.useState(false)
 
@@ -61,13 +66,19 @@ const InputField = React.forwardRef<HTMLInputElement, InputProps>(
                         focus-visible:ring-offset-[var(--color-background)]
                         focus-visible:outline-none
                         disabled:cursor-not-allowed disabled:opacity-50`,
-                        error
+                        error || errorMessages?.length > 0
                             ? 'border-[var(--error)] focus-visible:ring-[var(--error)] focus-visible:ring-offset-[var(--error)]/50 hover:bg-[var(--error)]/10'
                             : 'border-[var(--input-border)]',
                         className,
                     )}
                     {...props}
                 />
+                {errorMessages && errorMessages.length > 0 && (
+                    <InputError
+                        id="legal-terms-error"
+                        messages={errorMessages}
+                    />
+                )}
             </motion.div>
         )
     },

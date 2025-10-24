@@ -11,6 +11,8 @@ export default function EditInvoicePage() {
     const {
         invoiceDetails,
         setInvoiceDetailsField,
+        bankDetails,
+        setBankDetailsField,
         issuer,
         setIssuerField,
         issuerId,
@@ -43,6 +45,8 @@ export default function EditInvoicePage() {
         <InvoiceForm
             invoiceDetails={invoiceDetails}
             setInvoiceDetailsField={setInvoiceDetailsField}
+            bankDetails={bankDetails}
+            setBankDetailsField={setBankDetailsField}
             issuer={issuer}
             setIssuerField={setIssuerField}
             issuerId={issuerId}

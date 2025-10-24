@@ -262,7 +262,12 @@
             "totalGross": "Total Amount (Gross)",
             "deposit": "Deposit",
             "payments": "Payments",
-            "amountDue": "Amount Due"
+            "amountDue": "Amount Due",
+            "paymentInformation": "Payment Information",
+            "accountHolder": "Account Holder",
+            "bankName": "Bank Name",
+            "iban": "IBAN",
+            "bic": "BIC/SWIFT"
         },
         "InvoiceStatus": {
             "draft": "Draft",
@@ -278,6 +283,14 @@
             "invoiceDate": "Invoice Date",
             "dueDate": "Due Date",
             "reference": "Reference / Order Number"
+        },
+        "BankDetails": {
+            "title": "Bank Details",
+            "accountHolder": "Account Holder",
+            "bankName": "Bank Name",
+            "iban": "IBAN",
+            "bic": "BIC/SWIFT",
+            "currency": "Currency"
         },
         "IssuerDetails": {
             "title": "Issuer Details",

@@ -21,12 +21,16 @@ import {
     Issuer,
     Legal,
     Footer,
+    BankDetails,
 } from '@/types/Invoice'
 import { Organisation } from '@/types/Organisation'
+import BankDetailsSection from './form-sections/BankDetailsSection'
 
 export interface InvoiceFormProps {
     invoiceDetails: InvoiceDetails
     setInvoiceDetailsField: (field: keyof InvoiceDetails, value: string) => void
+    bankDetails: BankDetails
+    setBankDetailsField: (field: keyof BankDetails, value: string) => void
     issuer: Issuer
     setIssuerField: (field: keyof Issuer, value: string) => void
     issuerId: number | null
@@ -67,6 +71,8 @@ export interface InvoiceFormProps {
 export function InvoiceForm({
     invoiceDetails,
     setInvoiceDetailsField,
+    bankDetails,
+    setBankDetailsField,
     issuer,
     setIssuerField,
     issuerId,
@@ -112,6 +118,7 @@ export function InvoiceForm({
 
     const invoice = {
         invoiceDetails,
+        bankDetails,
         issuer,
         client,
         items,
@@ -140,7 +147,6 @@ export function InvoiceForm({
                         issuer={issuer}
                         setIssuerField={setIssuerField}
                         organisations={organisations}
-                        issuerId={issuerId}
                         setIssuerId={setIssuerId}
                         errors={fieldErrors}
                     />
@@ -160,6 +166,12 @@ export function InvoiceForm({
                         onUpdateItem={updateItem}
                         onAddItem={addItem}
                         onRemoveItem={removeItem}
+                        errors={fieldErrors}
+                    />
+
+                    <BankDetailsSection
+                        bankDetails={bankDetails}
+                        setBankDetailsField={setBankDetailsField}
                         errors={fieldErrors}
                     />
 

@@ -30,6 +30,7 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
                 const blob = await pdf(
                     <PDFInvoiceDocument
                         invoiceDetails={debouncedInvoice.invoiceDetails}
+                        bankDetails={debouncedInvoice.bankDetails}
                         issuer={debouncedInvoice.issuer}
                         client={debouncedInvoice.client}
                         items={debouncedInvoice.items}
@@ -54,6 +55,11 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
                             tax: t('tax'),
                             totalGross: t('totalGross'),
                             amountDue: t('amountDue'),
+                            paymentInformation: t('paymentInformation'),
+                            accountHolder: t('accountHolder'),
+                            bankName: t('bankName'),
+                            iban: t('iban'),
+                            bic: t('bic'),
                         }}
                     />,
                 ).toBlob()

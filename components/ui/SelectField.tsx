@@ -7,7 +7,7 @@ import { ChevronDownIcon } from './ChevronDownIcon'
 interface SelectFieldProps {
     options: { label: string; value: string | number }[]
     value: string | number | null
-    onChange: (value: any) => void
+    onChange: (value: string | number | null) => void
     placeholder?: string
     className?: string
 }
@@ -20,7 +20,11 @@ export const SelectField = React.forwardRef<HTMLDivElement, SelectFieldProps>(
         const mouseX = useMotionValue(0)
         const mouseY = useMotionValue(0)
 
-        function handleMouseMove({ currentTarget, clientX, clientY }: any) {
+        function handleMouseMove({
+            currentTarget,
+            clientX,
+            clientY,
+        }: React.MouseEvent<HTMLDivElement>) {
             const { left, top } = currentTarget.getBoundingClientRect()
             mouseX.set(clientX - left)
             mouseY.set(clientY - top)

@@ -10,6 +10,7 @@ import {
 } from '@react-pdf/renderer'
 import {
     InvoiceDetails,
+    BankDetails,
     Issuer,
     Client,
     InvoiceItem,
@@ -80,6 +81,7 @@ const money = (n: number, c: string) => `${(n ?? 0).toFixed(2)} ${safeText(c)}`
 
 export default function PDFInvoiceDocument({
     invoiceDetails,
+    bankDetails,
     issuer,
     client,
     items,
@@ -89,6 +91,7 @@ export default function PDFInvoiceDocument({
     t,
 }: {
     invoiceDetails: InvoiceDetails
+    bankDetails: BankDetails
     issuer: Issuer
     client: Client
     items: InvoiceItem[]
@@ -102,22 +105,31 @@ export default function PDFInvoiceDocument({
             <Page size="A4" style={styles.page}>
                 <View style={styles.headerRow}>
                     <Image src="/logo.png" style={styles.logo} />
-                    <Text style={styles.title}>{safeText(t.title)}</Text>
+                    {t.title ? (
+                        <Text style={styles.title}>{safeText(t.title)}</Text>
+                    ) : null}
                 </View>
 
+                {/* Invoice Details */}
                 <View style={styles.section}>
-                    <Text>
-                        {safeText(t.invoiceNumber)}:{' '}
-                        {safeText(invoiceDetails.invoiceNumber)}
-                    </Text>
-                    <Text>
-                        {safeText(t.invoiceDate)}:{' '}
-                        {safeText(invoiceDetails.invoiceDate)}
-                    </Text>
-                    <Text>
-                        {safeText(t.dueDate)}:{' '}
-                        {safeText(invoiceDetails.dueDate)}
-                    </Text>
+                    {invoiceDetails.invoiceNumber ? (
+                        <Text>
+                            {safeText(t.invoiceNumber)}:{' '}
+                            {safeText(invoiceDetails.invoiceNumber)}
+                        </Text>
+                    ) : null}
+                    {invoiceDetails.invoiceDate ? (
+                        <Text>
+                            {safeText(t.invoiceDate)}:{' '}
+                            {safeText(invoiceDetails.invoiceDate)}
+                        </Text>
+                    ) : null}
+                    {invoiceDetails.dueDate ? (
+                        <Text>
+                            {safeText(t.dueDate)}:{' '}
+                            {safeText(invoiceDetails.dueDate)}
+                        </Text>
+                    ) : null}
                     {invoiceDetails.reference ? (
                         <Text>
                             {safeText(t.reference)}:{' '}
@@ -128,72 +140,125 @@ export default function PDFInvoiceDocument({
 
                 <View style={styles.divider} />
 
+                {/* Issuer / Client */}
                 <View style={[styles.section, styles.rowBetween]}>
                     <View style={{ flex: 1, paddingRight: 8 }}>
-                        <Text style={styles.label}>{safeText(t.from)}</Text>
-                        <Text>{safeText(issuer.name)}</Text>
-                        <Text>{safeText(issuer.street)}</Text>
-                        <Text>
-                            {[issuer.zip, issuer.city]
-                                .filter(Boolean)
-                                .join(' ')}
-                        </Text>
-                        {issuer.region && (
+                        {issuer.name ? (
+                            <Text style={styles.label}>{safeText(t.from)}</Text>
+                        ) : null}
+                        {issuer.name ? (
+                            <Text>{safeText(issuer.name)}</Text>
+                        ) : null}
+                        {issuer.street ? (
+                            <Text>{safeText(issuer.street)}</Text>
+                        ) : null}
+                        {issuer.zip || issuer.city ? (
+                            <Text>
+                                {[issuer.zip, issuer.city]
+                                    .filter(Boolean)
+                                    .join(' ')}
+                            </Text>
+                        ) : null}
+                        {issuer.region ? (
                             <Text>{safeText(issuer.region)}</Text>
-                        )}
+                        ) : null}
                     </View>
+
                     <View style={{ flex: 1, paddingLeft: 8 }}>
-                        <Text style={styles.label}>{safeText(t.billTo)}</Text>
-                        <Text>{safeText(client.name)}</Text>
-                        <Text>{safeText(client.street)}</Text>
-                        <Text>
-                            {[client.zip, client.city]
-                                .filter(Boolean)
-                                .join(' ')}
-                        </Text>
-                        {client.region && (
+                        {client.name ? (
+                            <Text style={styles.label}>
+                                {safeText(t.billTo)}
+                            </Text>
+                        ) : null}
+                        {client.name ? (
+                            <Text>{safeText(client.name)}</Text>
+                        ) : null}
+                        {client.street ? (
+                            <Text>{safeText(client.street)}</Text>
+                        ) : null}
+                        {client.zip || client.city ? (
+                            <Text>
+                                {[client.zip, client.city]
+                                    .filter(Boolean)
+                                    .join(' ')}
+                            </Text>
+                        ) : null}
+                        {client.region ? (
                             <Text>{safeText(client.region)}</Text>
-                        )}
+                        ) : null}
                     </View>
                 </View>
 
                 <View style={styles.divider} />
 
-                <View style={styles.table}>
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                        <Text style={styles.th}>{safeText(t.name)}</Text>
-                        <Text style={styles.th}>{safeText(t.description)}</Text>
-                        <Text style={styles.th}>{safeText(t.quantity)}</Text>
-                        <Text style={styles.th}>{safeText(t.unitPrice)}</Text>
-                        <Text style={styles.th}>{safeText(t.subtotal)}</Text>
-                    </View>
-                    {items.map((item, i) => (
-                        <View key={`${item.name}-${i}`} style={styles.tableRow}>
-                            <Text style={styles.td}>{safeText(item.name)}</Text>
-                            <Text style={styles.td}>
-                                {safeText(item.description)}
+                {/* Items Table */}
+                {items && items.length > 0 ? (
+                    <View style={styles.table}>
+                        <View style={[styles.tableRow, styles.tableHeader]}>
+                            <Text style={styles.th}>{safeText(t.name)}</Text>
+                            <Text style={styles.th}>
+                                {safeText(t.description)}
                             </Text>
-                            <Text style={styles.td}>
-                                {safeText(item.quantity)}
+                            <Text style={styles.th}>
+                                {safeText(t.quantity)}
                             </Text>
-                            <Text style={styles.td}>
-                                {money(item.rate, totals.currency)}
+                            <Text style={styles.th}>
+                                {safeText(t.unitPrice)}
                             </Text>
-                            <Text style={styles.td}>
-                                {money(
-                                    (item.quantity ?? 0) * (item.rate ?? 0),
-                                    totals.currency,
-                                )}
+                            <Text style={styles.th}>
+                                {safeText(t.subtotal)}
                             </Text>
                         </View>
-                    ))}
-                </View>
+                        {items.map((item, i) => (
+                            <View
+                                key={`${item.name}-${i}`}
+                                style={styles.tableRow}>
+                                {item.name ? (
+                                    <Text style={styles.td}>
+                                        {safeText(item.name)}
+                                    </Text>
+                                ) : (
+                                    <Text style={styles.td}>—</Text>
+                                )}
+                                {item.description ? (
+                                    <Text style={styles.td}>
+                                        {safeText(item.description)}
+                                    </Text>
+                                ) : (
+                                    <Text style={styles.td}>—</Text>
+                                )}
+                                {item.quantity ? (
+                                    <Text style={styles.td}>
+                                        {safeText(item.quantity)}
+                                    </Text>
+                                ) : (
+                                    <Text style={styles.td}>—</Text>
+                                )}
+                                {item.rate ? (
+                                    <Text style={styles.td}>
+                                        {money(item.rate, totals.currency)}
+                                    </Text>
+                                ) : (
+                                    <Text style={styles.td}>—</Text>
+                                )}
+                                <Text style={styles.td}>
+                                    {money(
+                                        (item.quantity ?? 0) * (item.rate ?? 0),
+                                        totals.currency,
+                                    )}
+                                </Text>
+                            </View>
+                        ))}
+                    </View>
+                ) : null}
 
+                {/* Totals */}
                 <View style={styles.totals}>
                     <View style={styles.totalLine}>
                         <Text>{safeText(t.totalNet)}:</Text>
                         <Text>{money(totals.totalNet, totals.currency)}</Text>
                     </View>
+
                     <View style={styles.totalLine}>
                         <Text>
                             {safeText(t.tax)} ({safeText(totals.taxRate)}%):
@@ -218,13 +283,61 @@ export default function PDFInvoiceDocument({
 
                 <View style={styles.divider} />
 
-                <View>
-                    <Text>{safeText(legal.termsAndConditions)}</Text>
-                </View>
+                {/* Banking */}
+                {bankDetails.accountHolder ||
+                bankDetails.bankName ||
+                bankDetails.iban ||
+                bankDetails.bic ? (
+                    <View style={[styles.section, { marginTop: 12 }]}>
+                        <Text style={styles.label}>
+                            {safeText(t.paymentInformation)}
+                        </Text>
 
-                <Text style={styles.footer}>
-                    {`${safeText(footer.notes)} | ${safeText(issuer.name)} · ${safeText(issuer.city)}`}
-                </Text>
+                        {bankDetails.accountHolder ? (
+                            <Text>
+                                {safeText(t.accountHolder)}:{' '}
+                                {safeText(bankDetails.accountHolder)}
+                            </Text>
+                        ) : null}
+
+                        {bankDetails.bankName ? (
+                            <Text>
+                                {safeText(t.bankName)}:{' '}
+                                {safeText(bankDetails.bankName)}
+                            </Text>
+                        ) : null}
+
+                        {bankDetails.iban ? (
+                            <Text>
+                                {safeText(t.iban)}: {safeText(bankDetails.iban)}
+                            </Text>
+                        ) : null}
+
+                        {bankDetails.bic ? (
+                            <Text>
+                                {safeText(t.bic)}: {safeText(bankDetails.bic)}
+                            </Text>
+                        ) : null}
+                    </View>
+                ) : null}
+
+                <View style={styles.divider} />
+
+                {/* Legal Terms */}
+                {legal.termsAndConditions ? (
+                    <View>
+                        <Text>{safeText(legal.termsAndConditions)}</Text>
+                    </View>
+                ) : null}
+
+                {/* Footer */}
+                {footer.notes || issuer.name || issuer.city ? (
+                    <Text style={styles.footer}>
+                        {[footer.notes, issuer.name, issuer.city]
+                            .filter(Boolean)
+                            .join(' · ')}
+                    </Text>
+                ) : null}
             </Page>
         </Document>
     )

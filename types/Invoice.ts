@@ -24,6 +24,14 @@ export interface InvoiceDetails {
     reference: string
 }
 
+export interface BankDetails {
+    accountHolder: string
+    bankName: string
+    iban: string
+    bic: string
+    currency: string
+}
+
 export interface InvoiceItem {
     name: string
     description: string
@@ -54,6 +62,7 @@ export interface Footer {
 
 export interface Invoice {
     invoiceDetails: InvoiceDetails
+    bankDetails: BankDetails
     issuer: Issuer
     client: Client
     items: InvoiceItem[]
@@ -70,6 +79,7 @@ export interface InvoiceResponse {
     invoice_date: string
     due_date: string | null
     reference: string | null
+    bank_details: BankDetails | null
     issuer: Issuer
     client: Client
     items: InvoiceItem[]
