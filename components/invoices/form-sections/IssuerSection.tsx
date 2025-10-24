@@ -153,26 +153,13 @@ export default function IssuerSection({
                                 city: orgT('city'),
                                 region: orgT('region'),
                             }}
+                            errors={{
+                                street: getError('street'),
+                                zip: getError('zip'),
+                                city: getError('city'),
+                                region: getError('region'),
+                            }}
                         />
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputError
-                                id="issuer-street-error"
-                                messages={getError('street')}
-                            />
-                            <InputError
-                                id="issuer-zip-error"
-                                messages={getError('zip')}
-                            />
-                            <InputError
-                                id="issuer-city-error"
-                                messages={getError('city')}
-                            />
-                            <InputError
-                                id="issuer-region-error"
-                                messages={getError('region')}
-                            />
-                        </div>
                     </div>
                 </div>
             )}

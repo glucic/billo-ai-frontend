@@ -1,7 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Label, LabelInputContainer, InputField } from '@/components/ui'
+import {
+    Label,
+    LabelInputContainer,
+    InputField,
+    InputError,
+} from '@/components/ui'
 import { AddressField } from '@/components/ui/AddressField'
 
 export type LocationValues = {
@@ -22,6 +27,7 @@ export interface LocationFieldsProps {
     disableZipSuggestions?: boolean
     ids?: Partial<Record<keyof LocationValues, string>>
     placeholders?: Partial<Record<keyof LocationValues, string>>
+    errors?: Partial<Record<keyof LocationValues, string[]>>
 }
 
 export function LocationFields({
@@ -35,6 +41,7 @@ export function LocationFields({
     disableZipSuggestions = true,
     ids = {},
     placeholders = {},
+    errors = {},
 }: LocationFieldsProps) {
     const handleFieldChange =
         (field: keyof LocationValues) =>
@@ -68,6 +75,11 @@ export function LocationFields({
                     onChange={handleFieldChange('street')}
                     onSelect={handleFullSelect}
                     className={fieldClassName}
+                    error={Boolean(errors.street)}
+                />
+                <InputError
+                    id={ids.street ? `${ids.street}-error` : 'street-error'}
+                    messages={errors.street}
                 />
             </LabelInputContainer>
 
@@ -84,6 +96,7 @@ export function LocationFields({
                         value={values.zip ?? ''}
                         onChange={handleFieldChange('zip')}
                         className={fieldClassName}
+                        error={Boolean(errors.zip)}
                     />
                 ) : (
                     <AddressField
@@ -94,8 +107,13 @@ export function LocationFields({
                         onChange={handleFieldChange('zip')}
                         onSelect={handleFullSelect}
                         className={fieldClassName}
+                        error={Boolean(errors.zip)}
                     />
                 )}
+                <InputError
+                    id={ids.zip ? `${ids.zip}-error` : 'zip-error'}
+                    messages={errors.zip}
+                />
             </LabelInputContainer>
 
             <LabelInputContainer>
@@ -114,6 +132,11 @@ export function LocationFields({
                     onChange={handleFieldChange('city')}
                     onSelect={handleFullSelect}
                     className={fieldClassName}
+                    error={Boolean(errors.city)}
+                />
+                <InputError
+                    id={ids.city ? `${ids.city}-error` : 'city-error'}
+                    messages={errors.city}
                 />
             </LabelInputContainer>
 
@@ -133,6 +156,11 @@ export function LocationFields({
                     onChange={handleFieldChange('region')}
                     onSelect={handleFullSelect}
                     className={fieldClassName}
+                    error={Boolean(errors.region)}
+                />
+                <InputError
+                    id={ids.region ? `${ids.region}-error` : 'region-error'}
+                    messages={errors.region}
                 />
             </LabelInputContainer>
         </div>

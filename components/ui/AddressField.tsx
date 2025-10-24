@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, JSX } from 'react'
+import React, { useEffect, useState } from 'react'
 import { InputField } from './InputField'
 import { useDebouncedValue } from '@/lib/useDebouncedValue'
 import apiClient from '@/lib/apiClient'
@@ -38,20 +38,25 @@ export function AddressField({
         Array<{ description: string; place_id: string }>
     >([])
     const [showSuggestions, setShowSuggestions] = useState(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const debouncedQuery = useDebouncedValue(query, 300)
 
+    // Sync external value
     useEffect(() => {
-        setQuery(value as string)
+        setQuery(value || '')
     }, [value])
 
+    // Fetch suggestions
     useEffect(() => {
-        const fetchSuggestions = async () => {
-            if (!debouncedQuery) {
-                setSuggestions([])
-                return
-            }
+        if (!debouncedQuery) {
+            setSuggestions([])
+            setErrorMessage(null)
+            return
+        }
 
+        const fetchSuggestions = async () => {
             try {
+                setErrorMessage(null)
                 const types =
                     type === 'city'
                         ? 'cities'
@@ -60,32 +65,30 @@ export function AddressField({
                           : type === 'street'
                             ? 'address'
                             : null
-
                 if (!types) return
 
                 const response = await apiClient.get(
                     '/api/location/suggestions',
                     {
-                        params: {
-                            query: debouncedQuery,
-                            types,
-                        },
+                        params: { query: debouncedQuery, types },
                     },
                 )
-                setSuggestions(response.data.predictions || [])
-            } catch (error) {
-                console.error('Error fetching address suggestions:', error)
+                setSuggestions(response.data?.data || [])
+            } catch (err: any) {
+                console.error(err)
                 setSuggestions([])
+                setErrorMessage('Failed to fetch suggestions.')
             }
         }
+
         fetchSuggestions()
     }, [debouncedQuery, type])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
-        if (onChange) {
-            onChange(e)
-        }
+        onChange?.(e)
+        setShowSuggestions(true)
+        setErrorMessage(null)
     }
 
     const handleSuggestionClick = async (suggestion: {
@@ -93,11 +96,11 @@ export function AddressField({
         place_id: string
     }) => {
         try {
+            setErrorMessage(null)
             const response = await apiClient.get('/api/location/details', {
                 params: { place_id: suggestion.place_id },
             })
-
-            const address = response.data || {
+            const address = response.data?.data || {
                 street: '',
                 zip: '',
                 city: '',
@@ -124,33 +127,24 @@ export function AddressField({
             setSuggestions([])
             setShowSuggestions(false)
 
-            const event = {
-                target: {
-                    value: currentValue,
-                },
-            } as React.ChangeEvent<HTMLInputElement>
-
-            if (onChange) {
-                onChange(event)
-            }
-
-            if (onSelect) {
-                onSelect({
-                    street: address.street || '',
-                    zip: address.zip || '',
-                    city: address.city || '',
-                    region: address.region || '',
-                })
-            }
-        } catch (err) {
-            console.error('Error fetching address details:', err)
+            onChange?.({
+                target: { value: currentValue },
+            } as React.ChangeEvent<HTMLInputElement>)
+            onSelect?.({
+                street: address.street || '',
+                zip: address.zip || '',
+                city: address.city || '',
+                region: address.region || '',
+            })
+        } catch (err: any) {
+            console.error(err)
             setQuery(suggestion.description)
             setSuggestions([])
             setShowSuggestions(false)
-            const event = {
+            setErrorMessage('Failed to fetch address details.')
+            onChange?.({
                 target: { value: suggestion.description },
-            } as React.ChangeEvent<HTMLInputElement>
-            if (onChange) onChange(event)
+            } as React.ChangeEvent<HTMLInputElement>)
         }
     }
 
@@ -160,26 +154,31 @@ export function AddressField({
                 id={id}
                 value={query}
                 onChange={handleInputChange}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => {
-                    setTimeout(() => setShowSuggestions(false), 200)
-                }}
-                error={error}
+                onFocus={() => setShowSuggestions(suggestions.length > 0)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                error={error || !!errorMessage}
                 className={className}
                 placeholder={placeholder}
                 aria-describedby={ariaDescribedBy}
             />
+
             {showSuggestions && suggestions.length > 0 && type !== 'zip' && (
                 <ul className="absolute z-10 w-full mt-1 bg-[var(--secondary-background)]/100 rounded-[var(--input-radius)] shadow-lg max-h-60 overflow-auto">
                     {suggestions.map(suggestion => (
                         <li
                             key={suggestion.place_id}
                             className="px-[var(--input-padding-x)] py-[var(--input-padding-y)] hover:bg-[var(--accent-glow)] cursor-pointer"
-                            onClick={() => handleSuggestionClick(suggestion)}>
+                            onMouseDown={() =>
+                                handleSuggestionClick(suggestion)
+                            }>
                             {suggestion.description}
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {errorMessage && (
+                <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
             )}
         </div>
     )
