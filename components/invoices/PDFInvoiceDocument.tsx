@@ -78,6 +78,24 @@ const styles = StyleSheet.create({
 
 const safeText = (v: unknown) => String(v ?? '')
 const money = (n: number, c: string) => `${(n ?? 0).toFixed(2)} ${safeText(c)}`
+const MaybeText = ({
+    label,
+    value,
+}: {
+    label?: string
+    value?: string | number
+}) => {
+    if (value === undefined || value === null || value === '') return null
+    return (
+        <Text>
+            {label ? `${label}: ` : ''}
+            {safeText(value)}
+        </Text>
+    )
+}
+const TableCell = ({ children }: { children?: React.ReactNode }) => (
+    <Text style={styles.td}>{children ?? '—'}</Text>
+)
 
 export default function PDFInvoiceDocument({
     invoiceDetails,
@@ -88,7 +106,7 @@ export default function PDFInvoiceDocument({
     totals,
     legal,
     footer,
-    t,
+    translations: t,
 }: {
     invoiceDetails: InvoiceDetails
     bankDetails: BankDetails
@@ -98,44 +116,52 @@ export default function PDFInvoiceDocument({
     totals: InvoiceTotals
     legal: Legal
     footer: Footer
-    t: Record<string, string>
+    translations: (key: string) => string
 }) {
+    const totalsRows = [
+        { label: t('sumNet'), value: totals.sum },
+        { label: t('discount'), value: -totals.discount },
+        { label: t('totalNet'), value: totals.totalNet },
+        {
+            label: `${t('tax')} (${totals.taxRate}%)`,
+            value: (totals.totalGross ?? 0) - (totals.totalNet ?? 0),
+        },
+        { label: t('totalGross'), value: totals.totalGross },
+        { label: t('amountDue'), value: totals.amountDue, bold: true },
+    ]
+    const bankInfo = [
+        { label: t('accountHolder'), value: bankDetails.accountHolder },
+        { label: t('bankName'), value: bankDetails.bankName },
+        { label: t('iban'), value: bankDetails.iban },
+        { label: t('bic'), value: bankDetails.bic },
+    ].filter(b => b.value)
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
+                {/* Header */}
                 <View style={styles.headerRow}>
-                    <Image src="/logo.png" style={styles.logo} />
-                    {t.title ? (
-                        <Text style={styles.title}>{safeText(t.title)}</Text>
-                    ) : null}
+                    <Text style={styles.title}>{t('title')}</Text>
                 </View>
 
                 {/* Invoice Details */}
                 <View style={styles.section}>
-                    {invoiceDetails.invoiceNumber ? (
-                        <Text>
-                            {safeText(t.invoiceNumber)}:{' '}
-                            {safeText(invoiceDetails.invoiceNumber)}
-                        </Text>
-                    ) : null}
-                    {invoiceDetails.invoiceDate ? (
-                        <Text>
-                            {safeText(t.invoiceDate)}:{' '}
-                            {safeText(invoiceDetails.invoiceDate)}
-                        </Text>
-                    ) : null}
-                    {invoiceDetails.dueDate ? (
-                        <Text>
-                            {safeText(t.dueDate)}:{' '}
-                            {safeText(invoiceDetails.dueDate)}
-                        </Text>
-                    ) : null}
-                    {invoiceDetails.reference ? (
-                        <Text>
-                            {safeText(t.reference)}:{' '}
-                            {safeText(invoiceDetails.reference)}
-                        </Text>
-                    ) : null}
+                    <MaybeText
+                        label={t('invoiceNumber')}
+                        value={invoiceDetails.invoiceNumber}
+                    />
+                    <MaybeText
+                        label={t('invoiceDate')}
+                        value={invoiceDetails.invoiceDate}
+                    />
+                    <MaybeText
+                        label={t('dueDate')}
+                        value={invoiceDetails.dueDate}
+                    />
+                    <MaybeText
+                        label={t('reference')}
+                        value={invoiceDetails.reference}
+                    />
                 </View>
 
                 <View style={styles.divider} />
@@ -143,201 +169,111 @@ export default function PDFInvoiceDocument({
                 {/* Issuer / Client */}
                 <View style={[styles.section, styles.rowBetween]}>
                     <View style={{ flex: 1, paddingRight: 8 }}>
-                        {issuer.name ? (
-                            <Text style={styles.label}>{safeText(t.from)}</Text>
-                        ) : null}
-                        {issuer.name ? (
-                            <Text>{safeText(issuer.name)}</Text>
-                        ) : null}
-                        {issuer.street ? (
-                            <Text>{safeText(issuer.street)}</Text>
-                        ) : null}
-                        {issuer.zip || issuer.city ? (
-                            <Text>
-                                {[issuer.zip, issuer.city]
-                                    .filter(Boolean)
-                                    .join(' ')}
-                            </Text>
-                        ) : null}
-                        {issuer.region ? (
-                            <Text>{safeText(issuer.region)}</Text>
-                        ) : null}
+                        <MaybeText
+                            label={issuer.name ? t('from') : undefined}
+                            value={issuer.name}
+                        />
+                        <MaybeText value={issuer.street} />
+                        <MaybeText
+                            value={[issuer.zip, issuer.city]
+                                .filter(Boolean)
+                                .join(' ')}
+                        />
+                        <MaybeText value={issuer.region} />
                     </View>
 
                     <View style={{ flex: 1, paddingLeft: 8 }}>
-                        {client.name ? (
-                            <Text style={styles.label}>
-                                {safeText(t.billTo)}
-                            </Text>
-                        ) : null}
-                        {client.name ? (
-                            <Text>{safeText(client.name)}</Text>
-                        ) : null}
-                        {client.street ? (
-                            <Text>{safeText(client.street)}</Text>
-                        ) : null}
-                        {client.zip || client.city ? (
-                            <Text>
-                                {[client.zip, client.city]
-                                    .filter(Boolean)
-                                    .join(' ')}
-                            </Text>
-                        ) : null}
-                        {client.region ? (
-                            <Text>{safeText(client.region)}</Text>
-                        ) : null}
+                        <MaybeText
+                            label={client.name ? t('billTo') : undefined}
+                            value={client.name}
+                        />
+                        <MaybeText value={client.street} />
+                        <MaybeText
+                            value={[client.zip, client.city]
+                                .filter(Boolean)
+                                .join(' ')}
+                        />
+                        <MaybeText value={client.region} />
                     </View>
                 </View>
 
                 <View style={styles.divider} />
 
                 {/* Items Table */}
-                {items && items.length > 0 ? (
+                {items.length > 0 && (
                     <View style={styles.table}>
                         <View style={[styles.tableRow, styles.tableHeader]}>
-                            <Text style={styles.th}>{safeText(t.name)}</Text>
-                            <Text style={styles.th}>
-                                {safeText(t.description)}
-                            </Text>
-                            <Text style={styles.th}>
-                                {safeText(t.quantity)}
-                            </Text>
-                            <Text style={styles.th}>
-                                {safeText(t.unitPrice)}
-                            </Text>
-                            <Text style={styles.th}>
-                                {safeText(t.subtotal)}
-                            </Text>
+                            <Text style={styles.th}>{t('name')}</Text>
+                            <Text style={styles.th}>{t('description')}</Text>
+                            <Text style={styles.th}>{t('quantity')}</Text>
+                            <Text style={styles.th}>{t('unitPrice')}</Text>
+                            <Text style={styles.th}>{t('subtotal')}</Text>
                         </View>
                         {items.map((item, i) => (
-                            <View
-                                key={`${item.name}-${i}`}
-                                style={styles.tableRow}>
-                                {item.name ? (
-                                    <Text style={styles.td}>
-                                        {safeText(item.name)}
-                                    </Text>
-                                ) : (
-                                    <Text style={styles.td}>—</Text>
-                                )}
-                                {item.description ? (
-                                    <Text style={styles.td}>
-                                        {safeText(item.description)}
-                                    </Text>
-                                ) : (
-                                    <Text style={styles.td}>—</Text>
-                                )}
-                                {item.quantity ? (
-                                    <Text style={styles.td}>
-                                        {safeText(item.quantity)}
-                                    </Text>
-                                ) : (
-                                    <Text style={styles.td}>—</Text>
-                                )}
-                                {item.rate ? (
-                                    <Text style={styles.td}>
-                                        {money(item.rate, totals.currency)}
-                                    </Text>
-                                ) : (
-                                    <Text style={styles.td}>—</Text>
-                                )}
-                                <Text style={styles.td}>
+                            <View key={i} style={styles.tableRow}>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>{item.description}</TableCell>
+                                <TableCell>{item.quantity}</TableCell>
+                                <TableCell>
+                                    {item.rate
+                                        ? money(item.rate, totals.currency)
+                                        : undefined}
+                                </TableCell>
+                                <TableCell>
                                     {money(
                                         (item.quantity ?? 0) * (item.rate ?? 0),
                                         totals.currency,
                                     )}
-                                </Text>
+                                </TableCell>
                             </View>
                         ))}
                     </View>
-                ) : null}
+                )}
 
                 {/* Totals */}
                 <View style={styles.totals}>
-                    <View style={styles.totalLine}>
-                        <Text>{safeText(t.totalNet)}:</Text>
-                        <Text>{money(totals.totalNet, totals.currency)}</Text>
-                    </View>
-
-                    <View style={styles.totalLine}>
-                        <Text>
-                            {safeText(t.tax)} ({safeText(totals.taxRate)}%):
-                        </Text>
-                        <Text>
-                            {money(
-                                (totals.totalGross ?? 0) -
-                                    (totals.totalNet ?? 0),
-                                totals.currency,
-                            )}
-                        </Text>
-                    </View>
-                    <View style={styles.totalLine}>
-                        <Text>{safeText(t.totalGross)}:</Text>
-                        <Text>{money(totals.totalGross, totals.currency)}</Text>
-                    </View>
-                    <View style={[styles.totalLine, styles.totalBold]}>
-                        <Text>{safeText(t.amountDue)}:</Text>
-                        <Text>{money(totals.amountDue, totals.currency)}</Text>
-                    </View>
+                    {totalsRows.map((row, i) => (
+                        <View
+                            key={i}
+                            style={[
+                                styles.totalLine,
+                                row.bold ? styles.totalBold : {},
+                            ]}>
+                            <Text>{row.label}:</Text>
+                            <Text>{money(row.value, totals.currency)}</Text>
+                        </View>
+                    ))}
                 </View>
 
                 <View style={styles.divider} />
 
-                {/* Banking */}
-                {bankDetails.accountHolder ||
-                bankDetails.bankName ||
-                bankDetails.iban ||
-                bankDetails.bic ? (
+                {/* Bank Details */}
+                {bankInfo.length > 0 && (
                     <View style={[styles.section, { marginTop: 12 }]}>
                         <Text style={styles.label}>
-                            {safeText(t.paymentInformation)}
+                            {t('paymentInformation')}
                         </Text>
-
-                        {bankDetails.accountHolder ? (
-                            <Text>
-                                {safeText(t.accountHolder)}:{' '}
-                                {safeText(bankDetails.accountHolder)}
+                        {bankInfo.map((b, i) => (
+                            <Text key={i}>
+                                {b.label}: {b.value}
                             </Text>
-                        ) : null}
-
-                        {bankDetails.bankName ? (
-                            <Text>
-                                {safeText(t.bankName)}:{' '}
-                                {safeText(bankDetails.bankName)}
-                            </Text>
-                        ) : null}
-
-                        {bankDetails.iban ? (
-                            <Text>
-                                {safeText(t.iban)}: {safeText(bankDetails.iban)}
-                            </Text>
-                        ) : null}
-
-                        {bankDetails.bic ? (
-                            <Text>
-                                {safeText(t.bic)}: {safeText(bankDetails.bic)}
-                            </Text>
-                        ) : null}
+                        ))}
                     </View>
-                ) : null}
-
-                <View style={styles.divider} />
+                )}
 
                 {/* Legal Terms */}
-                {legal.termsAndConditions ? (
-                    <View>
-                        <Text>{safeText(legal.termsAndConditions)}</Text>
-                    </View>
-                ) : null}
+                {legal.termsAndConditions && (
+                    <Text>{legal.termsAndConditions}</Text>
+                )}
 
                 {/* Footer */}
-                {footer.notes || issuer.name || issuer.city ? (
+                {(footer.notes || issuer.name || issuer.city) && (
                     <Text style={styles.footer}>
                         {[footer.notes, issuer.name, issuer.city]
                             .filter(Boolean)
                             .join(' · ')}
                     </Text>
-                ) : null}
+                )}
             </Page>
         </Document>
     )

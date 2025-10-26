@@ -25,11 +25,11 @@ export interface InvoiceDetails {
 }
 
 export interface BankDetails {
-    accountHolder: string
-    bankName: string
-    iban: string
-    bic: string
-    currency: string
+    accountHolder?: string
+    bankName?: string
+    iban?: string
+    bic?: string
+    currency?: string
 }
 
 export interface InvoiceItem {
@@ -79,7 +79,7 @@ export interface InvoiceResponse {
     invoice_date: string
     due_date: string | null
     reference: string | null
-    bank_details: BankDetails | null
+    bank_details: BankDetails
     issuer: Issuer
     client: Client
     items: InvoiceItem[]

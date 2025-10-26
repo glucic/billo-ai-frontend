@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { pdf } from '@react-pdf/renderer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDebounce } from 'use-debounce'
-import { useTranslations } from 'next-intl'
 import PDFInvoiceDocument from './PDFInvoiceDocument'
 import { Invoice } from '@/types/Invoice'
+import { useTranslations } from 'next-intl'
 
 function PDFSkeleton() {
     return (
@@ -37,30 +37,7 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
                         totals={debouncedInvoice.totals}
                         legal={debouncedInvoice.legal}
                         footer={debouncedInvoice.footer}
-                        t={{
-                            title: t('title'),
-                            invoiceNumber: t('invoiceNumber'),
-                            invoiceDate: t('invoiceDate'),
-                            dueDate: t('dueDate'),
-                            reference: t('reference'),
-                            from: t('from'),
-                            billTo: t('billTo'),
-                            items: t('items'),
-                            name: t('name'),
-                            description: t('description'),
-                            quantity: t('quantity'),
-                            unitPrice: t('unitPrice'),
-                            subtotal: t('subtotal'),
-                            totalNet: t('totalNet'),
-                            tax: t('tax'),
-                            totalGross: t('totalGross'),
-                            amountDue: t('amountDue'),
-                            paymentInformation: t('paymentInformation'),
-                            accountHolder: t('accountHolder'),
-                            bankName: t('bankName'),
-                            iban: t('iban'),
-                            bic: t('bic'),
-                        }}
+                        translations={t}
                     />,
                 ).toBlob()
                 if (!active) return
@@ -80,7 +57,7 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
         return () => {
             active = false
         }
-    }, [debouncedInvoice, t])
+    }, [debouncedInvoice])
 
     return (
         <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--background)] text-[var(--foreground)] shadow-sm">

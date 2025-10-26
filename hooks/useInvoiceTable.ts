@@ -102,6 +102,7 @@ export function useInvoiceTable(): UseInvoiceTableReturn {
                 legal: response.legal ?? { termsAndConditions: '' },
                 footer: response.footer ?? { notes: '' },
                 attachments: [],
+                bankDetails: response.bank_details,
             }
         },
         [],

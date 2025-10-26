@@ -18,9 +18,7 @@ interface InvoiceTableProps {
     onSelect: (invoice: Invoice) => void
     onDownloadPDF: (invoice: Invoice) => void
     onArchive: (invoice: Invoice) => void
-    /** optional external search value (server-side) */
     searchTerm?: string
-    /** called with debounced search value when provided */
     onSearch?: (value: string) => void
 }
 
@@ -47,12 +45,10 @@ const InvoiceTableComponent = ({
         return () => clearTimeout(handler)
     }, [search])
 
-    // forward debounced search to parent if onSearch provided
     useEffect(() => {
         if (typeof onSearch === 'function') onSearch(debouncedSearch)
     }, [debouncedSearch, onSearch])
 
-    // if parent controls searchTerm, sync it into local input so user sees it
     useEffect(() => {
         if (typeof searchTerm === 'string') setSearch(searchTerm)
     }, [searchTerm])
@@ -149,9 +145,11 @@ const InvoiceTableComponent = ({
 
     return (
         <div className="flex flex-col h-full rounded-xl bg-[var(--secondary-background)] shadow-[var(--card-shadow)] p-4 border-[var(--card-border)]">
-            <div className="mb-4">
+            {/* Search */}
+            <div className="mb-4 w-full border-b border-[var(--divider)] pb-2">
                 <InputField
-                    placeholder="Search invoices, clients or emails..."
+                    placeholder={invoicesT('searchPlaceholder')}
+                    className="w-2xl"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
@@ -159,7 +157,7 @@ const InvoiceTableComponent = ({
 
             <div className="flex-1 overflow-auto">
                 <table className="min-w-full table-fixed text-sm text-left border-collapse invoice-table">
-                    <thead className="sticky top-0 bg-[var(--secondary-background)] text-xs uppercase tracking-wide z-10">
+                    <thead className="sticky top-0 text-xs uppercase tracking-wide z-10 p-5">
                         <tr>
                             {[
                                 'invoiceNumber',
@@ -171,8 +169,16 @@ const InvoiceTableComponent = ({
                             ].map((key, i) => (
                                 <th
                                     key={key}
+                                    scope="col"
+                                    aria-sort={
+                                        sortBy === key
+                                            ? sortOrder === 'asc'
+                                                ? 'ascending'
+                                                : 'descending'
+                                            : 'none'
+                                    }
                                     style={{ width: `${colWidths[i]}%` }}
-                                    className="px-6 py-4 relative whitespace-nowrap">
+                                    className={`px-6 py-4 relative whitespace-nowrap ${key !== 'actions' ? 'sortable' : ''}`}>
                                     {key !== 'actions' ? (
                                         <div
                                             onClick={() =>
@@ -186,9 +192,11 @@ const InvoiceTableComponent = ({
                                     ) : (
                                         invoicesT('actions')
                                     )}
+
+                                    {/* Resizer */}
                                     {i < colWidths.length - 1 && (
                                         <div
-                                            className="resizer absolute top-0 right-0 h-full w-2 cursor-col-resize"
+                                            className="resizer absolute top-0 right-0 h-full cursor-col-resize"
                                             onMouseDown={e =>
                                                 onMouseDownResize(i, e)
                                             }
@@ -216,31 +224,68 @@ const InvoiceTableComponent = ({
                         ) : (
                             filteredInvoices.map((invoice, idx) => {
                                 const total = invoice.totals?.amountDue ?? 0
+                                const overdue =
+                                    total > 0 &&
+                                    invoice.invoiceDetails.dueDate &&
+                                    new Date(invoice.invoiceDetails.dueDate) <
+                                        new Date()
+                                const pending = total > 0 && !overdue
                                 return (
                                     <tr
                                         key={invoice.invoiceDetails.id || idx}
-                                        className="h-16 hover:bg-[var(--accent-light)]/10 transition-colors">
-                                        <td className="px-6 py-4 font-semibold text-[var(--accent)]">
+                                        className={`h-16 transition-all duration-200 hover:bg-[var(--accent-light)]/10 ${
+                                            overdue
+                                                ? 'bg-[var(--error)]/10'
+                                                : pending
+                                                  ? 'bg-[var(--warning)]/10'
+                                                  : ''
+                                        }`}>
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.invoiceNumber',
+                                            )}
+                                            className="px-6 py-4 font-semibold text-[var(--accent)]"
+                                            scope="row">
                                             {
                                                 invoice.invoiceDetails
                                                     .invoiceNumber
                                             }
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.invoiceDate',
+                                            )}
+                                            className="px-6 py-4">
                                             {new Date(
                                                 invoice.invoiceDetails.invoiceDate,
                                             ).toLocaleDateString('de-DE')}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.clientName',
+                                            )}
+                                            className="px-6 py-4">
                                             {invoice.client.name}
                                         </td>
-                                        <td className="px-6 py-4 text-right font-semibold">
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.amountDue',
+                                            )}
+                                            className="px-6 py-4 text-right font-semibold">
                                             €{total.toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.status',
+                                            )}
+                                            className="px-6 py-4">
                                             {getStatusBadge(invoice)}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td
+                                            data-label={invoicesT(
+                                                'columns.actions',
+                                            )}
+                                            className="px-6 py-4">
                                             <InvoiceActionsMenu
                                                 invoice={invoice}
                                                 isOpen={
@@ -283,16 +328,7 @@ const InvoiceTableComponent = ({
                 </table>
             </div>
 
-            <style jsx>{`
-                @media (max-width: 768px) {
-                    td:nth-child(2),
-                    th:nth-child(2),
-                    td:nth-child(4),
-                    th:nth-child(4) {
-                        display: none;
-                    }
-                }
-            `}</style>
+            {/* Mobile styles handled via CSS */}
         </div>
     )
 }

@@ -1,4 +1,6 @@
-/* Table styles */
+/* =========================
+   Invoice Table Styles
+========================= */
 .invoice-table {
     width: 100%;
     border-collapse: separate;
@@ -6,18 +8,22 @@
     font-size: 0.875rem;
     text-align: left;
     scroll-behavior: smooth;
+    background: var(--table-bg);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+/* Header */
 .invoice-table thead {
     background: var(--table-header-bg);
     color: var(--table-header-text);
-    box-shadow: var(--table-header-shadow);
     text-transform: uppercase;
     letter-spacing: 0.03em;
     font-size: 0.75rem;
     position: sticky;
     top: 0;
     z-index: 40;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .invoice-table th,
@@ -39,12 +45,14 @@
     border-right: none;
 }
 
+/* Table body rows */
 .invoice-table tbody tr {
     border-bottom: 1px solid var(--table-border);
     transition:
         background-color 0.2s ease,
         box-shadow 0.15s ease,
         transform 0.15s ease;
+    will-change: background-color, box-shadow, transform;
 }
 
 .invoice-table tbody tr:nth-child(even) {
@@ -53,7 +61,8 @@
 
 .invoice-table tbody tr:hover {
     background-color: var(--table-row-hover);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
 .invoice-table tbody tr:focus-within,
@@ -62,38 +71,80 @@
     outline-offset: -2px;
 }
 
+/* Cell text alignment */
 .invoice-table tbody td.text-right {
     text-align: right;
     font-weight: 500;
 }
 
-@media (max-width: 768px) {
-    .invoice-table td:nth-child(2),
-    .invoice-table th:nth-child(2),
-    .invoice-table td:nth-child(4),
-    .invoice-table th:nth-child(4) {
-        display: none;
-    }
+/* Rounded corners */
+.invoice-table th:first-child {
+    border-top-left-radius: 8px;
+}
+.invoice-table th:last-child {
+    border-top-right-radius: 8px;
+}
+.invoice-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+.invoice-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
 }
 
+/* Scrollbar styling */
 .invoice-table::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-
 .invoice-table::-webkit-scrollbar-thumb {
     background: var(--accent-glow);
     border-radius: 9999px;
+    transition: background 0.2s ease;
 }
-
-.invoice-table::-webkit-scrollbar-thumb:hover {
+.invoice-table:hover::-webkit-scrollbar-thumb {
     background: var(--accent-light);
 }
-
 .invoice-table::-webkit-scrollbar-track {
     background: transparent;
 }
+.invoice-table {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-glow) transparent;
+}
 
+/* Resizable columns */
+.resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    cursor: col-resize;
+    background: var(--border-color);
+    opacity: 0.8;
+    z-index: 45;
+    transition:
+        background-color 0.12s ease,
+        width 0.12s ease,
+        opacity 0.12s ease;
+}
+.resizer:hover,
+.resizer:active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    opacity: 0.95;
+    width: 6px !important;
+}
+
+/* Sticky first column */
+.invoice-table tbody td:first-child,
+.invoice-table thead th:first-child {
+    position: sticky;
+    left: 0;
+    background: var(--table-bg);
+    z-index: 30;
+}
+
+/* Dropdown content (for actions in cells) */
 .dropdown-content {
     opacity: 0;
     transform: translateY(-5px);
@@ -102,41 +153,48 @@
         transform 0.2s var(--ease-out-soft);
     z-index: var(--z-dropdown);
 }
-
 .dropdown-content.show,
 .dropdown-content[style] {
     opacity: 1;
     transform: translateY(0);
 }
-
 .dropdown-content button {
     transition: background 0.2s ease;
 }
-
 .dropdown-content button:hover {
     background: var(--accent-glow);
 }
 
-.resizer {
-    background: var(--border-color);
-    opacity: 1;
-    transition:
-        background-color 0.12s ease,
-        width 0.12s ease,
-        opacity 0.12s ease;
-    z-index: 45; /* above header content */
-}
-
-.resizer:hover,
-.resizer:active {
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    opacity: 0.95;
-    width: 4px !important; /* slightly widen on hover for grab */
-}
-
-/* Make resizer easier to touch on mobile */
-@media (pointer: coarse) {
+/* =========================
+   Mobile / Responsive
+========================= */
+@media (max-width: 768px) {
+    .invoice-table {
+        display: block;
+        overflow-x: auto;
+        width: 100%;
+    }
+    .invoice-table thead {
+        display: none;
+    }
+    .invoice-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--table-border);
+    }
+    .invoice-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        text-align: right;
+        padding: 0.5rem 1rem;
+        position: relative;
+    }
+    .invoice-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+    }
     .resizer {
-        width: 18px !important;
+        display: none; /* hide resizer on mobile */
     }
 }
