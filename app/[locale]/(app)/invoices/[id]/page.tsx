@@ -9,6 +9,8 @@ export default function EditInvoicePage() {
     const { id } = useParams()
     const invoiceId = Number(id)
     const {
+        invoiceType,
+        setInvoiceType,
         invoiceDetails,
         setInvoiceDetailsField,
         bankDetails,
@@ -43,6 +45,8 @@ export default function EditInvoicePage() {
 
     return (
         <InvoiceForm
+            invoiceType={invoiceType}
+            setInvoiceType={setInvoiceType}
             invoiceDetails={invoiceDetails}
             setInvoiceDetailsField={setInvoiceDetailsField}
             bankDetails={bankDetails}

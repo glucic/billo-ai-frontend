@@ -57,7 +57,7 @@ export default function PDFInvoicePreview({ invoice }: { invoice: Invoice }) {
         return () => {
             active = false
         }
-    }, [debouncedInvoice])
+    }, [debouncedInvoice, t])
 
     return (
         <div className="relative w-full h-full rounded-xl overflow-hidden bg-[var(--background)] text-[var(--foreground)] shadow-sm">

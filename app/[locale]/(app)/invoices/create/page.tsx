@@ -7,6 +7,8 @@ import { InvoiceForm } from '@/components/invoices/InvoiceForm'
 export default function CreateInvoicePage() {
     const router = useRouter()
     const {
+        invoiceType,
+        setInvoiceType,
         invoiceDetails,
         setInvoiceDetailsField,
         bankDetails,
@@ -39,6 +41,8 @@ export default function CreateInvoicePage() {
 
     return (
         <InvoiceForm
+            invoiceType={invoiceType}
+            setInvoiceType={setInvoiceType}
             invoiceDetails={invoiceDetails}
             setInvoiceDetailsField={setInvoiceDetailsField}
             bankDetails={bankDetails}

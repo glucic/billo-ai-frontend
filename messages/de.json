@@ -279,6 +279,36 @@
             "overdue": "Überfällig",
             "archived": "Archiviert"
         },
+        "InvoiceType": {
+            "title": "Rechnungstyp",
+            "types": {
+                "standard": {
+                    "label": "Standard",
+                    "desc": "Nur Pflichtfelder",
+                    "tooltip": "Verwenden Sie dies für eine normale Rechnung mit nur den erforderlichen Feldern."
+                },
+                "shipping": {
+                    "label": "Versand",
+                    "desc": "Liefer- & Versandinformationen",
+                    "tooltip": "Fügen Sie Liefer- und Versandinformationen für Rechnungen mit Versand hinzu."
+                },
+                "service": {
+                    "label": "Dienstleistung",
+                    "desc": "Arbeit oder Beratung",
+                    "tooltip": "Wird verwendet, wenn Dienstleistungen oder Beratungsleistungen in Rechnung gestellt werden."
+                },
+                "recurring": {
+                    "label": "Wiederkehrend",
+                    "desc": "Abonnement / Häufigkeit",
+                    "tooltip": "Verwenden Sie dies für wiederkehrende oder abonnementsbasierte Rechnungen."
+                },
+                "proforma": {
+                    "label": "Proforma",
+                    "desc": "Kostenvoranschläge / Zoll",
+                    "tooltip": "Proforma-Rechnungen für Kostenvoranschläge oder Zollzwecke."
+                }
+            }
+        },
         "InvoiceDetails": {
             "title": "Rechnungsdetails",
             "invoiceNumber": "Rechnungsnummer",

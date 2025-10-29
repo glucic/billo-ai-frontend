@@ -2,80 +2,30 @@
 
 import { useTranslations } from 'next-intl'
 import {
+    InvoiceTypeSection,
     InvoiceDetailsSection,
     IssuerSection,
     ClientSection,
     ItemsSection,
     TotalsSection,
+    BankDetailsSection,
     FooterSection,
     LegalSection,
 } from '@/components/invoices/form-sections'
 import { PDFInvoicePreview } from '@/components/invoices'
 import { Button, StatefulButton } from '@/components/ui'
 import { useInvoiceFormLayout } from '@/hooks/useInvoiceFormLayout'
-import {
-    InvoiceDetails,
-    InvoiceItem,
-    InvoiceTotals,
-    Client,
-    Issuer,
-    Legal,
-    Footer,
-    BankDetails,
-} from '@/types/Invoice'
-import { Organisation } from '@/types/Organisation'
-import BankDetailsSection from './form-sections/BankDetailsSection'
-
-export interface InvoiceFormProps {
-    invoiceDetails: InvoiceDetails
-    setInvoiceDetailsField: (field: keyof InvoiceDetails, value: string) => void
-    bankDetails: BankDetails
-    setBankDetailsField: (field: keyof BankDetails, value: string) => void
-    issuer: Issuer
-    setIssuerField: (field: keyof Issuer, value: string) => void
-    issuerId: number | null
-    setIssuerId: (id: number | null) => void
-    client: Client
-    setClientField: (field: keyof Client, value: string) => void
-    clientId: number | null
-    setClientId: (id: number | null) => void
-    items: InvoiceItem[]
-    addItem: () => void
-    removeItem: (index: number) => void
-    updateItem: <K extends keyof InvoiceItem>(
-        index: number,
-        field: K,
-        value: InvoiceItem[K],
-    ) => void
-    totals: InvoiceTotals
-    setTotalsField: <K extends keyof InvoiceTotals>(
-        field: K,
-        value: InvoiceTotals[K],
-    ) => void
-    legal: Legal
-    setLegalField: (field: keyof Legal, value: string) => void
-    footer: Footer
-    setFooterField: (field: keyof Footer, value: string) => void
-    attachments: File[]
-    setAttachments: (files: File[]) => void
-    saveInvoice: () => Promise<{ success: boolean }>
-    organisations: Organisation[]
-    saving: boolean
-    loading?: boolean
-    fieldErrors: Partial<Record<string, string[]>>
-    error?: string
-    mode: 'create' | 'edit'
-    onSuccessRedirect?: () => void
-}
+import { InvoiceFormProps } from './InvoiceFormProps'
 
 export function InvoiceForm({
+    invoiceType,
+    setInvoiceType,
     invoiceDetails,
     setInvoiceDetailsField,
     bankDetails,
     setBankDetailsField,
     issuer,
     setIssuerField,
-    issuerId,
     setIssuerId,
     client,
     setClientField,
@@ -116,18 +66,6 @@ export function InvoiceForm({
         )
     }
 
-    const invoice = {
-        invoiceDetails,
-        bankDetails,
-        issuer,
-        client,
-        items,
-        totals,
-        legal,
-        footer,
-        attachments,
-    }
-
     return (
         <main className="flex flex-col h-screen overflow-hidden text-[var(--color-foreground)] p-4 md:p-6">
             <div className="flex flex-1 gap-8 overflow-hidden">
@@ -136,7 +74,11 @@ export function InvoiceForm({
                     className={`overflow-y-auto pr-2 md:pr-4 transition-all duration-300 ease-in-out ${
                         showPreview ? 'flex-1' : 'flex-[1_1_100%]'
                     }`}>
-                    {/* Sections */}
+                    <InvoiceTypeSection
+                        value={invoiceType}
+                        setValue={setInvoiceType}
+                    />
+
                     <InvoiceDetailsSection
                         invoiceDetails={invoiceDetails}
                         setInvoiceDetailsField={setInvoiceDetailsField}
@@ -222,7 +164,20 @@ export function InvoiceForm({
 
                 {showPreview && (
                     <aside className="hidden md:flex flex-col items-center justify-start w-[480px] xl:w-[600px] transition-all duration-300">
-                        <PDFInvoicePreview invoice={invoice} />
+                        <PDFInvoicePreview
+                            invoice={{
+                                invoiceType,
+                                invoiceDetails,
+                                bankDetails,
+                                issuer,
+                                client,
+                                items,
+                                totals,
+                                legal,
+                                footer,
+                                attachments,
+                            }}
+                        />
                     </aside>
                 )}
             </div>

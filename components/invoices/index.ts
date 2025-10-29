@@ -2,3 +2,4 @@ export { default as PDFInvoicePreview } from '@/components/invoices/PDFInvoicePr
 export { InvoiceTable } from '@/components/invoices/InvoiceTable'
 export { default as InvoicePagination } from '@/components/invoices/InvoicePagination'
 export { InvoiceActionsMenu } from '@/components/invoices/InvoiceTableActionsMenu'
+export { InvoiceForm } from '@/components/invoices/InvoiceForm'

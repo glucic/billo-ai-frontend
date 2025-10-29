@@ -279,6 +279,36 @@
             "overdue": "Overdue",
             "archived": "Archived"
         },
+        "InvoiceType": {
+            "title": "Invoice Type",
+            "types": {
+                "standard": {
+                    "label": "Standard",
+                    "desc": "Only required fields",
+                    "tooltip": "Use this for a normal invoice with mandatory fields only."
+                },
+                "shipping": {
+                    "label": "Shipping",
+                    "desc": "Delivery & carrier info",
+                    "tooltip": "Add shipping and carrier information for delivery invoices."
+                },
+                "service": {
+                    "label": "Service",
+                    "desc": "Labor or consulting",
+                    "tooltip": "Used when invoicing for services or consulting work."
+                },
+                "recurring": {
+                    "label": "Recurring",
+                    "desc": "Subscription/frequency",
+                    "tooltip": "Use for recurring or subscription-based invoices."
+                },
+                "proforma": {
+                    "label": "Proforma",
+                    "desc": "Estimates/customs",
+                    "tooltip": "Proforma invoices for estimates or customs purposes."
+                }
+            }
+        },
         "InvoiceDetails": {
             "title": "Invoice Details",
             "invoiceNumber": "Invoice Number",

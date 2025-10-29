@@ -15,6 +15,7 @@ import {
     InvoiceCreatePayload,
     InvoiceUpdatePayload,
     BankDetails,
+    InvoiceTypeKey,
 } from '@/types/Invoice'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { calculateTotals } from '@/lib/invoiceCalculations'
@@ -31,16 +32,22 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const { organisations, fetchOrganisations } = useOrganisations()
     const t = useTranslations()
 
-    // Core sections
+    // --- Invoice type ---
+    const [invoiceType, setInvoiceType] = useState<InvoiceTypeKey>('standard')
+    const setInvoiceTypeField = useCallback((value: InvoiceTypeKey) => {
+        setInvoiceType(value)
+    }, [])
+
+    // --- Core sections ---
     const [invoiceDetails, setInvoiceDetails] = useState<InvoiceDetails>({
         id: initialInvoiceId ?? 0,
         invoiceNumber: `INV-${new Date()
             .toISOString()
             .slice(0, 10)
-            .replace(
-                /-/g,
-                '',
-            )}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
+            .replace(/-/g, '')}-${Math.random()
+            .toString(36)
+            .substring(2, 5)
+            .toUpperCase()}`,
         invoiceDate: format(new Date(), 'yyyy-MM-dd'),
         dueDate: '',
         reference: '',
@@ -106,25 +113,25 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     )
     const [totals, setTotals] = useState<InvoiceTotals>(defaultTotals)
 
-    // New sections
+    // --- New sections ---
     const [legal, setLegal] = useState<Legal>({ termsAndConditions: '' })
     const [footer, setFooter] = useState<Footer>({ notes: '' })
     const [attachments, setAttachments] = useState<File[]>([])
 
-    // Loading & errors
+    // --- Loading & errors ---
     const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [fieldErrors, setFieldErrors] = useState<BackendErrors>({})
 
-    // Load organisations on mount
+    // --- Load organisations ---
     useEffect(() => {
         fetchOrganisations().catch(err =>
             console.error('Failed to load organisations:', err),
         )
     }, [fetchOrganisations])
 
-    // Auto-fill issuer
+    // --- Auto-fill issuer ---
     useEffect(() => {
         if (organisations.length === 0) {
             setIssuer(defaultIssuer)
@@ -132,8 +139,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         }
 
         let org: Organisation | undefined
-
-        console.log(issuerId)
 
         if (issuerId) {
             org = organisations.find(o => o.id === issuerId)
@@ -159,7 +164,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         }
     }, [issuerId, organisations, defaultIssuer, setIssuer])
 
-    // Auto-fill client
+    // --- Auto-fill client ---
     useEffect(() => {
         if (!clientId) return
         const org = organisations.find(o => o.id === clientId)
@@ -176,7 +181,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         )
     }, [clientId, organisations])
 
-    // Field setters
+    // --- Field setters ---
     const setInvoiceDetailsField = useCallback(
         (field: keyof InvoiceDetails, value: string) =>
             setInvoiceDetails(prev => ({ ...prev, [field]: value })),
@@ -213,7 +218,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         [],
     )
 
-    // Items
+    // --- Items ---
     const addItem = () =>
         setItems(prev => [
             ...prev,
@@ -231,7 +236,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
     const removeItem = (index: number) =>
         setItems(prev => prev.filter((_, i) => i !== index))
 
-    // Derived totals
+    // --- Derived totals ---
     const computedTotals = useMemo(
         () =>
             calculateTotals({
@@ -263,7 +268,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         }))
     }, [computedTotals])
 
-    // Load invoice from backend
+    // --- Load invoice from backend ---
     useEffect(() => {
         if (!initialInvoiceId) return
         const loadInvoice = async () => {
@@ -291,11 +296,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     currency: inv.bank_details?.currency ?? 'EUR',
                 })
 
-                // Use stable defaults (avoid referencing state that the effect will write)
                 setIssuer(inv.issuer ?? defaultIssuer)
                 setClient(inv.client ?? defaultClient)
-
-                // Handle items with proper typing
                 setItems(
                     inv.items?.map(item => ({
                         name: item.name,
@@ -306,11 +308,11 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                         { name: '', description: '', rate: 0, quantity: 1 },
                     ],
                 )
-
                 setTotals(inv.totals ?? defaultTotals)
                 setLegal(inv.legal ?? { termsAndConditions: '' })
                 setFooter(inv.footer ?? { notes: '' })
-                setAttachments([]) // Backend doesn't return attachments in the response
+                setAttachments([])
+                setInvoiceType(inv.invoiceType ?? 'standard') // <--- load type
             } catch (err) {
                 console.error('Failed to load invoice:', err)
                 setError(
@@ -323,14 +325,14 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         loadInvoice()
     }, [initialInvoiceId, t, defaultClient, defaultIssuer, defaultTotals])
 
-    // Save invoice
+    // --- Save invoice ---
     const saveInvoice = async () => {
         setSaving(true)
         setError(null)
         setFieldErrors({})
 
-        // Prepare payload based on whether it's a create or update operation
         const basePayload = {
+            invoiceType, // <--- include type
             bankDetails,
             issuer,
             client,
@@ -355,7 +357,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 : '/api/invoices'
             const method = initialInvoiceId ? 'put' : 'post'
 
-            // Type the payload based on the operation
             const payload = initialInvoiceId
                 ? ({ ...basePayload, invoiceDetails } as InvoiceUpdatePayload)
                 : ({
@@ -389,6 +390,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 
     return {
         organisations,
+        invoiceType,
+        setInvoiceType: setInvoiceTypeField,
         invoiceDetails,
         setInvoiceDetailsField,
         bankDetails,

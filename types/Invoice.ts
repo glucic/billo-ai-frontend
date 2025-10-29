@@ -1,5 +1,4 @@
 import { Organisation } from '@/types/Organisation'
-import { User } from '@/types/User'
 
 export type Issuer = Omit<
     Organisation,
@@ -15,6 +14,21 @@ export type Client = Omit<
     | 'created_at'
     | 'updated_at'
 >
+
+export type InvoiceTypeKey =
+    | 'standard'
+    | 'shipping'
+    | 'service'
+    | 'recurring'
+    | 'proforma'
+
+export interface InvoiceTypeOption {
+    value: InvoiceTypeKey
+    label: string
+    desc: string
+    tooltip: string
+    icon: React.ElementType<React.SVGProps<SVGSVGElement>>
+}
 
 export interface InvoiceDetails {
     id?: number
@@ -61,6 +75,7 @@ export interface Footer {
 }
 
 export interface Invoice {
+    invoiceType: InvoiceTypeKey
     invoiceDetails: InvoiceDetails
     bankDetails: BankDetails
     issuer: Issuer
@@ -72,13 +87,13 @@ export interface Invoice {
     attachments: File[]
 }
 
-// New types for backend responses
 export interface InvoiceResponse {
     id: number
     invoice_number: string
     invoice_date: string
     due_date: string | null
     reference: string | null
+    invoiceType: InvoiceTypeKey
     bank_details: BankDetails
     issuer: Issuer
     client: Client
