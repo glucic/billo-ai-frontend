@@ -133,6 +133,8 @@ export function useInvoiceForm(initialInvoiceId?: number) {
 
         let org: Organisation | undefined
 
+        console.log(issuerId)
+
         if (issuerId) {
             org = organisations.find(o => o.id === issuerId)
         }

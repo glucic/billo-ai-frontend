@@ -15,7 +15,9 @@
         "notifications": "Benachrichtigungen",
         "help": "Hilfe & Support",
         "logout": "Abmelden",
-        "organisations": "Organisationen"
+        "organisations": "Organisationen",
+        "organisationsOverview": "Organisationsübersicht",
+        "organisationsCreate": "Organisation erstellen"
     },
     "LandingPage": {
         "HeroSection": {

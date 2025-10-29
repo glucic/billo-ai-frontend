@@ -224,22 +224,11 @@ const InvoiceTableComponent = ({
                         ) : (
                             filteredInvoices.map((invoice, idx) => {
                                 const total = invoice.totals?.amountDue ?? 0
-                                const overdue =
-                                    total > 0 &&
-                                    invoice.invoiceDetails.dueDate &&
-                                    new Date(invoice.invoiceDetails.dueDate) <
-                                        new Date()
-                                const pending = total > 0 && !overdue
+
                                 return (
                                     <tr
                                         key={invoice.invoiceDetails.id || idx}
-                                        className={`h-16 transition-all duration-200 hover:bg-[var(--accent-light)]/10 ${
-                                            overdue
-                                                ? 'bg-[var(--error)]/10'
-                                                : pending
-                                                  ? 'bg-[var(--warning)]/10'
-                                                  : ''
-                                        }`}>
+                                        className={`h-16 transition-all duration-200 hover:bg-[var(--accent-light)]/10`}>
                                         <td
                                             data-label={invoicesT(
                                                 'columns.invoiceNumber',

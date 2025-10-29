@@ -72,6 +72,23 @@ export function SidebarComponent() {
             label: t('organisations'),
             href: '/organisations',
             icon: <IconBuildingSkyscraper className="h-5 w-5 shrink-0" />,
+
+            children: [
+                {
+                    label: t('organisationsOverview'),
+                    href: '/organisations',
+                    icon: (
+                        <IconBuildingSkyscraper className="h-5 w-5 shrink-0" />
+                    ),
+                },
+                {
+                    label: t('organisationsCreate'),
+                    href: '/getting-started',
+                    icon: (
+                        <IconBuildingSkyscraper className="h-5 w-5 shrink-0" />
+                    ),
+                },
+            ],
         },
         {
             label: t('settings'),

@@ -15,7 +15,9 @@
         "notifications": "Notifications",
         "help": "Help & Support",
         "logout": "Log Out",
-        "organisations": "Organizations"
+        "organisations": "Organisations",
+        "organisationsOverview": "Organisations Overview",
+        "organisationsCreate": "Create Organisation"
     },
     "LandingPage": {
         "HeroSection": {
@@ -41,14 +43,14 @@
         }
     },
     "Organisation": {
-        "title": "Organizations",
-        "count": "{count} organizations found",
-        "edit": "Edit Organization",
+        "title": "Organisations",
+        "count": "{count} organisations found",
+        "edit": "Edit Organisation",
         "delete": "Delete",
         "save": "Save Changes",
         "cancel": "Cancel",
-        "leave": "Leave Organization",
-        "join": "Join Organization",
+        "leave": "Leave Organisation",
+        "join": "Join Organistion",
         "companyInfo": "Company Details",
         "addressInfo": "Address Details",
         "fields": {
@@ -65,11 +67,11 @@
             "members": "Members"
         },
         "errors": {
-            "loadFailed": "Failed to load organizations.",
+            "loadFailed": "Failed to load organisations.",
             "saveFailed": "Failed to save changes.",
-            "deleteFailed": "Failed to delete organization.",
-            "leaveFailed": "Failed to leave organization.",
-            "joinFailed": "Failed to join organization.",
+            "deleteFailed": "Failed to delete organisation.",
+            "leaveFailed": "Failed to leave organisation.",
+            "joinFailed": "Failed to join organisation.",
             "general": "An error occurred. Please try again.",
             "nameRequired": "Name is required.",
             "streetRequired": "Street is required.",
@@ -91,8 +93,8 @@
             "employee_countTooShort": "Employee count must be at least 1.",
             "unknownError": "An unknown error occurred. Please try again later."
         },
-        "confirmDelete": "Are you sure you want to delete this organization?",
-        "notFound": "No organizations found.",
+        "confirmDelete": "Are you sure you want to delete this organisation?",
+        "notFound": "No organisations found.",
         "GettingStarted": {
             "StepCompanyName": {
                 "label": "What is your company name?",
@@ -179,7 +181,7 @@
     },
     "Dashboard": {
         "stats": {
-            "organisations": "Organizations",
+            "organisations": "Organisations",
             "activeUsers": "Active Users",
             "invoicesGenerated": "Invoices Generated",
             "upcomingMeetings": "Upcoming Meetings"
