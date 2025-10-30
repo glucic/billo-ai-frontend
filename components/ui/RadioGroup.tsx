@@ -60,7 +60,6 @@ export function RadioGroupItem({
     value,
     checked,
     onChange,
-    className = '',
     ...props
 }: RadioGroupItemProps) {
     return (

@@ -8,7 +8,10 @@ import { User } from '@/types/User'
 interface AuthContextType {
     user: User | null
     loading: boolean
-    mutateUser: (data?: User | null, shouldRevalidate?: boolean) => Promise<any>
+    mutateUser: (
+        data?: User | null,
+        shouldRevalidate?: boolean,
+    ) => Promise<User | undefined>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -16,19 +19,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
         data: user,
-        error,
         mutate,
         isLoading,
-    } = useSWR<User>(
+    } = useSWR<User | null>(
         '/api/user',
         async () => {
             try {
                 const res = await apiClient.get('/api/user')
                 return res.data
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
-                if (err.response?.status === 401) {
-                    // Not logged in — return null, don’t throw
-                    return null
+                if (
+                    typeof err === 'object' &&
+                    err !== null &&
+                    'response' in err
+                ) {
+                    if (err.response?.status === 401) return null
                 }
                 throw err
             }
@@ -42,9 +48,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const loading = isLoading
 
+    const mutateUser = async (
+        data?: User | null,
+        shouldRevalidate?: boolean,
+    ): Promise<User | undefined> => {
+        const result = await mutate(data ?? undefined, shouldRevalidate)
+        // Convert any null into undefined to satisfy type
+        return result ?? undefined
+    }
+
     return (
         <AuthContext.Provider
-            value={{ user: user ?? null, loading, mutateUser: mutate }}>
+            value={{ user: user ?? null, loading, mutateUser }}>
             {children}
         </AuthContext.Provider>
     )
