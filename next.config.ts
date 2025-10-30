@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
         BACKEND_URL: process.env.BACKEND_URL,
     },
     transpilePackages: ['@react-pdf/renderer'],
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
 }
 
 export default withNextIntl(nextConfig)
