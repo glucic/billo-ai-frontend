@@ -11,9 +11,8 @@ import {
 } from '@/components/ui'
 import { CalculatedTotals, calculateTotals } from '@/lib/invoiceCalculations'
 import { ChevronDownIcon } from 'lucide-react'
-import { InvoiceItem, InvoiceTotals } from '@/types/Invoice'
+import { InvoiceItem, InvoiceTotals, InvoiceTypeKey } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
-import { NumberField } from 'react-aria-components'
 
 interface TotalsSectionProps {
     items: InvoiceItem[]
@@ -23,6 +22,7 @@ interface TotalsSectionProps {
         value: InvoiceTotals[K],
     ) => void
     errors?: BackendErrors
+    invoiceType: InvoiceTypeKey
 }
 
 const currencySymbols: Record<string, string> = {
@@ -37,6 +37,7 @@ export default function TotalsSection({
     totals,
     setTotalsField,
     errors,
+    invoiceType,
 }: TotalsSectionProps) {
     const t = useTranslations('Invoices.Totals')
     const [open, setOpen] = useState(true)
@@ -141,22 +142,27 @@ export default function TotalsSection({
                                 messages={getError('discount')}
                             />
                         </LabelInputContainer>
-
-                        <LabelInputContainer>
-                            <Label>{t('shipping')}</Label>
-                            <CurrencyInput
-                                value={totals.shipping}
-                                onChange={v => setTotalsField('shipping', v)}
-                                currency={totals.currency}
-                                mode="currency"
-                                step={1}
-                                error={Boolean(getError('shipping')?.length)}
-                            />
-                            <InputError
-                                id="totals-shipping-error"
-                                messages={getError('shipping')}
-                            />
-                        </LabelInputContainer>
+                        {invoiceType == 'shipping' && (
+                            <LabelInputContainer>
+                                <Label>{t('shipping')}</Label>
+                                <CurrencyInput
+                                    value={totals.shipping}
+                                    onChange={v =>
+                                        setTotalsField('shipping', v)
+                                    }
+                                    currency={totals.currency}
+                                    mode="currency"
+                                    step={1}
+                                    error={Boolean(
+                                        getError('shipping')?.length,
+                                    )}
+                                />
+                                <InputError
+                                    id="totals-shipping-error"
+                                    messages={getError('shipping')}
+                                />
+                            </LabelInputContainer>
+                        )}
                     </div>
 
                     <div className="rounded-lg p-5">

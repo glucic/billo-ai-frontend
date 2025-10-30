@@ -43,7 +43,7 @@ export default function BankDetailsSection({
             {open && (
                 <div
                     id="bank-details-fields"
-                    className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pl-4 gap-5">
+                    className="grid grid-cols-1 md:grid-cols-2 mt-4 pl-4 gap-5">
                     <LabelInputContainer>
                         <Label htmlFor="accountHolder">
                             {t('accountHolder')}

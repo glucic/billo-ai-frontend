@@ -122,6 +122,7 @@ export function InvoiceForm({
                         totals={totals}
                         setTotalsField={setTotalsField}
                         errors={fieldErrors}
+                        invoiceType={invoiceType}
                     />
 
                     <LegalSection

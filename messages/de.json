@@ -223,6 +223,7 @@
         "copy": "Rechnung kopieren",
         "archive": "Rechnung archivieren",
         "saveSuccess": "Rechnung erfolgreich gespeichert!",
+        "updateSuccess": "Rechnung erfolgreich bearbeitet!",
         "searchPlaceholder": "Rechnungen durchsuchen...",
         "selectIssuer": "Aussteller auswählen",
         "showToolbar": "Symbolleiste anzeigen",
@@ -374,7 +375,6 @@
         "errors": {
             "general": "Es ist ein unerwarteter Fehler aufgetreten.",
             "unknownError": "Ein unbekannter Fehler ist aufgetreten.",
-            "invalidCredentials": "Die angegebenen Zugangsdaten sind ungültig.",
             "tooManyAttempts": "Zu viele Versuche. Bitte versuche es später erneut.",
             "invoiceDetails": {
                 "invoiceNumberRequired": "Die Rechnungsnummer ist erforderlich.",
