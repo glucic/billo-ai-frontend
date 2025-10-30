@@ -93,7 +93,7 @@ export interface InvoiceResponse {
     invoice_date: string
     due_date: string | null
     reference: string | null
-    invoiceType: InvoiceTypeKey
+    invoice_type: InvoiceTypeKey
     bank_details: BankDetails
     issuer: Issuer
     client: Client

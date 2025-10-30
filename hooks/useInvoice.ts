@@ -312,7 +312,7 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                 setLegal(inv.legal ?? { termsAndConditions: '' })
                 setFooter(inv.footer ?? { notes: '' })
                 setAttachments([])
-                setInvoiceType(inv.invoiceType ?? 'standard') // <--- load type
+                setInvoiceType(inv.invoice_type ?? 'standard')
             } catch (err) {
                 console.error('Failed to load invoice:', err)
                 setError(

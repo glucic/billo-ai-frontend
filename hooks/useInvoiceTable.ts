@@ -77,6 +77,7 @@ export function useInvoiceTable(): UseInvoiceTableReturn {
             }
 
             return {
+                invoiceType: response.invoice_type,
                 invoiceDetails: {
                     id: response.id,
                     invoiceNumber: response.invoice_number,
