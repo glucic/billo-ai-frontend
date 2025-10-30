@@ -6,9 +6,10 @@ import { useOrganisationFormLayout } from '@/hooks/useOrganisationFormLayout'
 import { CompanyNameSection } from '@/components/organisations/form-sections/CompanyNameSection'
 import { CompanyDetailsSection } from '@/components/organisations/form-sections/CompanyDetailsSection'
 import { CompanyAboutSection } from '@/components/organisations/form-sections/CompanyAboutSection'
+import { Organisation } from '@/types/Organisation'
 
 interface OrganisationFormProps {
-    form: Record<string, any>
+    form: Partial<Organisation>
     fieldErrors: Partial<Record<string, string[]>>
     saving: boolean
     loading?: boolean

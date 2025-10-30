@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import {
-    Label,
     LabelInputContainer,
     TextAreaField,
     Button,

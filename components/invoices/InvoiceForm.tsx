@@ -42,7 +42,6 @@ export function InvoiceForm({
     footer,
     setFooterField,
     attachments,
-    setAttachments,
     saveInvoice,
     organisations,
     saving,

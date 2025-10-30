@@ -11,7 +11,7 @@ import {
 } from '@/components/ui'
 import React from 'react'
 import { Organisation } from '@/types/Organisation'
-import { Client, Issuer } from '@/types/Invoice'
+import { Client } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
 import LocationFields, {
     LocationValues,

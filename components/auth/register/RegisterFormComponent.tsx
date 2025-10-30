@@ -9,6 +9,7 @@ import {
     StatefulButton,
     InputError,
 } from '@/components/ui'
+import { RegisterFormProps } from './RegisterFormProps'
 
 export function RegisterForm({
     onSubmit,

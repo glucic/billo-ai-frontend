@@ -77,6 +77,7 @@ export function detectErrorKey(field: string, message: string): string | null {
  *   3. Fallback to raw message
  */
 export function parseBackendErrors(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error: any,
     t: TranslateFn,
     namespace: string = 'GlobalErrors',

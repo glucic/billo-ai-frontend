@@ -12,6 +12,7 @@ export function CompanyDetailsSection({
     form,
     handleChange,
     fieldErrors,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) {
     const t = useTranslations('Organisation')
     return (

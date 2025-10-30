@@ -15,7 +15,6 @@ import {
 } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import { useAuthContext } from '@/context/AuthProvider'
-import ThemeToggle from '@/components/common/ThemeToggle'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { usePathname } from 'next/navigation'

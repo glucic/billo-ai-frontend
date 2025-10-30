@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { NumberField, Group, Input, Button, Label } from 'react-aria-components'
+import { Group, Input, Button, Label } from 'react-aria-components'
 import { ChevronUpIcon, ChevronDownIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

@@ -1,3 +1,5 @@
+import { FormErrors } from '@/types/InputErrors'
+
 type RegisterFields =
     | 'first_name'
     | 'last_name'
@@ -5,7 +7,7 @@ type RegisterFields =
     | 'password'
     | 'password_confirmation'
 
-type RegisterFormProps = {
+export type RegisterFormProps = {
     onSubmit: (credentials: Record<RegisterFields, string>) => void
     loading?: boolean
     errors?: FormErrors<RegisterFields>

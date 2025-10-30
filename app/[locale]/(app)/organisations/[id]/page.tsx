@@ -23,7 +23,7 @@ export default function EditOrganisationPage() {
         if (!isNaN(organisationId)) {
             fetchOrganisationById(organisationId)
         }
-    }, [organisationId])
+    }, [fetchOrganisationById, organisationId])
 
     return (
         <OrganisationForm

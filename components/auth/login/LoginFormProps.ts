@@ -1,3 +1,5 @@
+import { FormErrors } from '@/types/InputErrors'
+
 type LoginFields = 'email' | 'password'
 
 export type LoginFormProps = {

@@ -16,7 +16,6 @@ import { MinusIcon, PlusIcon } from 'lucide-react'
 import { InvoiceItem } from '@/types/Invoice'
 import { BackendErrors } from '@/lib/errorUtils'
 import { cn } from '@/lib/utils'
-import { Link } from 'react-aria-components'
 
 interface ItemsSectionProps {
     value: InvoiceItem[]

@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/navigation'
 import { Invoice } from '@/types/Invoice'
-import { IconDotsDiagonal2, IconDotsVertical } from '@tabler/icons-react'
+import { IconDotsVertical } from '@tabler/icons-react'
 
 interface InvoiceActionsMenuProps {
     invoice: Invoice
@@ -117,7 +117,7 @@ export const InvoiceActionsMenu: React.FC<InvoiceActionsMenuProps> = ({
                             </button>
                             <button
                                 className="flex items-center w-full px-4 py-2 text-sm gap-2 hover:bg-[var(--accent-light)]/20"
-                                onClick={e => {
+                                onClick={() => {
                                     handleAction(() =>
                                         router.push(
                                             `/invoices/${invoice.invoiceDetails.id}`,

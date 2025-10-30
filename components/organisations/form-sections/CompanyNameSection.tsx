@@ -8,6 +8,7 @@ import {
 } from '@/components/ui'
 import { useTranslations } from 'next-intl'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CompanyNameSection({ form, handleChange, fieldErrors }: any) {
     const t = useTranslations('Organisation')
     return (

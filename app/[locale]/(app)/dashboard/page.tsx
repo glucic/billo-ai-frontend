@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useTranslations } from 'next-intl'
 import WelcomeSection from '@/components/dashboard/WelcomeSection'
 import { useOrganisations } from '@/hooks/useOrganisations'
 import { useAuthContext } from '@/context/AuthProvider'
 
 export default function DashboardPage() {
-    const t = useTranslations('Dashboard')
     const { fetchOrganisations } = useOrganisations()
     const { user } = useAuthContext()
 

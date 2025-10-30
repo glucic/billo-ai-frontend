@@ -74,8 +74,7 @@ export function AddressField({
                     },
                 )
                 setSuggestions(response.data?.data || [])
-            } catch (err: any) {
-                console.error(err)
+            } catch {
                 setSuggestions([])
                 setErrorMessage('Failed to fetch suggestions.')
             }
@@ -136,8 +135,7 @@ export function AddressField({
                 city: address.city || '',
                 region: address.region || '',
             })
-        } catch (err: any) {
-            console.error(err)
+        } catch {
             setQuery(suggestion.description)
             setSuggestions([])
             setShowSuggestions(false)

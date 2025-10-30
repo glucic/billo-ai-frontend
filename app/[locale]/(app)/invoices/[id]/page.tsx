@@ -39,7 +39,6 @@ export default function EditInvoicePage() {
         organisations,
         saving,
         loading,
-        error,
         fieldErrors,
     } = useInvoiceForm(invoiceId)
 
