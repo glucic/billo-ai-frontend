@@ -40,11 +40,33 @@ export default function InvoiceDetailsSection({
         key: keyof InvoiceDetails
         required?: boolean
         type: 'text' | 'date'
+        placeholder?: string
+        tooltip?: string
     }[] = [
-        { key: 'invoiceNumber', required: true, type: 'text' },
-        { key: 'reference', required: false, type: 'text' },
-        { key: 'invoiceDate', required: true, type: 'date' },
-        { key: 'dueDate', required: false, type: 'date' },
+        {
+            key: 'invoiceNumber',
+            required: true,
+            type: 'text',
+            placeholder: t('invoiceNumberPlaceholder'),
+            tooltip: t('invoiceNumberTooltip'),
+        },
+        {
+            key: 'reference',
+            required: false,
+            type: 'text',
+            placeholder: t('referencePlaceholder'),
+            tooltip: t('referenceTooltip'),
+        },
+        {
+            key: 'invoiceDate',
+            required: true,
+            type: 'date',
+        },
+        {
+            key: 'dueDate',
+            required: false,
+            type: 'date',
+        },
     ]
 
     return (
@@ -66,54 +88,57 @@ export default function InvoiceDetailsSection({
                 <div
                     id="invoice-details-fields"
                     className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pl-4">
-                    {fields.map(({ key, required, type }) => (
-                        <LabelInputContainer key={key}>
-                            <Label
-                                htmlFor={`invoice-${key}`}
-                                required={required}>
-                                {t(key)}
-                            </Label>
-
-                            {type === 'text' ? (
-                                <InputField
-                                    id={`invoice-${key}`}
+                    {fields.map(
+                        ({ key, required, type, placeholder, tooltip }) => (
+                            <LabelInputContainer key={key}>
+                                <Label
+                                    htmlFor={`invoice-${key}`}
                                     required={required}
-                                    value={invoiceDetails[key] ?? ''}
-                                    onChange={e =>
-                                        setInvoiceDetailsField(
-                                            key,
-                                            e.target.value,
-                                        )
-                                    }
-                                    placeholder={t(key)}
-                                    error={Boolean(getError(key)?.length)}
-                                    aria-describedby={
-                                        getError(key)?.length
-                                            ? `invoice-${key}-error`
-                                            : undefined
-                                    }
-                                />
-                            ) : (
-                                <DatePicker
-                                    id={`invoice-${key}`}
-                                    value={invoiceDetails[key] ?? ''}
-                                    onChange={val =>
-                                        setInvoiceDetailsField(
-                                            key,
-                                            normalizeDate(val),
-                                        )
-                                    }
-                                    placeholder="dd/mm/yyyy"
-                                    error={Boolean(getError(key)?.length)}
-                                />
-                            )}
+                                    tooltipContent={tooltip}>
+                                    {t(key)}
+                                </Label>
 
-                            <InputError
-                                id={`invoice-${key}-error`}
-                                messages={getError(key)}
-                            />
-                        </LabelInputContainer>
-                    ))}
+                                {type === 'text' ? (
+                                    <InputField
+                                        id={`invoice-${key}`}
+                                        required={required}
+                                        value={invoiceDetails[key] ?? ''}
+                                        onChange={e =>
+                                            setInvoiceDetailsField(
+                                                key,
+                                                e.target.value,
+                                            )
+                                        }
+                                        placeholder={placeholder ?? t(key)}
+                                        error={Boolean(getError(key)?.length)}
+                                        aria-describedby={
+                                            getError(key)?.length
+                                                ? `invoice-${key}-error`
+                                                : undefined
+                                        }
+                                    />
+                                ) : (
+                                    <DatePicker
+                                        id={`invoice-${key}`}
+                                        value={invoiceDetails[key] ?? ''}
+                                        onChange={val =>
+                                            setInvoiceDetailsField(
+                                                key,
+                                                normalizeDate(val),
+                                            )
+                                        }
+                                        placeholder="dd/mm/yyyy"
+                                        error={Boolean(getError(key)?.length)}
+                                    />
+                                )}
+
+                                <InputError
+                                    id={`invoice-${key}-error`}
+                                    messages={getError(key)}
+                                />
+                            </LabelInputContainer>
+                        ),
+                    )}
                 </div>
             )}
         </section>

@@ -39,11 +39,10 @@ export interface InvoiceDetails {
 }
 
 export interface BankDetails {
-    accountHolder?: string
-    bankName?: string
-    iban?: string
-    bic?: string
-    currency?: string
+    accountHolder: string
+    bankName: string
+    iban: string
+    bic: string
 }
 
 export interface InvoiceItem {

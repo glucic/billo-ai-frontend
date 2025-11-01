@@ -84,7 +84,8 @@ export default function ItemsSection({
                                     <div className="md:col-span-2">
                                         <Label
                                             htmlFor={`item-name-${idx}`}
-                                            className="mb-1 block">
+                                            className="mb-1 block"
+                                            required={true}>
                                             {t('name')}
                                         </Label>
                                         <InputField
@@ -97,7 +98,7 @@ export default function ItemsSection({
                                                     e.target.value,
                                                 )
                                             }
-                                            placeholder={t('name')}
+                                            placeholder={t('namePlaceholder')}
                                             error={Boolean(
                                                 getError(idx, 'name')?.length,
                                             )}
@@ -219,6 +220,9 @@ export default function ItemsSection({
                                         id={`item-description-${idx}`}
                                         rows={3}
                                         value={item.description}
+                                        placeholder={t(
+                                            'descriptionPlaceholder',
+                                        )}
                                         onChange={e =>
                                             onUpdateItem(
                                                 idx,

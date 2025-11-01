@@ -13,9 +13,9 @@ import {
     LegalSection,
 } from '@/components/invoices/form-sections'
 import { PDFInvoicePreview } from '@/components/invoices'
-import { Button, StatefulButton } from '@/components/ui'
 import { useInvoiceFormLayout } from '@/hooks/useInvoiceFormLayout'
 import { InvoiceFormProps } from './InvoiceFormProps'
+import { InvoiceFormFooter } from './InvoiceFormFooter'
 
 export function InvoiceForm({
     invoiceType,
@@ -136,30 +136,12 @@ export function InvoiceForm({
                         errors={fieldErrors}
                     />
 
-                    {error && (
-                        <div className="text-[var(--error)] text-sm mb-2 text-right">
-                            {error}
-                        </div>
-                    )}
-
-                    {success && (
-                        <div className="text-[var(--success)] text-sm mb-2 text-right">
-                            {mode === 'edit'
-                                ? t('updateSuccess') ||
-                                  'Invoice updated successfully!'
-                                : t('saveSuccess') ||
-                                  'Invoice saved successfully!'}
-                        </div>
-                    )}
-
-                    <section className="sticky bottom-0 left-0 w-full bg-[var(--background)] border-t border-[var(--accent)] py-4 flex justify-end px-6 flex-row gap-2">
-                        <Button variant="ghost" href="/invoices">
-                            {t('cancel')}
-                        </Button>
-                        <StatefulButton type="submit" loading={saving}>
-                            {mode === 'edit' ? t('update') : t('save')}
-                        </StatefulButton>
-                    </section>
+                    <InvoiceFormFooter
+                        error={error}
+                        success={success}
+                        mode={mode}
+                        saving={saving}
+                    />
                 </form>
 
                 {showPreview && (

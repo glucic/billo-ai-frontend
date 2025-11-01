@@ -51,7 +51,7 @@ export const useAuth = ({
     const { user, loading, mutateUser } = useAuthContext()
     const t = useTranslations('Auth')
 
-    // ---- CSRF Setup ----
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const csrfPromise = React.useRef<Promise<any> | null>(null)
     const csrf = async () => {
         try {
@@ -60,7 +60,7 @@ export const useAuth = ({
             }
             return await csrfPromise.current
         } catch (err) {
-            csrfPromise.current = null // reset on failure
+            csrfPromise.current = null
             throw err
         }
     }
@@ -78,18 +78,19 @@ export const useAuth = ({
         try {
             await csrf()
             return await requestFn()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             setErrors(parseBackendErrors(error, t, namespace))
             throw error
         }
     }
 
-    // ---- Actions ----
     const register = async (props: RegisterProps) =>
         handleAuthRequest(
             async () => {
                 await apiClient.post('/register', props)
                 await mutateUser()
+                router.push('/getting-started')
             },
             props.setErrors,
             props.setStatus,
@@ -153,26 +154,20 @@ export const useAuth = ({
         router.push('/login')
     }, [router, mutateUser])
 
-    // ---- Redirect logic ----
     React.useEffect(() => {
-        if (loading) return // ✅ Wait for loading to finish
+        if (loading) return
 
-        // If guest-only route, redirect authenticated users
         if (middleware === 'guest' && user) {
             router.push(redirectIfAuthenticated ?? '/')
             return
         }
 
-        // If auth-only route, redirect unauthenticated users
         if (middleware === 'auth' && !user) {
             router.push('/login')
             return
         }
 
-        // Optional: verification route logic
-        if (
-            window.location.pathname === '/verify-email' //&& user?.email_verified_at
-        ) {
+        if (window.location.pathname === '/verify-email') {
             router.push(redirectIfAuthenticated ?? '/')
         }
     }, [user, loading, middleware, redirectIfAuthenticated, router])

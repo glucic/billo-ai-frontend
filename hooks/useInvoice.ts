@@ -58,7 +58,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         bankName: '',
         iban: '',
         bic: '',
-        currency: 'EUR',
     })
 
     const [issuerId, setIssuerId] = useState<number | null>(null)
@@ -112,8 +111,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         [],
     )
     const [totals, setTotals] = useState<InvoiceTotals>(defaultTotals)
-
-    // --- New sections ---
     const [legal, setLegal] = useState<Legal>({ termsAndConditions: '' })
     const [footer, setFooter] = useState<Footer>({ notes: '' })
     const [attachments, setAttachments] = useState<File[]>([])
@@ -268,7 +265,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         }))
     }, [computedTotals])
 
-    // --- Load invoice from backend ---
     useEffect(() => {
         if (!initialInvoiceId) return
         const loadInvoice = async () => {
@@ -293,7 +289,6 @@ export function useInvoiceForm(initialInvoiceId?: number) {
                     bankName: inv.bank_details?.bankName ?? '',
                     iban: inv.bank_details?.iban ?? '',
                     bic: inv.bank_details?.bic ?? '',
-                    currency: inv.bank_details?.currency ?? 'EUR',
                 })
 
                 setIssuer(inv.issuer ?? defaultIssuer)
@@ -325,14 +320,13 @@ export function useInvoiceForm(initialInvoiceId?: number) {
         loadInvoice()
     }, [initialInvoiceId, t, defaultClient, defaultIssuer, defaultTotals])
 
-    // --- Save invoice ---
     const saveInvoice = async () => {
         setSaving(true)
         setError(null)
         setFieldErrors({})
 
         const basePayload = {
-            invoiceType, // <--- include type
+            invoiceType,
             bankDetails,
             issuer,
             client,

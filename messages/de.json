@@ -96,6 +96,10 @@
         "confirmDelete": "Sind Sie sicher, dass Sie diese Organisation löschen möchten?",
         "notFound": "Keine Organisationen vorhanden.",
         "GettingStarted": {
+            "back": "Zurück",
+            "next": "Weiter",
+            "finish": "Fertigstellen",
+
             "StepCompanyName": {
                 "label": "Wie lautet der Name Ihres Unternehmens?",
                 "placeholder": "Geben Sie den Firmennamen ein"
@@ -106,21 +110,26 @@
             },
             "StepCompanyDetails": {
                 "title": "Unternehmensdetails",
+                "subtitle": "Geben Sie einige grundlegende Informationen zu Ihrem Unternehmen an.",
+
+                "contactInfoTitle": "Kontaktinformationen",
+                "addressInfoTitle": "Unternehmensadresse",
+
                 "emailLabel": "E-Mail-Adresse",
-                "emailPlaceholder": "z. B. kontakt@unternehmen.de",
+                "emailPlaceholder": "kontakt@unternehmen.de",
                 "phoneLabel": "Telefonnummer",
-                "phonePlaceholder": "z. B. +49 123 456789",
-                "addressSection": "Adresse",
-                "streetLabel": "Straße",
-                "streetPlaceholder": "z. B. Musterstraße 1",
-                "zipLabel": "Postleitzahl",
-                "zipPlaceholder": "z. B. 12345",
-                "cityLabel": "Stadt",
-                "cityPlaceholder": "z. B. Berlin",
-                "regionLabel": "Bundesland / Region",
-                "regionPlaceholder": "z. B. Bayern",
+                "phonePlaceholder": "+49 123 456789",
                 "workersLabel": "Anzahl der Mitarbeiter",
-                "workersPlaceholder": "z. B. 25"
+                "workersPlaceholder": "25",
+
+                "streetLabel": "Straße",
+                "streetPlaceholder": "Musterstraße 1",
+                "zipLabel": "Postleitzahl",
+                "zipPlaceholder": "12345",
+                "cityLabel": "Stadt",
+                "cityPlaceholder": "Berlin",
+                "regionLabel": "Bundesland / Region",
+                "regionPlaceholder": "Bayern"
             }
         }
     },
@@ -313,63 +322,119 @@
         "InvoiceDetails": {
             "title": "Rechnungsdetails",
             "invoiceNumber": "Rechnungsnummer",
+            "invoiceNumberPlaceholder": "2025-001",
+            "invoiceNumberTooltip": "Geben Sie die eindeutige Rechnungsnummer ein.",
             "invoiceDate": "Rechnungsdatum",
+            "invoiceDateTooltip": "Wählen Sie das Datum der Rechnung.",
             "dueDate": "Fälligkeitsdatum",
-            "reference": "Referenz / Bestellnummer"
+            "dueDateTooltip": "Geben Sie das Zahlungsziel an.",
+            "reference": "Referenz / Bestellnummer",
+            "referencePlaceholder": "PO12345",
+            "referenceTooltip": "Referenz oder Bestellnummer des Kunden."
         },
         "BankDetails": {
             "title": "Bankdetails",
             "accountHolder": "Kontoinhaber",
+            "accountHolderPlaceholder": "Max Mustermann",
+            "accountHolderTooltip": "Name des Kontoinhabers, auf den die Zahlung erfolgen soll.",
             "bankName": "Bankname",
+            "bankNamePlaceholder": "Deutsche Bank",
+            "bankNameTooltip": "Name der Bank, bei der das Konto geführt wird.",
             "iban": "IBAN",
+            "ibanPlaceholder": "DE12 3456 7890 1234 5678 90",
+            "ibanTooltip": "Internationale Bankkontonummer für Überweisungen.",
             "bic": "BIC/SWIFT",
-            "currency": "Währung"
+            "bicPlaceholder": "DEUTDEFFXXX",
+            "bicTooltip": "Bank Identifier Code, für internationale Zahlungen.",
+            "currency": "Währung",
+            "currencyPlaceholder": "EUR",
+            "currencyTooltip": "Währung der Rechnung."
         },
         "IssuerDetails": {
             "title": "Absenderdetails",
-            "selectIssuer": "Absender auswählen"
+            "selectIssuer": "Absender auswählen",
+            "selectIssuerPlaceholder": "Wählen Sie Ihren Firmennamen",
+            "selectIssuerTooltip": "Absender für diese Rechnung auswählen."
         },
         "ClientDetails": {
             "title": "Kundendetails",
-            "selectClient": "Kunde auswählen"
+            "selectClient": "Kunde auswählen",
+            "selectClientPlaceholder": "Wählen Sie einen Kunden",
+            "selectClientTooltip": "Kundeninformationen für die Rechnung auswählen."
         },
         "Items": {
             "title": "Positionen",
             "addItem": "Position hinzufügen",
+            "addItemTooltip": "Fügen Sie eine neue Rechnungsposition hinzu.",
             "removeItem": "Position entfernen",
+            "removeItemTooltip": "Entfernen Sie diese Position von der Rechnung.",
             "name": "Bezeichnung",
+            "namePlaceholder": "Produkt / Dienstleistung",
+            "nameTooltip": "Name der Ware oder Dienstleistung.",
             "description": "Beschreibung",
+            "descriptionPlaceholder": "Beschreibung ihrer Ware",
+            "descriptionTooltip": "Optionale Details zur Position.",
             "rate": "Preis",
-            "quantity": "Menge"
+            "ratePlaceholder": "100.00",
+            "rateTooltip": "Preis pro Einheit.",
+            "quantity": "Menge",
+            "quantityPlaceholder": "1",
+            "quantityTooltip": "Anzahl der Artikel oder Stunden."
         },
         "Totals": {
             "title": "Gesamtübersicht",
             "currency": "Währung",
+            "currencyPlaceholder": "EUR",
+            "currencyTooltip": "Währung für die Berechnungen.",
             "sum": "Summe",
+            "sumPlaceholder": "Summe der Nettopreise",
+            "sumTooltip": "Summe vor Rabatten und Steuern.",
             "totalNet": "Gesamtbetrag (Netto)",
+            "totalNetPlaceholder": "Netto Gesamtbetrag",
+            "totalNetTooltip": "Gesamtsumme nach Rabatt, vor Steuern.",
             "totalGross": "Gesamtbetrag (Brutto)",
+            "totalGrossPlaceholder": "Brutto Gesamtbetrag",
+            "totalGrossTooltip": "Gesamtsumme inklusive Steuern.",
             "mwst": "MwSt",
+            "mwstPlaceholder": "19%",
+            "mwstTooltip": "Mehrwertsteuersatz der Rechnung.",
             "discount": "Rabatt (%)",
+            "discountPlaceholder": "0",
+            "discountTooltip": "Prozentualer Rabatt auf die Summe.",
             "discountAmount": "Rabattbetrag",
+            "discountAmountPlaceholder": "0.00",
+            "discountAmountTooltip": "Betrag des Rabatts.",
             "shipping": "Versandkosten",
+            "shippingPlaceholder": "0.00",
+            "shippingTooltip": "Kosten für Versand oder Lieferung.",
             "deposit": "Anzahlung",
+            "depositPlaceholder": "0.00",
+            "depositTooltip": "Optional geleistete Vorauszahlung.",
             "payments": "Zahlungen",
-            "amountDue": "Offener Betrag"
+            "paymentsPlaceholder": "0.00",
+            "paymentsTooltip": "Bisherige Zahlungen vom Kunden.",
+            "amountDue": "Offener Betrag",
+            "amountDuePlaceholder": "0.00",
+            "amountDueTooltip": "Betrag, der noch zu zahlen ist."
         },
         "Legal": {
             "title": "Rechtliche Hinweise",
             "legalTermsLabel": "Allgemeine Geschäftsbedingungen",
-            "legalTermsPlaceholder": "Geben Sie hier die allgemeinen Geschäftsbedingungen ein..."
+            "legalTermsPlaceholder": "Geben Sie hier die allgemeinen Geschäftsbedingungen ein...",
+            "legalTermsTooltip": "Optional: Ihre AGB für diese Rechnung."
         },
         "Footer": {
             "title": "Fußzeile",
             "footerLabel": "Fußzeilentext",
-            "footerPlaceholder": "Geben Sie hier den Fußzeilentext ein..."
+            "footerPlaceholder": "Geben Sie hier den Fußzeilentext ein...",
+            "footerTooltip": "Text, der am unteren Rand jeder Rechnung angezeigt wird."
         },
         "Attachments": {
             "title": "Anhänge",
             "addAttachment": "Anhang hinzufügen",
+            "addAttachmentTooltip": "Dateien zur Rechnung hinzufügen.",
             "remove": "Entfernen",
+            "removeTooltip": "Entfernt die Datei vom Anhang.",
             "noAttachments": "Keine Anhänge hinzugefügt"
         },
         "errors": {

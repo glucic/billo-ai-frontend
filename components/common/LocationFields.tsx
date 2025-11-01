@@ -27,6 +27,7 @@ export interface LocationFieldsProps {
     disableZipSuggestions?: boolean
     ids?: Partial<Record<keyof LocationValues, string>>
     placeholders?: Partial<Record<keyof LocationValues, string>>
+    labels?: Partial<Record<keyof LocationValues, string>>
     errors?: Partial<Record<keyof LocationValues, string[]>>
 }
 
@@ -40,6 +41,7 @@ export function LocationFields({
     fieldClassName = '',
     disableZipSuggestions = true,
     ids = {},
+    labels = {},
     placeholders = {},
     errors = {},
 }: LocationFieldsProps) {
@@ -64,7 +66,7 @@ export function LocationFields({
                     <Label
                         htmlFor={ids.street ?? 'street'}
                         required={!!required.street}>
-                        {placeholders.street ?? 'Street'}
+                        {labels.street ?? 'Street'}
                     </Label>
                 )}
                 <AddressField
@@ -86,7 +88,7 @@ export function LocationFields({
             <LabelInputContainer>
                 {showLabels && (
                     <Label htmlFor={ids.zip ?? 'zip'} required={!!required.zip}>
-                        {placeholders.zip ?? 'ZIP'}
+                        {labels.zip ?? 'ZIP'}
                     </Label>
                 )}
                 {disableZipSuggestions ? (
@@ -121,7 +123,7 @@ export function LocationFields({
                     <Label
                         htmlFor={ids.city ?? 'city'}
                         required={!!required.city}>
-                        {placeholders.city ?? 'City'}
+                        {labels.city ?? 'City'}
                     </Label>
                 )}
                 <AddressField
@@ -145,7 +147,7 @@ export function LocationFields({
                     <Label
                         htmlFor={ids.region ?? 'region'}
                         required={!!required.region}>
-                        {placeholders.region ?? 'Region'}
+                        {labels.region ?? 'Region'}
                     </Label>
                 )}
                 <AddressField

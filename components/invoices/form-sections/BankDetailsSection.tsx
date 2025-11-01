@@ -57,9 +57,11 @@ export default function BankDetailsSection({
                                     e.target.value,
                                 )
                             }
+                            placeholder={t('accountHolderPlaceholder')}
                             errorMessages={errors?.accountHolder}
                         />
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="bankName">{t('bankName')}</Label>
                         <InputField
@@ -68,9 +70,11 @@ export default function BankDetailsSection({
                             onChange={e =>
                                 setBankDetailsField('bankName', e.target.value)
                             }
+                            placeholder={t('bankNamePlaceholder')}
                             errorMessages={errors?.bankName}
                         />
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="iban">{t('iban')}</Label>
                         <InputField
@@ -79,9 +83,11 @@ export default function BankDetailsSection({
                             onChange={e =>
                                 setBankDetailsField('iban', e.target.value)
                             }
+                            placeholder={t('ibanPlaceholder')}
                             errorMessages={errors?.iban}
                         />
                     </LabelInputContainer>
+
                     <LabelInputContainer>
                         <Label htmlFor="bic">{t('bic')}</Label>
                         <InputField
@@ -90,6 +96,7 @@ export default function BankDetailsSection({
                             onChange={e =>
                                 setBankDetailsField('bic', e.target.value)
                             }
+                            placeholder={t('bicPlaceholder')}
                             errorMessages={errors?.bic}
                         />
                     </LabelInputContainer>

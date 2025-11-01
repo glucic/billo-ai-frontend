@@ -125,7 +125,11 @@ export default function ClientSection({
                                     region: address.region ?? '',
                                 })
                             }
-                            required={{ street: true, zip: true, city: true }}
+                            required={{
+                                street: false,
+                                zip: false,
+                                city: false,
+                            }}
                             placeholders={{
                                 street: orgT('street'),
                                 zip: orgT('zip'),
@@ -133,25 +137,6 @@ export default function ClientSection({
                                 region: orgT('region'),
                             }}
                         />
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputError
-                                id="issuer-street-error"
-                                messages={getError('street')}
-                            />
-                            <InputError
-                                id="issuer-zip-error"
-                                messages={getError('zip')}
-                            />
-                            <InputError
-                                id="issuer-city-error"
-                                messages={getError('city')}
-                            />
-                            <InputError
-                                id="issuer-region-error"
-                                messages={getError('region')}
-                            />
-                        </div>
                     </div>
                 </div>
             )}

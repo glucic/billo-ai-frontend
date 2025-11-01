@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { InputField } from './InputField'
+import { AutocompleteSelection } from './AutocompleteSelect'
 import { useDebouncedValue } from '@/lib/useDebouncedValue'
 import apiClient from '@/lib/apiClient'
+import { cn } from '@/lib/utils'
 
 interface AddressFieldProps {
     type: 'street' | 'zip' | 'city' | 'region'
@@ -24,39 +25,33 @@ interface AddressFieldProps {
 
 export function AddressField({
     type,
-    error,
     className,
     value,
     onChange,
     onSelect,
-    id,
     placeholder,
-    'aria-describedby': ariaDescribedBy,
+    error
 }: AddressFieldProps) {
     const [query, setQuery] = useState(value || '')
     const [suggestions, setSuggestions] = useState<
         Array<{ description: string; place_id: string }>
     >([])
-    const [showSuggestions, setShowSuggestions] = useState(false)
-    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
     const debouncedQuery = useDebouncedValue(query, 300)
 
-    // Sync external value
     useEffect(() => {
         setQuery(value || '')
     }, [value])
 
-    // Fetch suggestions
     useEffect(() => {
         if (!debouncedQuery) {
             setSuggestions([])
-            setErrorMessage(null)
             return
         }
 
         const fetchSuggestions = async () => {
             try {
-                setErrorMessage(null)
+                setIsLoading(true)
                 const types =
                     type === 'city'
                         ? 'cities'
@@ -76,26 +71,35 @@ export function AddressField({
                 setSuggestions(response.data?.data || [])
             } catch {
                 setSuggestions([])
-                setErrorMessage('Failed to fetch suggestions.')
+            } finally {
+                setIsLoading(false)
             }
         }
 
         fetchSuggestions()
     }, [debouncedQuery, type])
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(e.target.value)
-        onChange?.(e)
-        setShowSuggestions(true)
-        setErrorMessage(null)
-    }
+    const handleSelect = async (selectedLabel: string) => {
+        const suggestion = suggestions.find(
+            s => s.description === selectedLabel,
+        )
 
-    const handleSuggestionClick = async (suggestion: {
-        description: string
-        place_id: string
-    }) => {
+        if (!suggestion) {
+            setQuery(selectedLabel)
+            onChange?.({
+                target: { value: selectedLabel },
+            } as React.ChangeEvent<HTMLInputElement>)
+            onSelect?.({
+                street: type === 'street' ? selectedLabel : '',
+                zip: type === 'zip' ? selectedLabel : '',
+                city: type === 'city' ? selectedLabel : '',
+                region: type === 'region' ? selectedLabel : '',
+            })
+            return
+        }
+
         try {
-            setErrorMessage(null)
+            setIsLoading(true)
             const response = await apiClient.get('/api/location/details', {
                 params: { place_id: suggestion.place_id },
             })
@@ -123,61 +127,36 @@ export function AddressField({
             }
 
             setQuery(currentValue)
-            setSuggestions([])
-            setShowSuggestions(false)
-
             onChange?.({
                 target: { value: currentValue },
             } as React.ChangeEvent<HTMLInputElement>)
-            onSelect?.({
-                street: address.street || '',
-                zip: address.zip || '',
-                city: address.city || '',
-                region: address.region || '',
-            })
+            onSelect?.(address)
         } catch {
-            setQuery(suggestion.description)
-            setSuggestions([])
-            setShowSuggestions(false)
-            setErrorMessage('Failed to fetch address details.')
+            setQuery(selectedLabel)
             onChange?.({
-                target: { value: suggestion.description },
+                target: { value: selectedLabel },
             } as React.ChangeEvent<HTMLInputElement>)
+        } finally {
+            setIsLoading(false)
         }
     }
 
+    const options = suggestions.map(s => ({
+        label: s.description,
+        value: s.description,
+    }))
+
     return (
         <div className="relative">
-            <InputField
-                id={id}
+            <AutocompleteSelection
+                options={options}
                 value={query}
-                onChange={handleInputChange}
-                onFocus={() => setShowSuggestions(suggestions.length > 0)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                error={error || !!errorMessage}
-                className={className}
-                placeholder={placeholder}
-                aria-describedby={ariaDescribedBy}
+                onChange={handleSelect}
+                placeholder={placeholder || 'Type to search...'}
+                className={cn(className, 'w-full')}
+                loading={isLoading}
+                error={Boolean(error)}
             />
-
-            {showSuggestions && suggestions.length > 0 && type !== 'zip' && (
-                <ul className="absolute z-10 w-full mt-1 bg-[var(--secondary-background)]/100 rounded-[var(--input-radius)] shadow-lg max-h-60 overflow-auto">
-                    {suggestions.map(suggestion => (
-                        <li
-                            key={suggestion.place_id}
-                            className="px-[var(--input-padding-x)] py-[var(--input-padding-y)] hover:bg-[var(--accent-glow)] cursor-pointer"
-                            onMouseDown={() =>
-                                handleSuggestionClick(suggestion)
-                            }>
-                            {suggestion.description}
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            {errorMessage && (
-                <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
-            )}
         </div>
     )
 }

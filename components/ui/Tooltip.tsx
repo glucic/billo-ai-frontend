@@ -9,6 +9,8 @@ interface TooltipProps {
     content: ReactNode
     className?: string
     children?: ReactNode
+    anchor?: HTMLElement
+    position?: 'right-end'
 }
 
 export function Tooltip({ content, children, className }: TooltipProps) {

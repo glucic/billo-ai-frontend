@@ -122,11 +122,13 @@ export default function PDFInvoiceDocument({
         { label: t('totalGross'), value: totals.totalGross },
         { label: t('amountDue'), value: totals.amountDue, bold: true },
     ]
+    const safeBankDetails = bankDetails ?? {}
+
     const bankInfo = [
-        { label: t('accountHolder'), value: bankDetails.accountHolder },
-        { label: t('bankName'), value: bankDetails.bankName },
-        { label: t('iban'), value: bankDetails.iban },
-        { label: t('bic'), value: bankDetails.bic },
+        { label: t('accountHolder'), value: safeBankDetails.accountHolder },
+        { label: t('bankName'), value: safeBankDetails.bankName },
+        { label: t('iban'), value: safeBankDetails.iban },
+        { label: t('bic'), value: safeBankDetails.bic },
     ].filter(b => b.value)
 
     return (
@@ -241,7 +243,7 @@ export default function PDFInvoiceDocument({
                 <View style={styles.divider} />
 
                 {/* Bank Details */}
-                {bankInfo.length > 0 && (
+                {bankInfo?.length > 0 && (
                     <View style={[styles.section, { marginTop: 12 }]}>
                         <Text style={styles.label}>
                             {t('paymentInformation')}
