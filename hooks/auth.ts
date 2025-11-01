@@ -67,6 +67,7 @@ export const useAuth = ({
 
     // ---- Unified request wrapper ----
     const handleAuthRequest = async (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         requestFn: () => Promise<any>,
         setErrors: (errors: BackendErrors) => void,
         setStatus?: (status: string | null) => void,
@@ -88,9 +89,12 @@ export const useAuth = ({
     const register = async (props: RegisterProps) =>
         handleAuthRequest(
             async () => {
-                await apiClient.post('/register', props)
-                await mutateUser()
-                router.push('/getting-started')
+                try {
+                    await apiClient.post('/register', props)
+                    await mutateUser()
+                } finally {
+                    router.push('/getting-started')
+                }
             },
             props.setErrors,
             props.setStatus,
