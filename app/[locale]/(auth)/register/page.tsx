@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -12,59 +12,51 @@ import { SocialLoginButton } from '@/components/ui/SocialLoginButton'
 import type { BackendErrors } from '@/lib/errorUtils'
 
 export default function RegisterPage() {
-    useRouter()
+    const router = useRouter()
     const t = useTranslations('Auth.Register')
 
-    const { register: registerUser } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: '/dashboard',
-    })
+    const { register, user, loading } = useAuth({ middleware: 'guest' })
 
-    const [loading, setLoading] = useState(false)
+    const [formLoading, setFormLoading] = useState(false)
     const [errors, setErrors] = useState<BackendErrors>({})
     const [status, setStatus] = useState<string | null>(null)
 
-    const handleRegister = async ({
-        first_name,
-        last_name,
-        email,
-        password,
-        password_confirmation,
-    }: {
+    useEffect(() => {
+        if (!loading && user) {
+            router.push('/dashboard')
+        }
+    }, [user, loading, router])
+
+    const handleRegister = async (data: {
         first_name: string
         last_name: string
         email: string
         password: string
         password_confirmation: string
     }) => {
-        setLoading(true)
+        setFormLoading(true)
         setErrors({})
         setStatus(null)
 
         try {
-            await registerUser({
-                first_name,
-                last_name,
-                email,
-                password,
-                password_confirmation,
+            await register({
+                ...data,
                 setErrors,
                 setStatus,
+                redirectAfter: '/getting-started',
             })
         } finally {
-            setLoading(false)
+            setFormLoading(false)
         }
     }
 
     return (
-        <main
-            id="register"
-            className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4 text-[var(--color-foreground)]">
+        <main className="flex flex-col min-h-screen bg-[var(--color-background)] justify-center items-center px-4 text-[var(--color-foreground)]">
             <RegisterHeader />
 
             <RegisterForm
                 onSubmit={handleRegister}
-                loading={loading}
+                loading={formLoading}
                 errors={errors}
             />
 
@@ -87,7 +79,7 @@ export default function RegisterPage() {
                     }
                     label={t('signUpGoogle')}
                     onClick={() => alert('Google sign-up not implemented')}
-                    disabled={loading}
+                    disabled={formLoading}
                 />
             </div>
 

@@ -86,14 +86,15 @@ export const useAuth = ({
         }
     }
 
-    const register = async (props: RegisterProps) =>
+    const register = async (
+        props: RegisterProps & { redirectAfter?: string },
+    ) =>
         handleAuthRequest(
             async () => {
-                try {
-                    await apiClient.post('/register', props)
-                    await mutateUser()
-                } finally {
-                    router.push('/getting-started')
+                await apiClient.post('/register', props)
+                await mutateUser()
+                if (props.redirectAfter) {
+                    router.push(props.redirectAfter)
                 }
             },
             props.setErrors,
