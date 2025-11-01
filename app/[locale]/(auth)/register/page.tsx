@@ -23,7 +23,7 @@ export default function RegisterPage() {
 
     useEffect(() => {
         if (!loading && user) {
-            router.push('/dashboard')
+            router.replace('/dashboard')
         }
     }, [user, loading, router])
 
@@ -37,7 +37,6 @@ export default function RegisterPage() {
         setFormLoading(true)
         setErrors({})
         setStatus(null)
-
         try {
             await register({
                 ...data,
